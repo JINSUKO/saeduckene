@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
    pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ include file="../include/header.jsp"%>
 
@@ -135,11 +135,16 @@ $(function() {
 					isFinish = true;
 					$('#div-btn').css('display','none');
 					if(total === 0){
-						str = '등록된 글이 없습니다. 첫 번째 글을 등록해 보세요.';
+						str = '등록된 글이 없습니다. 첫 번째 글을 등록해 보세요.'; 
 						$('#contentDiv').html(str);
-						$('#contentDiv').css('display','block');
+						$('#contentDiv').css('display', 'block');
+						/* $('#contentDiv').css({
+							display: 'block',
+							text-align: 'center',
+							line-height: 150px
+							}); */
 						$('#contentDiv').css('text-align','center');
-						$('#contentDiv').css('line-height','150px');	
+						$('#contentDiv').css('line-height','150px');	 
 					}
 				}
 				
@@ -167,6 +172,7 @@ $(function() {
 				    </div>
 			  		</div>`;
 				}
+				console.log(str);
 				
 				$('#contentDiv').html(str);
 				
