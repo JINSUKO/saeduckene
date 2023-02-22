@@ -138,7 +138,7 @@ public class UserController {
 			String today = simple.format(new Date());
 			
 			String fileRealName = profilePic.getOriginalFilename(); // 파일 원본명
-			String profilePath = "c:/imgduck/user/";
+			String profilePath = "/imgduck/user/";
 			
 			String fileExtension = fileRealName.substring(fileRealName.lastIndexOf("."),fileRealName.length());
 			
@@ -554,7 +554,7 @@ public class UserController {
 			String today = simple.format(new Date());
 			
 			String fileRealName = profilePic.getOriginalFilename(); // 파일 원본명
-			String profilePath = "c:/imgduck/user/";
+			String profilePath = "/imgduck/user/";
 			
 			String fileExtension = fileRealName.substring(fileRealName.lastIndexOf("."),fileRealName.length());
 			
