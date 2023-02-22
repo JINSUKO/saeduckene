@@ -97,6 +97,8 @@
 										<!--상품번호-->
 										<input type="hidden" name="orderProductNo"
 											value="${product.productNo }" />
+										<input type="hidden" name="orderQuantity"
+													value="${ea }" />
 									</div>
 								</div>
 							</div>
@@ -520,10 +522,12 @@
 					});
 
 	const checkStock = '${result}';
+	const productName = '${productName}'
 	console.log(checkStock);
 	if (checkStock === 'lack') {
-		alert('상품의 재고수량이 부족합니다.\n 상품의 재고수량 이하로 주문해 주세요.')
+		alert('"'+productName +'" 상품의 재고수량이 부족합니다.\n 상품의 재고수량 이하로 주문해 주세요.');
 	}
+	
 	
 </script>
 </html>

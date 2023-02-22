@@ -161,12 +161,12 @@ $(function() {
 				      </svg>
 				      <div class="card-body container">
 				        <div class="d-flex justify-content-between align-items-center row">
-							<p class="col-8 text-truncate" style="color: #5c5e5e; margin-bottom: 0;">` + list[i].boardTitle + `</p>
+							<p class="col-8 text-truncate pt-1" style="color: #5c5e5e; margin-bottom: 0;">` + list[i].boardTitle + `</p>
 							<p class="col-4" style="color: #5c5e5e; margin-bottom: 0;"><small >` + timeForToday(list[i].boardRegDate) + `&nbsp;</small></p>
 							<p class="col-8"></p>
 							<p class="col-4" style="color: #5c5e5e; margin-bottom: 0;"><small >조회수&nbsp;` + list[i].boardViews + `</small></p>
 							<p class="col-8"></p>
-							<p class="col-4"  style="color: #5c5e5e; margin-bottom: 0;"><small >작성자&nbsp;` + list[i].writer + `</small></p>
+							<p class="col-4"  style="color: #5c5e5e; margin-bottom: 0;"><small >작성자&nbsp;` + (list[i].writer===null?'탈퇴회원':list[i].writer) + `</small></p>
 				        </div>
 				      </div>
 				    </div>
