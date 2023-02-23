@@ -2,6 +2,8 @@
    pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
+<link href="${pageContext.request.contextPath }/resources/css/boardWrite.css" rel="stylesheet">
+
 <%@ include file="../include/header.jsp"%>
 
 <section>
@@ -25,16 +27,25 @@
    </div>
 </div>
 
-<form action="${pageContext.request.contextPath}/board/boardWrite" id="writeForm" method="post">
+<form action="${pageContext.request.contextPath}/board/boardWrite" id="writeForm" method="post" enctype="multipart/form-data">
 
    <div class="container">
+        <label for="exampleFormControlInput1">&nbsp;제목</label>
+        &nbsp;&nbsp;&nbsp; 썸네일 설정하기
+		<input type="checkbox" id="thumbnail-checkbox">
+		<label for="thumbnail-checkbox"></label>
+		<span class="file-upload">
+			<i class="note-icon-picture"></i>
+			<input name="thumbnail-pic" type="file" class="upload" id="thumbnail-pic" accept="image/*" > <br>
+			// 모달만들어서 썸네일 미리보기 만들어주기.
+		</span>
       <div class="form-group">
-         <label for="exampleFormControlInput1">&nbsp;제목</label> 
-         <input type="text" class="form-control" id="exampleFormControlInput1" name="boardTitle" placeholder="제목을 작성해주세요." maxlength="50" >
+        <input type="text" class="form-control" id="exampleFormControlInput1" name="boardTitle" placeholder="제목을 작성해주세요." maxlength="50" />
       </div>
 
       <div class="form-group boardContent-summernote">
-         <textarea class="form-control" id="summernote" rows="10" name="boardContent"></textarea>
+      	<textarea class="form-control" id="summernote" rows="10" name="boardContent"></textarea>
+      	<!-- <input type="hidden" id="summernote" name="boardContent"></input> -->
       </div>
       	<div class="mt-3 float-end" style="color: #8c8c8c;">
       		<span class=textCount>0</span>
@@ -60,122 +71,158 @@
 <script>                                                                                                                                                                                                                                                 
 
 	$(document).ready(function() {
-		let jsonArray = [];
-	
+		let boardFileJsonArray = [];
 		
+			
 		// https://programmer93.tistory.com/31 여기서 봄
-    $('#summernote').summernote({
-      height: 500,                 // 에디터 높이
-      minHeight: null,             // 최소 높이
-      maxHeight: null,             // 최대 높이
-      focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
-      lang: "ko-KR",					// 한글 설정
-      toolbar: [
-		// 글꼴 설정
-		['fontname', ['fontname']],
-		// 글자 크기 설정
-		['fontsize', ['fontsize']],
-		// 굵기, 기울임꼴, 밑줄,취소 선, 서식지우기
-		['style', ['bold', 'italic', 'underline','strikethrough', 'clear']],
-		// 글자색
-		['color', ['color']],
-		// 표만들기
-		['table', ['table']],
-		// 글머리 기호, 번호매기기, 문단정렬
-		['para', ['ul', 'ol', 'paragraph']],
-		// 줄간격
-		['height', ['height']],
-		// 그림첨부, 링크만들기, 동영상첨부
-		['insert',['picture']]
-		// 코드보기, 확대해서보기, 도움말
-		,['view', ['codeview']]
-        ],
-      // 추가한 글꼴
-      fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New','맑은 고딕','궁서','굴림체','굴림','돋음체','바탕체'],
-      // 추가한 폰트사이즈
-      fontSizes: ['8','9','10','11','12','14','16','18','20','22','24','28','30','36','50','72'],
-      callbacks: {	//여기 부분이 이미지를 첨부하는 부분
-			// onImageUpload : function(files) {
-		    onImageUpload : function(files, editor, welEditable) {
-				/* uploadSummernoteImageFile(files[0],this);*/
-				for (var i = files.length - 1; i >= 0; i--) {
-                    uploadSummernoteImageFile(files[i], this);
-                }
-			},
-		onPaste: function (e) {
-			var clipboardData = e.originalEvent.clipboardData;
-			if (clipboardData && clipboardData.items && clipboardData.items.length) {
-				var item = clipboardData.items[0];
-				if (item.kind === 'file' && item.type.indexOf('image/') !== -1) {
-					e.preventDefault();
+		// summernote 이미지파일을 올릴 때 비동기로 temp폴더에 넣는다.
+		// 업로드 할때 temp폴더의 이미지 파일을 board폴더로 복사하고,
+		// temp폴더의 이미지 파일을 전부 지우는 방식으로 동작한다.
+	    $('#summernote').summernote({
+	      height: 500,                 // 에디터 높이
+	      minHeight: null,             // 최소 높이
+	      maxHeight: null,             // 최대 높이
+	      focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
+	      lang: "ko-KR",					// 한글 설정
+	      toolbar: [
+			// 글꼴 설정
+			['fontname', ['fontname']],
+			// 글자 크기 설정
+			['fontsize', ['fontsize']],
+			// 굵기, 기울임꼴, 밑줄,취소 선, 서식지우기
+			['style', ['bold', 'italic', 'underline','strikethrough', 'clear']],
+			// 글자색
+			['color', ['color']],
+			// 표만들기
+			['table', ['table']],
+			// 글머리 기호, 번호매기기, 문단정렬
+			['para', ['ul', 'ol', 'paragraph']],
+			// 줄간격
+			['height', ['height']],
+			// 그림첨부, 링크만들기, 동영상첨부
+			['insert',['picture']]
+			// 코드보기, 확대해서보기, 도움말
+			,['view', ['codeview']]
+	        ],
+	      // 추가한 글꼴
+	      fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New','맑은 고딕','궁서','굴림체','굴림','돋음체','바탕체'],
+	      // 추가한 폰트사이즈
+	      fontSizes: ['8','9','10','11','12','14','16','18','20','22','24','28','30','36','50','72'],
+	      callbacks: {	//여기 부분이 이미지를 첨부하는 부분
+				// onImageUpload : function(files) {
+			    onImageUpload : function(files, editor, welEditable) {
+					/* uploadSummernoteImageFile(files[0],this);*/
+					for (var i = files.length - 1; i >= 0; i--) {
+	                    uploadSummernoteImageFile(files[i], this);
+	                }
+				},
+			onPaste: function (e) {
+				var clipboardData = e.originalEvent.clipboardData;
+				if (clipboardData && clipboardData.items && clipboardData.items.length) {
+					var item = clipboardData.items[0];
+					if (item.kind === 'file' && item.type.indexOf('image/') !== -1) {
+						e.preventDefault();
+					}
 				}
 			}
+		  }
+	    });
+	    $('#summernote').summernote('fontName', 'GangwonEdu_OTFBoldA');
+	    
+	    function uploadSummernoteImageFile(file, editor) {
+	
+			let formData = new FormData();
+			formData.append('file', file);
+			formData.append('categoryNo', '${categoryNo}');
+	
+			$.ajax({
+				data : formData,
+				type : 'POST',
+				url : '<c:url value="/board/uploadSummernoteImageFile"/>',
+				enctype: 'multipart/form-data',
+				cache: false,
+				contentType : false,
+				processData : false,
+				success : function(result) {
+	            	//항상 업로드된 파일의 url이 있어야 한다.
+	               console.log(result);
+	               boardFileJsonArray.push(result);
+					$(editor).summernote('insertImage', result.url);
+				}
+			});
 		}
-	  }
-    });
-    $('#summernote').summernote('fontName', 'GangwonEdu_OTFBoldA');
-    
-    function uploadSummernoteImageFile(file, editor) {
-
-		var formData = new FormData();
-		formData.append("file",file);
-
-		$.ajax({
-			data : formData,
-			type : 'POST',
-			url : '<c:url value="/board/uploadSummernoteImageFile"/>',
-			enctype: 'multipart/form-data',
-			cache: false,
-			contentType : false,
-			processData : false,
-			success : function(result) {
-            	//항상 업로드된 파일의 url이 있어야 한다.
-               console.log(result);
-               jsonArray.push(result);
-				$(editor).summernote('insertImage', result.url);
-			}
-		});
-	}
-   
-    
-
-   //새로고침, 브라우저 종료, 뒤로가기 감지 이벤트
-   $(window).on('beforeunload', function(){
-      deleteTempFile();
-      $('#summernote').summernote('reset');
-      return "Any changes will be lost";
-    });
-    //폼 submit 때는 경고창 뜨지 않도록 하기
-    $(document).on("submit", "form", function(event){
-        $(window).off('beforeunload');
-    });
-    
-    function deleteTempFile() {
-      let deleteFiles = [];
-    	for(var i = 0; i<jsonArray.length; i++){
-            console.log('반복문 동작!');
-            var str = jsonArray[i].url;
-            console.log(str);
-            var result = str.split('/');
-            console.log('정제된 데이터: ' + result);
-            deleteFiles.push(result[3]);
-      }
-
-      console.log(deleteFiles);
-      
-      $.ajax({
-         type: 'post',
-         contentType: 'application/json',
-         url: '${pageContext.request.contextPath}/board/tempDelete',
-         data: JSON.stringify(deleteFiles)
-      });
-	} 
-    
-    
-		$('.boardContent-summernote').keydown(function() {
-			console.log('키 이벤트 발생');
+	   
+	    
+	
+	   //새로고침, 브라우저 종료, 뒤로가기 감지 이벤트
+	   $(window).on('beforeunload', function(){
+	      deleteTempFile();
+	      $('#summernote').summernote('reset');
+	      return "Any changes will be lost";
+	    });
+	    //폼 submit 때는 경고창 뜨지 않도록 하기
+	    $(document).on("submit", "form", function(event){
+	        $(window).off('beforeunload');
+	    });
+	    
+	    function deleteTempFile() {
+	      let deleteFiles = [];
+	    	for(var i = 0; i<boardFileJsonArray.length; i++){
+	            console.log('반복문 동작!');
+	            var str = boardFileJsonArray[i].url;
+	            console.log(str);
+	            var result = str.split('/');
+	            console.log('정제된 데이터: ' + result);
+	            deleteFiles.push(result[3]);
+	      }
+	
+	      console.log(deleteFiles);
+	      
+	      $.ajax({
+	         type: 'post',
+	         contentType: 'application/json',
+	         url: '${pageContext.request.contextPath}/board/tempDelete',
+	         data: JSON.stringify(deleteFiles)
+	      });
+		} 
+	    
+	    
+			$('.boardContent-summernote').keydown(function() {
+				console.log('키 이벤트 발생');
+				
+				// textarea 값
+				let boardContent = $('.note-editable').html();
+				
+				// textarea length
+				let boardContentLength = boardContent.length;
+				let boardContentByteLength = 0;
+				
+				console.log(boardContent, 'boardContent');
+				console.log(boardContentLength, 'boardContentLength');
+				
+				
+				boardContentByteLength = (function(s,b,i,c) {
+					for(b=i=0;c=s.charCodeAt(i++);b+=c>>11?3:c>>7?2:1);
+					return b
+				})(boardContent);
 			
-			// textarea 값
+				if(boardContentByteLength >= 100000) {
+					alert('글자수 제한!');
+					return;
+				};
+				
+				console.log('boardContentByteLength', boardContentByteLength);
+				$('.textCount').text(boardContentByteLength);
+				
+			});
+			
+			
+		
+	    
+		
+	    $('#board-Write-button').click(function() {
+	        console.log('글 등록 버튼 이벤트 발생!');
+	    	// textarea 값
 			let boardContent = $('.note-editable').html();
 			
 			// textarea length
@@ -190,79 +237,93 @@
 				for(b=i=0;c=s.charCodeAt(i++);b+=c>>11?3:c>>7?2:1);
 				return b
 			})(boardContent);
+	        
+	        if($('input[name=boardTitle]').val().trim() === '') {
+	           alert('제목은 필수 항목입니다.');
+	           return;
+	          } else if($('textarea[name=boardContent]').val().trim() === '') {
+	             alert('내용은 필수 항목입니다.');
+	             return;
+	          } else if(boardContentByteLength >= 100000) {
+	         	alert('내용은 100000byte를 넘을 수 없습니다.');
+	         	return;
+	          } else {
+	             console.log('boardFileJsonArray: ' + boardFileJsonArray);
+	             console.log('길이: ' + boardFileJsonArray.length);
+	             
+	             for(var i = 0; i<boardFileJsonArray.length; i++){
+	                console.log('반복문 동작!');
+	                var str = boardFileJsonArray[i].url;
+	                console.log(str);
+	                // str의 값 : /board/summernoteImage/152210d9-a713-43ff-b81c-d9f1a3de0303(BN_CN10).jpg 
+	                // '='를 기준으로 자른다.
+	                var result = str.split('/');
+	                console.log('정제된 데이터: ' + result);
+	
+	                const $input = document.createElement('input');
+	                $input.setAttribute('name', 'filename');
+	                $input.setAttribute('type', 'hidden');
+	                $input.setAttribute('value', result[3]);
+	
+	                document.getElementById('writeForm').appendChild($input);
+	                
+	             }            
+	             $('#writeForm').submit();
+	             
+	          }
+	     });
+	    
+	    $('#thumbnail-checkbox').click(function() {
+	    	if ($('#thumbnail-checkbox').is(":checked")) {
+	    		$('.file-upload').css('display','inline-block');
+	    		
+	    	} else {
+	    		$('.file-upload').css('display','none');
+	    		
+				const dt = new DataTransfer();
+	    		$("#thumbnail-pic")[0].files = dt.files;
+	    	}
+    	});
+	    
+	    
+	 });// end jQuery
+	
+	// 이미지 파일을 올릴 시 미리보기 기능.
+	// 함수작성을 위한 빈 파일이 들어간 노드를 가져온다.
+	const input = document.querySelector('#thumbnail-pic');
+	
+	// 함수를 호출할때 실제 노드가 매개변수로 온다.
+	function readURL(input) {
+		if (input.files && input.files[0]) {
+			let reader = new FileReader();
+			
+			reader.onload = function (e) {
+			 $('#image_section').attr('src', e.target.result);  
+			}
+			
+			reader.readAsDataURL(input.files[0]);
+		}
+	}
+	 
+    // 프로필 이미지파일 제한
+	// 이벤트를 바인딩해서 input에 파일이 올라올때 (input에 change를 트리거할때) 위의 함수를 this context로 실행합니다.
+	$("#thumbnail-pic").change(function(){
 		
-			if(boardContentByteLength >= 100000) {
-				alert('글자수 제한!');
+		if (this.files[0]) {
+			if (!this.files[0].type.includes('image/')) {
+				alert("이미지 파일만 등록 가능합니다.");
+				const dt = new DataTransfer();
+				this.files = dt.files;
+				
+				 $('#image_section').attr('src', '<c:url value="/resources/img/BoardThumbnail.png" />');  
 				return;
-			};
-			
-			console.log('boardContentByteLength', boardContentByteLength);
-			$('.textCount').text(boardContentByteLength);
-			
-		});
-		
-		
-	
-    
-	
-    $('#board-Write-button').click(function() {
-        console.log('글 등록 버튼 이벤트 발생!');
-    	// textarea 값
-		let boardContent = $('.note-editable').html();
-		
-		// textarea length
-		let boardContentLength = boardContent.length;
-		let boardContentByteLength = 0;
-		
-		console.log(boardContent, 'boardContent');
-		console.log(boardContentLength, 'boardContentLength');
-		
-		
-		boardContentByteLength = (function(s,b,i,c) {
-			for(b=i=0;c=s.charCodeAt(i++);b+=c>>11?3:c>>7?2:1);
-			return b
-		})(boardContent);
-        
-        if($('input[name=boardTitle]').val().trim() === '') {
-           alert('제목은 필수 항목입니다.');
-           return;
-          } else if($('textarea[name=boardContent]').val().trim() === '') {
-             alert('내용은 필수 항목입니다.');
-             return;
-          } else if(boardContentByteLength >= 100000) {
-         	alert('내용은 100000byte를 넘을 수 없습니다.');
-         	return;
-          } else {
-             console.log('jsonArray: ' + jsonArray);
-             console.log('길이: ' + jsonArray.length);
-             
-             for(var i = 0; i<jsonArray.length; i++){
-                console.log('반복문 동작!');
-                var str = jsonArray[i].url;
-                console.log(str);
-                // str의 값 : common/getImg.do?savedFileName=bc395afe-2324-438d-ae68-1a0a75d0a431.png 
-                // '='를 기준으로 자른다.
-                var result = str.split('/');
-                console.log('정제된 데이터: ' + result);
-
-                const $input = document.createElement('input');
-                $input.setAttribute('name', 'filename');
-                $input.setAttribute('type', 'hidden');
-                $input.setAttribute('value', result[3]);
-
-                document.getElementById('writeForm').appendChild($input);
-                
-             }            
-            
-             $('#writeForm').submit();
-             
-          }
-     });
-    
-    
-    
-    
-    
-  }); 
+			} else {
+				readURL(this);				
+			}
+		} else {
+			 $('#image_section').attr('src', '<c:url value="/resources/img/BoardThumbnail.png" />');  
+			readURL(this);
+		}
+	});	
 
 </script>

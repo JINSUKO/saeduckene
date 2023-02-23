@@ -20,10 +20,8 @@
 		    (
 		    SELECT ROWNUM AS rn, tbl.* FROM
 		        (
-		        SELECT d.*, i.*, c.*, u.user_nickname AS writer
+		        SELECT d.*, c.*, u.user_nickname AS writer
                 FROM board d
-                LEFT JOIN boardImage i
-                ON d.board_no = i.board_board_no
                 LEFT JOIN category c
             	ON d.board_category_no = c.category_no
             	LEFT JOIN duck_user u
@@ -181,7 +179,7 @@
 	</select>
 	
 	<insert id="boardImageAdd">
-		INSERT INTO boardImage VALUES(board_image_no_seq.NEXTVAL, #{UUID}, #{boardNo}, 1)
+		INSERT INTO boardImage VALUES(board_image_no_seq.NEXTVAL, #{UUID}, #{boardNo})
 	</insert>
 	
 	<update id="addViewCount">

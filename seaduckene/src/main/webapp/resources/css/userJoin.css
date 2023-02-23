@@ -193,7 +193,7 @@
 
 	border:3px solid #707070;
 	position: relative;
-  }
+}
 #userJoinPage .join-container input[id="optional-checkbox"]:checked + label::after{
 	content:'✔';
 	font-size: 40px;
@@ -204,7 +204,7 @@
 	position: absolute;
 	left: 0px;
 	top: 0px;
- }
+}
 
 
 

@@ -127,7 +127,7 @@ public class UserController {
 	}
 	
 	@PostMapping("/userJoin")
-	public ModelAndView userjoin(UserVO userVO, AddressVO addressVO, CategoryVO  categoryVO, ModelAndView modelAndView, MultipartFile profilePic) {
+	public ModelAndView userjoin(UserVO userVO, AddressVO addressVO, CategoryVO categoryVO, ModelAndView modelAndView, MultipartFile profilePic) {
 		log.info(userVO);
 		log.info(addressVO);
 		log.info(categoryVO);
@@ -352,14 +352,14 @@ public class UserController {
 		return Integer.toString(userService.checkCurrPw(pwMap));
 	}
 	
-	@PostMapping("/userUpdate")
-	public ModelAndView userUpdate(UserVO userVO, AddressVO addressVO, CategoryVO  categoryVO
+	@PostMapping("/userUpdate") // 동일한 name으로 여러 태그에서 받아올때, String은 문자열 붙여서 들어오는데, List로 받아서 들어올 수도 있다.
+	public ModelAndView userUpdate(UserVO userVO, AddressVO addressVO, CategoryVO categoryVO
 								, ModelAndView modelAndView, MultipartFile profilePic, String categoryIndex, String addressCount) {
 		log.info("/userUpdate");
 		log.info(userVO); 
 		log.info(addressVO); // 수정된 부분 확인 후 db 수정
 		log.info(categoryVO); // 삭제된 부분 조회 후 삭제 처리 먼저, 추가된 부분 확인 후 db favorite 추가. 
-		log.info(profilePic); 
+		log.info(profilePic);
 		log.info(categoryIndex);
 		log.info(addressCount);
 		

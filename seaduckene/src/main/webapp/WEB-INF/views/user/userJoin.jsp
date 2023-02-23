@@ -707,8 +707,11 @@
         
 	}); // end jQuery
 	
+	// 이미지 파일을 올릴 시 미리보기 기능.
+	// 함수작성을 위한 빈 파일이 들어간 노드를 가져온다.
 	const input = document.querySelector('#user-profile-pic');
 	
+	// 함수를 호출할때 실제 노드가 매개변수로 온다.
 	function readURL(input) {
 		if (input.files && input.files[0]) {
 			let reader = new FileReader();
