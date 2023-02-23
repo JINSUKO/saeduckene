@@ -110,6 +110,13 @@ public class boardListController {
 				e.printStackTrace();
 			}
 		}
+		
+		for (String summerfile : summerfiles) {
+			boardService.boardImageAdd(Integer.parseInt(boardNo), summerfile);
+		}
+		if (thumbnail.getSize() != 0) {
+			// vo클래스랑 db 다 바꾸기.
+		}
 		boardService.write(vo);
 		return "redirect:/board/boardList/" + vo.getBoardCategoryNo();
 	}
@@ -123,10 +130,7 @@ public class boardListController {
 		summernoteCopy copy = new summernoteCopy();
 		copy.summerCopy(summerfiles);
 		
-		int boardNo = boardService.boardNoSearch(vo.getBoardUserNo());
-		for (String summerfile : summerfiles) {
-			boardService.boardImageAdd(boardNo, summerfile);
-		}
+
 	}
 	
 	//상세보기 페이지
