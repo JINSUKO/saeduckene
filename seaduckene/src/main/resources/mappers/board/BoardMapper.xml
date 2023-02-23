@@ -204,6 +204,17 @@
 		]]>
 	</select>
 	
+	<select id="getLatestBoardNo" resultType="int">
+		SELECT * FROM
+		(
+			SELECT ROWNUM AS rn, tbl.* FROM
+				(
+					SELECT board_no FROM board ORDER BY board_no DESC
+				) tbl
+		) s
+		WHERE rn = 1
+	</select>
+	
 </mapper>
 
 

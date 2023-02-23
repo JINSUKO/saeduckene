@@ -30,15 +30,18 @@
 <form action="${pageContext.request.contextPath}/board/boardWrite" id="writeForm" method="post" enctype="multipart/form-data">
 
    <div class="container">
-        <label for="exampleFormControlInput1">&nbsp;제목</label>
-        &nbsp;&nbsp;&nbsp; 썸네일 설정하기
-		<input type="checkbox" id="thumbnail-checkbox">
-		<label for="thumbnail-checkbox"></label>
-		<span class="file-upload">
-			<i class="note-icon-picture"></i>
-			<input name="thumbnail-pic" type="file" class="upload" id="thumbnail-pic" accept="image/*" > <br>
-			// 모달만들어서 썸네일 미리보기 만들어주기.
-		</span>
+		<div style="line-height: 30px">
+	        <label for="exampleFormControlInput1">&nbsp;제목</label>
+	        &nbsp;&nbsp;&nbsp; 썸네일 설정하기
+			<input type="checkbox" id="thumbnail-checkbox">
+			<label for="thumbnail-checkbox"></label>
+			<span class="file-upload">
+				<i class="note-icon-picture"></i>
+				<input name="thumbnail" type="file" class="upload" id="thumbnail-pic" accept="image/*" > <br>
+			</span>
+			<button type="button" class="sbtn cyan" id="thumbnail-show" >썸네일 미리보기</button>
+			<!-- 모달만들어서 썸네일 미리보기 만들어주기. -->
+    	</div>
       <div class="form-group">
         <input type="text" class="form-control" id="exampleFormControlInput1" name="boardTitle" placeholder="제목을 작성해주세요." maxlength="50" />
       </div>

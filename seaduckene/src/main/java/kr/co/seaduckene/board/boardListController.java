@@ -94,9 +94,12 @@ public class boardListController {
 	
 	//게시글을 DB 등록 요청
 	@PostMapping("/boardWrite")
-	public String boardWrite(BoardVO vo, @RequestParam(value="filename", required=false) List<String> summerfiles) {
+	public String boardWrite(BoardVO vo, @RequestParam(value="filename", required=false) List<String> summerfiles,
+			MultipartFile thumbnail) {
 		log.info("글 등록 요청이 들어옴!");
 		log.info("vo: " + vo);
+		String boardNo = Integer.toString(boardService.getLatestBoardNo() + 1);
+		vo.setBoardContent(vo.getBoardContent().replaceAll("_", boardNo));
 		if(summerfiles != null) {
 			log.info("summerFile: " + summerfiles);
 			
@@ -107,7 +110,6 @@ public class boardListController {
 				e.printStackTrace();
 			}
 		}
-		
 		boardService.write(vo);
 		return "redirect:/board/boardList/" + vo.getBoardCategoryNo();
 	}
@@ -115,7 +117,7 @@ public class boardListController {
 	private void summerfileUpload(BoardVO vo, List<String> summerfiles) throws Exception {
 		String boardContent;
 		boardContent = vo.getBoardContent();
-		String imgEditedContent = boardContent.replaceAll("summernoteImage","getImg");
+		String imgEditedContent = boardContent.replaceAll("summernoteImage", "getImg");
 		vo.setBoardContent(imgEditedContent);
 		
 		summernoteCopy copy = new summernoteCopy();

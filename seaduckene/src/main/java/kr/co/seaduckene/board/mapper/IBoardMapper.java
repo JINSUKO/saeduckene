@@ -20,6 +20,9 @@ public interface IBoardMapper {
 	// 글 목록
 	List<BoardVO> list(Map<String, Object> map);
 	
+	// 가장 최신 boardNo
+	int getLatestBoardNo();
+	
 	// category 글 수량
 	int getTotal(int categoryNo);
 	

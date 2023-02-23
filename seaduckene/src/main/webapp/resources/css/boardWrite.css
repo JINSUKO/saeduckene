@@ -56,7 +56,7 @@ input[id="thumbnail-checkbox"]:checked + label::after{
 .file-upload i {
 	font-size: 20px;
 	position: relative;
-	top: -6px;
+	top: -11px;
 	left: -4px;
 	
 }
@@ -65,7 +65,7 @@ input[id="thumbnail-checkbox"]:checked + label::after{
 	position: absolute;
 
 	border:1px solid red !important;
-	top: 0px;
+	top: -20px;
 	right: 0;
 	margin: 0;
 	padding: 0;
@@ -73,6 +73,12 @@ input[id="thumbnail-checkbox"]:checked + label::after{
 	cursor: pointer;
 	opacity: 0;
 	filter: alpha(opacity=0);
+}
+
+#thumbnail-show {
+	width: 105px;
+	height: 20px;
+	padding: 0;
 }
 
 /*============= END boardWrite ==============*/
