@@ -98,7 +98,9 @@ public class boardListController {
 			MultipartFile thumbnail) {
 		log.info("글 등록 요청이 들어옴!");
 		log.info("vo: " + vo);
-		String boardNo = Integer.toString(boardService.getLatestBoardNo() + 1);
+		
+		boardService.write(vo);
+		String boardNo = Integer.toString(boardService.boardNoSearch(vo.getBoardUserNo()));
 		vo.setBoardContent(vo.getBoardContent().replaceAll("_", boardNo));
 		if(summerfiles != null) {
 			log.info("summerFile: " + summerfiles);
@@ -117,7 +119,7 @@ public class boardListController {
 		if (thumbnail.getSize() != 0) {
 			// vo클래스랑 db 다 바꾸기.
 		}
-		boardService.write(vo);
+		boardService.update(vo);
 		return "redirect:/board/boardList/" + vo.getBoardCategoryNo();
 	}
 	

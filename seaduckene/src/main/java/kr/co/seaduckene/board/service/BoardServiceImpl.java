@@ -35,11 +35,6 @@ public class BoardServiceImpl implements IBoardService {
 
 		return boardMapper.list(map);
 	}
-
-	@Override
-	public int getLatestBoardNo() {
-		return boardMapper.getLatestBoardNo();
-	}
 	
 	@Override
 	public int getTotal(int categoryNo) {

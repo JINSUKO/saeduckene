@@ -18,9 +18,6 @@ public interface IBoardService {
 	// 글 목록
 	List<BoardVO> list(PageVO paging , int categoryNo);
 	
-	// 가장 최신 boardNo
-	int getLatestBoardNo();
-	
 	// category 글 수량
 	int getTotal(int categoryNo);
 	
