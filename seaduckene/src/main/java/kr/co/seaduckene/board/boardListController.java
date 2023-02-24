@@ -109,7 +109,7 @@ public class boardListController {
 		boardVo.setBoardContent(boardVo.getBoardContent().replaceAll("_", Integer.toString(boardNo)));
 		boardVo.setBoardNo(boardNo);
 		
-		if(summerfiles != null) {
+		if (summerfiles != null) {
 			log.info("summerFile: " + summerfiles);
 			
 			try {
@@ -117,19 +117,45 @@ public class boardListController {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			
+			for (String summerfile : summerfiles) {
+				boardService.boardImageAdd(boardNo, summerfile);
+			}
 		}
 		
-		for (String summerfile : summerfiles) {
-			boardService.boardImageAdd(boardNo, summerfile);
-		}
 		if (thumbnail.getSize() != 0) {
 			String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 			String fileRealName = thumbnail.getOriginalFilename();
 			String fileExtension = fileRealName.substring(fileRealName.lastIndexOf("."), fileRealName.length());
+			String boardThumbnailPath = "c:/imgduck/board/";
 			
-			boardVo.setBoardThumbnailPath("c:/imgduck/board/");
+			boardVo.setBoardThumbnailPath(boardThumbnailPath);
 			boardVo.setBoardThumbnailFileName(uuid + fileExtension);
 			boardVo.setBoardThumbnailFileRealName(fileRealName);
+			
+			// 나중에 날짜로 폴더명 구분할 때 사용함.
+			/*File folder = new File(boardThumbnailPath);
+			if(!folder.exists()) {
+				folder.mkdirs();
+			}*/
+			File saveFile = new File(boardThumbnailPath + uuid + fileExtension);
+			try {
+				thumbnail.transferTo(saveFile);
+			} catch (IllegalStateException | IOException e) {
+				e.printStackTrace();
+			}
+			
+			// update도 복사해서 추가해야 함.
+			/*
+			 * UserVO userBeforeUpdate = userService.getUserVoWithNo(userVO.getUserNo());
+			 * File previousFile = new File(userBeforeUpdate.getUserProfilePath() +
+			 * userBeforeUpdate.getUserProfileFolder() + "/" +
+			 * userBeforeUpdate.getUserProfileFileName());
+			 * 
+			 * previousFile.delete();
+			 * 
+			 * update에 기존 썸네일 파일 삭제 코드
+			 */
 		}
 		
 		boardService.update(boardVo);

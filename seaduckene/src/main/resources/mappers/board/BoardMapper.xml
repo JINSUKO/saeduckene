@@ -13,6 +13,17 @@
 		<result property="boardContent" column="board_content" jdbcType="CLOB" javaType="java.lang.String" />
 	</resultMap>
 	
+	<sql id="boardThumbnail">
+		<if test="boardThumbnailFileRealName == null">
+			board_thumbnail_path = 'c:/imgduck/board/', board_thumbnail_file_name = 'BoardThumbnail.png'
+			, board_thumbnail_file_real_name = 'BoardThumbnail.png'
+		</if>
+		<if test="boardThumbnailFileRealName != null">
+			board_thumbnail_path = #{boardThumbnailPath}, board_thumbnail_file_name = #{boardThumbnailFileName}
+			, board_thumbnail_file_real_name = #{boardThumbnailFileRealName}
+		</if>
+	</sql>
+	
 	<select id="list" resultType="boardList">
 		<![CDATA[
 		SELECT *
@@ -84,8 +95,8 @@
 	<update id="update">
 		UPDATE board
 		SET board_title = #{boardTitle}, board_content = #{boardContent}, board_reg_date = sysdate, 
-			board_thumbnail_path = #{boardThumbnailPath}, board_thumbnail_file_name = #{boardThumbnailFileName}
-			, board_thumbnail_file_real_name = #{boardThumbnailFileRealName}
+			<include refid="boardThumbnail"/>
+
 		WHERE board_no = #{boardNo}
 	</update>
 
