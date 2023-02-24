@@ -13,18 +13,21 @@ import org.springframework.stereotype.Service;
 @Service
 public class SummernoteCopy {
 
-	public Map<String, Object> summerCopy(List<String> fileList) throws Exception {
+	public Map<String, Object> summerCopy(List<String> summerfileNames, int boardNo) throws Exception {
 
 		Map<String, Object> result = new HashMap<String, Object>();
 
-		if(fileList != null ) {
-			for (int i = 0; i < fileList.size(); i++) {
-				String oriFilePath = "c:/imgduck/temp/" + fileList.get(i);
+		String boardNoStr = Integer.toString(boardNo);
+		
+		if(summerfileNames != null ) {
+			for (int i = 0; i < summerfileNames.size(); i++) {
+				String oriFilePath = "c:/imgduck/temp/" + summerfileNames.get(i);
 
 				// 복사될 파일경로
-				String copyFilePath = "c:/imgduck/board/" + fileList.get(i);
+				String copyFilePath = ("c:/imgduck/board/" + summerfileNames.get(i)).replace("_", boardNoStr);
 
 				try {
+					// 파일 이름은 안 건드리고 내부 byte[]만 복사한다
 					FileInputStream fis = new FileInputStream(oriFilePath); // 읽을파일
 					FileOutputStream fos = new FileOutputStream(copyFilePath); // 복사할파일
 					int data = 0;

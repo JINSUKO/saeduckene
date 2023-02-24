@@ -99,7 +99,7 @@ public class boardListController {
 	
 	//게시글을 DB 등록 요청
 	@PostMapping("/boardWrite")
-	public String boardWrite(BoardVO boardVo, @RequestParam(value="filename", required=false) List<String> summerfiles,
+	public String boardWrite(BoardVO boardVo, @RequestParam(value="filename", required=false) List<String> summerfileNames,
 			MultipartFile thumbnail) {
 		log.info("글 등록 요청이 들어옴!");
 		log.info("vo: " + boardVo);
@@ -109,17 +109,17 @@ public class boardListController {
 		boardVo.setBoardContent(boardVo.getBoardContent().replaceAll("_", Integer.toString(boardNo)));
 		boardVo.setBoardNo(boardNo);
 		
-		if (summerfiles != null) {
-			log.info("summerFile: " + summerfiles);
+		if (summerfileNames != null) {
+			log.info("summerFile: " + summerfileNames);
 			
 			try {
-				summerfileUpload(boardVo, summerfiles);
+				summerfileUpload(boardVo, summerfileNames);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			
-			for (String summerfile : summerfiles) {
-				boardService.boardImageAdd(boardNo, summerfile);
+			for (String summerfileName : summerfileNames) {
+				boardService.boardImageAdd(boardNo, summerfileName);
 			}
 		}
 		
@@ -162,14 +162,14 @@ public class boardListController {
 		return "redirect:/board/boardList/" + boardVo.getBoardCategoryNo();
 	}
 	
-	private void summerfileUpload(BoardVO vo, List<String> summerfiles) throws Exception {
+	private void summerfileUpload(BoardVO boardVo, List<String> summerfileNames) throws Exception {
 		String boardContent;
-		boardContent = vo.getBoardContent();
+		boardContent = boardVo.getBoardContent();
 		String imgEditedContent = boardContent.replaceAll("summernoteImage", "getImg");
-		vo.setBoardContent(imgEditedContent);
+		boardVo.setBoardContent(imgEditedContent);
 		
 		// temp 폴더에서 board폴더로 파일을 복사하고 기존 temp의 파일을 삭제해준다.
-		summernoteCopy.summerCopy(summerfiles);
+		summernoteCopy.summerCopy(summerfileNames, boardVo.getBoardNo());
 		
 
 	}
