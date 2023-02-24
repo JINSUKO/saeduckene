@@ -556,10 +556,10 @@ public class UserController {
 			String fileRealName = profilePic.getOriginalFilename(); // 파일 원본명
 			String profilePath = "c:/imgduck/user/";
 			
-			String fileExtension = fileRealName.substring(fileRealName.lastIndexOf("."),fileRealName.length());
+			String fileExtension = fileRealName.substring(fileRealName.lastIndexOf("."), fileRealName.length());
 			
 			UUID uuid = UUID.randomUUID();
-			String uu = uuid.toString().replace("-","");
+			String uu = uuid.toString().replace("-", "");
 			
 			
 			userVO.setUserProfileFileRealName(fileRealName);

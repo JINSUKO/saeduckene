@@ -8,7 +8,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class summernoteCopy {
+import org.springframework.stereotype.Service;
+
+@Service
+public class SummernoteCopy {
 
 	public Map<String, Object> summerCopy(List<String> fileList) throws Exception {
 

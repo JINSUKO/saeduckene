@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import kr.co.seaduckene.board.command.BoardListVO;
 import kr.co.seaduckene.board.command.BoardVO;
 import kr.co.seaduckene.board.mapper.IBoardMapper;
 import kr.co.seaduckene.common.CategoryVO;
@@ -28,7 +29,7 @@ public class BoardServiceImpl implements IBoardService {
 	}
 
 	@Override
-	public List<BoardVO> list(PageVO paging, int categoryNo) {
+	public List<BoardListVO> list(PageVO paging, int categoryNo) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("paging", paging);
 		map.put("categoryNo", categoryNo);

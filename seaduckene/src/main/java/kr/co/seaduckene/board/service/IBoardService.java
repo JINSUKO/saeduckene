@@ -3,6 +3,7 @@ package kr.co.seaduckene.board.service;
 import java.util.List;
 import java.util.Map;
 
+import kr.co.seaduckene.board.command.BoardListVO;
 import kr.co.seaduckene.board.command.BoardVO;
 import kr.co.seaduckene.common.CategoryVO;
 import kr.co.seaduckene.common.NoticeVO;
@@ -16,7 +17,7 @@ public interface IBoardService {
 	void write(BoardVO vo);
 
 	// 글 목록
-	List<BoardVO> list(PageVO paging , int categoryNo);
+	List<BoardListVO> list(PageVO paging , int categoryNo);
 	
 	// category 글 수량
 	int getTotal(int categoryNo);

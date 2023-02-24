@@ -25,7 +25,7 @@ import kr.co.seaduckene.common.NoticeVO;
 import kr.co.seaduckene.user.command.UserVO;
 import kr.co.seaduckene.user.service.IUserService;
 import kr.co.seaduckene.util.AskCategoryBoardVO;
-import kr.co.seaduckene.util.summernoteCopy;
+import kr.co.seaduckene.util.SummernoteCopy;
 import lombok.extern.log4j.Log4j;
 
 @Controller
@@ -85,7 +85,7 @@ public class adminController {
 		vo.setNoticeContent(editordata);
 		service.write(vo);
 
-		summernoteCopy copy = new summernoteCopy();
+		SummernoteCopy copy = new SummernoteCopy();
 		copy.summerCopy(summerfile);
 		
 		return "redirect:/admin/adminMain";

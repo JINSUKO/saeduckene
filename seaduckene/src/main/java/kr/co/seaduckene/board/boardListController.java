@@ -39,12 +39,13 @@ import org.springframework.web.util.WebUtils;
 
 import com.google.gson.JsonObject;
 
+import kr.co.seaduckene.board.command.BoardListVO;
 import kr.co.seaduckene.board.command.BoardVO;
 import kr.co.seaduckene.board.service.IBoardService;
 import kr.co.seaduckene.common.NoticeVO;
 import kr.co.seaduckene.user.command.UserVO;
 import kr.co.seaduckene.util.PageVO;
-import kr.co.seaduckene.util.summernoteCopy;
+import kr.co.seaduckene.util.SummernoteCopy;
 import lombok.extern.log4j.Log4j;
 
 @Log4j
@@ -54,6 +55,10 @@ public class boardListController {
 	
 	@Autowired
 	private IBoardService boardService;
+	
+	// summernote로 이미지 파일 복사하는 기능이 있는 클래스
+	@Autowired
+	private SummernoteCopy summernoteCopy;
 
 	//게시판 목록으로 이동
 	@GetMapping("/boardList/{categoryNo}")
@@ -72,7 +77,7 @@ public class boardListController {
 	//페이징
 	@GetMapping("/boardLists")
 	@ResponseBody
-	public List<BoardVO> boardList(PageVO paging, int categoryNo) {
+	public List<BoardListVO> boardList(PageVO paging, int categoryNo) {
 		
 		paging.setCpp(9);
 		
@@ -94,33 +99,41 @@ public class boardListController {
 	
 	//게시글을 DB 등록 요청
 	@PostMapping("/boardWrite")
-	public String boardWrite(BoardVO vo, @RequestParam(value="filename", required=false) List<String> summerfiles,
+	public String boardWrite(BoardVO boardVo, @RequestParam(value="filename", required=false) List<String> summerfiles,
 			MultipartFile thumbnail) {
 		log.info("글 등록 요청이 들어옴!");
-		log.info("vo: " + vo);
+		log.info("vo: " + boardVo);
 		
-		boardService.write(vo);
-		String boardNo = Integer.toString(boardService.boardNoSearch(vo.getBoardUserNo()));
-		vo.setBoardContent(vo.getBoardContent().replaceAll("_", boardNo));
+		boardService.write(boardVo);
+		int boardNo = boardService.boardNoSearch(boardVo.getBoardUserNo());
+		boardVo.setBoardContent(boardVo.getBoardContent().replaceAll("_", Integer.toString(boardNo)));
+		boardVo.setBoardNo(boardNo);
+		
 		if(summerfiles != null) {
 			log.info("summerFile: " + summerfiles);
 			
 			try {
-				summerfileUpload(vo, summerfiles);
+				summerfileUpload(boardVo, summerfiles);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 		
 		for (String summerfile : summerfiles) {
-			boardService.boardImageAdd(Integer.parseInt(boardNo), summerfile);
+			boardService.boardImageAdd(boardNo, summerfile);
 		}
 		if (thumbnail.getSize() != 0) {
-			// vo클래스랑 db 다 바꾸기.
+			String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+			String fileRealName = thumbnail.getOriginalFilename();
+			String fileExtension = fileRealName.substring(fileRealName.lastIndexOf("."), fileRealName.length());
+			
+			boardVo.setBoardThumbnailPath("c:/imgduck/board/");
+			boardVo.setBoardThumbnailFileName(uuid + fileExtension);
+			boardVo.setBoardThumbnailFileRealName(fileRealName);
 		}
-		boardService.update(vo);
-		return "redirect:/board/boardList/" + vo.getBoardCategoryNo();
+		
+		boardService.update(boardVo);
+		return "redirect:/board/boardList/" + boardVo.getBoardCategoryNo();
 	}
 	
 	private void summerfileUpload(BoardVO vo, List<String> summerfiles) throws Exception {
@@ -129,8 +142,8 @@ public class boardListController {
 		String imgEditedContent = boardContent.replaceAll("summernoteImage", "getImg");
 		vo.setBoardContent(imgEditedContent);
 		
-		summernoteCopy copy = new summernoteCopy();
-		copy.summerCopy(summerfiles);
+		// temp 폴더에서 board폴더로 파일을 복사하고 기존 temp의 파일을 삭제해준다.
+		summernoteCopy.summerCopy(summerfiles);
 		
 
 	}
@@ -249,7 +262,8 @@ public class boardListController {
 				
 		categoryNo = categoryNo.length() == 1 ? "0" + categoryNo : categoryNo;
 		
-		String savedFileName = UUID.randomUUID() + "(BN_CN" + categoryNo + ")" + extension;	//저장될 파일명
+		String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+		String savedFileName = uuid + "(BN_CN" + categoryNo + ")" + extension;	//저장될 파일명
 		
 		File targetFile = new File(fileRoot + savedFileName);	
 		

@@ -13,7 +13,7 @@
 		<result property="boardContent" column="board_content" jdbcType="CLOB" javaType="java.lang.String" />
 	</resultMap>
 	
-	<select id="list" resultType="boardImage">
+	<select id="list" resultType="boardList">
 		<![CDATA[
 		SELECT *
 		FROM
@@ -83,7 +83,9 @@
 	<!-- 수정 -->
 	<update id="update">
 		UPDATE board
-		SET board_title=#{boardTitle}, board_content=#{boardContent}, board_reg_date = sysdate
+		SET board_title = #{boardTitle}, board_content = #{boardContent}, board_reg_date = sysdate, 
+			board_thumbnail_path = #{boardThumbnailPath}, board_thumbnail_file_name = #{boardThumbnailFileName}
+			, board_thumbnail_file_real_name = #{boardThumbnailFileRealName}
 		WHERE board_no = #{boardNo}
 	</update>
 
