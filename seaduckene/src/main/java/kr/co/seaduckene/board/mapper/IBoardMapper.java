@@ -34,7 +34,7 @@ public interface IBoardMapper {
 	CategoryVO getCategory(int categoryNo);
 
 	// 상세보기
-	BoardVO content(int bno);
+	BoardVO getBoardDetailVo(int bno);
 
 	// 글 수정
 	void update(BoardVO bno);

@@ -60,11 +60,13 @@
 
 	<select id="getCategory" resultType="category">
 		SELECT * FROM category
+		ORDER BY category_major_title , category_minor_title
 	</select>
 	
 	<select id="getMajor" resultType="String">
 		SELECT DISTINCT category_major_title
 		FROM category
+		ORDER BY category_major_title 
 	</select>
 
 	<select id="getMinor" resultType="String">

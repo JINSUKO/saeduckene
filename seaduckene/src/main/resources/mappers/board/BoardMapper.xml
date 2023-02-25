@@ -86,7 +86,7 @@
 	</insert>
 	
 	<!-- 글 상세 보기 -->
-	<select id="content" resultMap="boardCLOB">
+	<select id="getBoardDetailVo" resultMap="boardCLOB">
 		SELECT * FROM board
 		WHERE board_no = #{boardNo}
 	</select> 

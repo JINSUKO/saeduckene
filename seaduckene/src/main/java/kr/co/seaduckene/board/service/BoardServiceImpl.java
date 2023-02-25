@@ -58,8 +58,8 @@ public class BoardServiceImpl implements IBoardService {
 	}
 
 	@Override
-	public BoardVO content(int bno) {
-		return boardMapper.content(bno);
+	public BoardVO getBoardDetailVo(int bno) {
+		return boardMapper.getBoardDetailVo(bno);
 	}
 
 	@Override

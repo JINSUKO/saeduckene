@@ -8,64 +8,65 @@
 
 <section>
 	<div class="container mt-4">
-   <div class="row">
-      <div class="mb-3">
-	  	<div class="col col align-self-center" style="position: relative;">
-        	<nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='15'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
-			  <ol class="breadcrumb" style="margin-bottom: 0; font-size: 25px; color: #ffc107;">
-			    <li class="breadcrumb-item mt-1" id="majorTitle">${category.categoryMajorTitle}</li>
-			    <li class="breadcrumb-item mt-1" id="minorTitle">${category.categoryMinorTitle}&nbsp;&nbsp;</li>
-			  </ol>
-			</nav>
-        </div>
+	  <div class="row">
+	     <div class="mb-3">
+		  	<div class="col col align-self-center" style="position: relative;">
+		       	<nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='15'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+				  <ol class="breadcrumb" style="margin-bottom: 0; font-size: 25px; color: #ffc107;">
+				    <li class="breadcrumb-item mt-1" id="majorTitle">${category.categoryMajorTitle}</li>
+				    <li class="breadcrumb-item mt-1" id="minorTitle">${category.categoryMinorTitle}&nbsp;&nbsp;</li>
+				  </ol>
+				</nav>
+	       </div>
+		</div>
+	  </div>
+	  <div class="row">
+	     <div class="col mb-1">
+			<p>&nbsp;작성자: ${nickName }</p>
+	     </div>
+	  </div>
 	</div>
-   </div>
-   <div class="row">
-      <div class="col mb-1">
-		<p>&nbsp;작성자: ${nickName }</p>
-      </div>
-   </div>
-</div>
-
-<form action="${pageContext.request.contextPath}/board/boardWrite" id="writeForm" method="post" enctype="multipart/form-data">
-
-   <div class="container">
-		<div style="line-height: 30px">
-	        <label for="exampleFormControlInput1">&nbsp;제목</label>
-	        &nbsp;&nbsp;&nbsp; 썸네일 설정하기
-			<input type="checkbox" id="thumbnail-checkbox">
-			<label for="thumbnail-checkbox"></label>
-			<span class="file-upload">
-				<i class="note-icon-picture"></i>
-				<input name="thumbnail" type="file" class="upload" id="thumbnail-pic" accept="image/*" > <br>
-			</span>
-			<button type="button" class="sbtn cyan" id="thumbnail-show" >썸네일 미리보기</button>
-			<!-- 모달만들어서 썸네일 미리보기 만들어주기. -->
-    	</div>
-      <div class="form-group">
-        <input type="text" class="form-control" id="exampleFormControlInput1" name="boardTitle" placeholder="제목을 작성해주세요." maxlength="50" />
-      </div>
-
-      <div class="form-group boardContent-summernote">
-      	<textarea class="form-control" id="summernote" rows="10" name="boardContent"></textarea>
-      	<!-- <input type="hidden" id="summernote" name="boardContent"></input> -->
-      </div>
-      	<div class="mt-3 float-end" style="color: #8c8c8c;">
-      		<span class=textCount>0</span>
-      		<span class=textTotal>/100000Byte &nbsp;</span>
-      	</div>
-      <input type="hidden" name="boardUserNo" value="${login.userNo}"> 
-      <input type="hidden" name="boardCategoryNo" value="${categoryNo}"> <br>
-
-      <div>
-
-         <button type="button" class="sbtn cyan small rounded" id="board-Write-button">등록하기</button>
-         <a href='<c:url value='/board/boardList/${categoryNo}'/>' class="sbtn blue small rounded" 
-            id="WritelistBtn">목록으로</a>
-      </div>
-
-   </div>
-</form>
+	
+	<!-- enctype="multipart/form-data" 속성 추가 해야 file이 넘어간다.-->
+	<form action="${pageContext.request.contextPath}/board/boardWrite" id="writeForm" method="post" enctype="multipart/form-data">
+	
+	   <div class="container">
+			<div style="line-height: 30px">
+			    <label for="exampleFormControlInput1">&nbsp;제목</label>
+			       &nbsp;&nbsp;&nbsp; 썸네일 설정하기
+				<input type="checkbox" id="thumbnail-checkbox">
+				<label for="thumbnail-checkbox"></label>
+				<span class="file-upload">
+					<i class="note-icon-picture"></i>
+					<input name="thumbnail" type="file" class="upload" id="thumbnail-pic" accept="image/*" > <br>
+				</span>
+				<button type="button" class="sbtn cyan" id="thumbnail-show" >썸네일 미리보기</button>
+				<!-- 모달만들어서 썸네일 미리보기 만들어주기. -->
+			</div>
+	      <div class="form-group">
+	        <input type="text" class="form-control" id="exampleFormControlInput1" name="boardTitle" placeholder="제목을 작성해주세요." maxlength="50" />
+	      </div>
+	
+	      <div class="form-group boardContent-summernote">
+	      	<textarea class="form-control" id="summernote" rows="10" name="boardContent"></textarea>
+	      	<!-- <input type="hidden" id="summernote" name="boardContent"></input> -->
+	      </div>
+	      	<div class="mt-3 float-end" style="color: #8c8c8c;">
+	      		<span class=textCount>0</span>
+	      		<span class=textTotal>/100000Byte &nbsp;</span>
+	      	</div>
+	      <input type="hidden" name="boardUserNo" value="${login.userNo}"> 
+	      <input type="hidden" name="boardCategoryNo" value="${categoryNo}"> <br>
+	
+	      <div>
+	
+	         <button type="button" class="sbtn cyan small rounded" id="board-Write-button">등록하기</button>
+	         <a href='<c:url value='/board/boardList/${categoryNo}'/>' class="sbtn blue small rounded" 
+	            id="WritelistBtn">목록으로</a>
+	      </div>
+	
+	   </div>
+	</form>
 </section>
 
 <%@ include file="../include/footer.jsp"%>
@@ -108,27 +109,27 @@
 			,['view', ['codeview']]
 	        ],
 	      // 추가한 글꼴
-	      fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New','맑은 고딕','궁서','굴림체','굴림','돋음체','바탕체'],
+	      fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New','맑은 고딕','궁서','굴림체','굴림','돋음체','바탕체','GangwonEdu_OTFBoldA'],
 	      // 추가한 폰트사이즈
 	      fontSizes: ['8','9','10','11','12','14','16','18','20','22','24','28','30','36','50','72'],
 	      callbacks: {	//여기 부분이 이미지를 첨부하는 부분
 				// onImageUpload : function(files) {
 			    onImageUpload : function(files, editor, welEditable) {
 					/* uploadSummernoteImageFile(files[0],this);*/
-					for (var i = files.length - 1; i >= 0; i--) {
+					for (let i = files.length - 1; i >= 0; i--) {
 	                    uploadSummernoteImageFile(files[i], this);
 	                }
 				},
-			onPaste: function (e) {
-				var clipboardData = e.originalEvent.clipboardData;
-				if (clipboardData && clipboardData.items && clipboardData.items.length) {
-					var item = clipboardData.items[0];
-					if (item.kind === 'file' && item.type.indexOf('image/') !== -1) {
-						e.preventDefault();
+				onPaste: function (e) {
+					let clipboardData = e.originalEvent.clipboardData;
+					if (clipboardData && clipboardData.items && clipboardData.items.length) {
+						let item = clipboardData.items[0];
+						if (item.kind === 'file' && item.type.indexOf('image/') !== -1) {
+							e.preventDefault();
+						}
 					}
 				}
-			}
-		  }
+	      }
 	    });
 	    $('#summernote').summernote('fontName', 'GangwonEdu_OTFBoldA');
 	    
@@ -141,40 +142,46 @@
 			$.ajax({
 				data : formData,
 				type : 'POST',
+				<!--  c:url 태그는 url로 요청을 보낸다.-->
 				url : '<c:url value="/board/uploadSummernoteImageFile"/>',
 				enctype: 'multipart/form-data',
 				cache: false,
 				contentType : false,
 				processData : false,
-				success : function(result) {
+				success : function(result) { // result는 자바스크립트 객체이다. api로 넘어올떄 string(json)을 자바스크립트 객체로 변환해주는듯.
 	            	//항상 업로드된 파일의 url이 있어야 한다.
-	               console.log(result);
-	               boardFileJsonArray.push(result);
+	                console.log(result);
+	                boardFileJsonArray.push(result);
 					$(editor).summernote('insertImage', result.url);
 				}
 			});
 		}
-	   
 	    
-	
 	   //새로고침, 브라우저 종료, 뒤로가기 감지 이벤트
-	   $(window).on('beforeunload', function(){
-	      deleteTempFile();
-	      $('#summernote').summernote('reset');
-	      return "Any changes will be lost";
-	    });
+	   $(window).on('beforeunload', function() {
+	       // return false or string이면 alert을 띄워준다. 
+		   return false;
+	   });
+		 
+	   // unload 시 ajax 가능.
+	   $(window).on('unload', function() {
+		   deleteTempFile();
+		   /* $('#summernote').summernote('reset'); */
+	   });
+	   
 	    //폼 submit 때는 경고창 뜨지 않도록 하기
 	    $(document).on("submit", "form", function(event){
 	        $(window).off('beforeunload');
 	    });
 	    
+	    // 다른 페이지로 넘어갈때 temp폴더의 이미지를 지움.
 	    function deleteTempFile() {
 	      let deleteFiles = [];
-	    	for(var i = 0; i<boardFileJsonArray.length; i++){
+	    	for(let i = 0; i<boardFileJsonArray.length; i++){
 	            console.log('반복문 동작!');
-	            var str = boardFileJsonArray[i].url;
+	            let str = boardFileJsonArray[i].url;
 	            console.log(str);
-	            var result = str.split('/');
+	            let result = str.split('/');
 	            console.log('정제된 데이터: ' + result);
 	            deleteFiles.push(result[3]);
 	      }
@@ -187,37 +194,37 @@
 	         url: '${pageContext.request.contextPath}/board/tempDelete',
 	         data: JSON.stringify(deleteFiles)
 	      });
-		} 
+		} // end deleteTempFile()
 	    
 	    
-			$('.boardContent-summernote').keydown(function() {
-				console.log('키 이벤트 발생');
-				
-				// textarea 값
-				let boardContent = $('.note-editable').html();
-				
-				// textarea length
-				let boardContentLength = boardContent.length;
-				let boardContentByteLength = 0;
-				
-				console.log(boardContent, 'boardContent');
-				console.log(boardContentLength, 'boardContentLength');
-				
-				
-				boardContentByteLength = (function(s,b,i,c) {
-					for(b=i=0;c=s.charCodeAt(i++);b+=c>>11?3:c>>7?2:1);
-					return b
-				})(boardContent);
+		$('.boardContent-summernote').keydown(function() {
+			console.log('키 이벤트 발생');
 			
-				if(boardContentByteLength >= 100000) {
-					alert('글자수 제한!');
-					return;
-				};
-				
-				console.log('boardContentByteLength', boardContentByteLength);
-				$('.textCount').text(boardContentByteLength);
-				
-			});
+			// textarea 값
+			let boardContent = $('.note-editable').html();
+			
+			// textarea length
+			let boardContentLength = boardContent.length;
+			let boardContentByteLength = 0;
+			
+			console.log(boardContent, 'boardContent');
+			console.log(boardContentLength, 'boardContentLength');
+			
+			
+			boardContentByteLength = (function(s,b,i,c) {
+				for(b=i=0;c=s.charCodeAt(i++);b+=c>>11?3:c>>7?2:1);
+				return b
+			})(boardContent);
+		
+			if(boardContentByteLength >= 100000) {
+				alert('글자수 제한!');
+				return;
+			};
+			
+			console.log('boardContentByteLength', boardContentByteLength);
+			$('.textCount').text(boardContentByteLength);
+			
+		});
 			
 			
 		
@@ -254,13 +261,13 @@
 	             console.log('boardFileJsonArray: ' + boardFileJsonArray);
 	             console.log('길이: ' + boardFileJsonArray.length);
 	             
-	             for(var i = 0; i<boardFileJsonArray.length; i++){
+	             for(let i = 0; i<boardFileJsonArray.length; i++){
 	                console.log('반복문 동작!');
-	                var str = boardFileJsonArray[i].url;
+	                let str = boardFileJsonArray[i].url;
 	                console.log(str);
 	                // str의 값 : /board/summernoteImage/152210d9-a713-43ff-b81c-d9f1a3de0303(BN_CN10).jpg 
 	                // '='를 기준으로 자른다.
-	                var result = str.split('/');
+	                let result = str.split('/');
 	                console.log('정제된 데이터: ' + result);
 	
 	                const $input = document.createElement('input');

@@ -29,10 +29,10 @@ public interface IBoardService {
 	int getNoticeTotal ();
 	
 	// 카테고리 이름
-	CategoryVO getCategory (int categoryNo);
+	CategoryVO getCategory(int categoryNo);
 
 	// 상세보기
-	BoardVO content(int bno);
+	BoardVO getBoardDetailVo(int bno);
 
 	// 글 수정
 	void update(BoardVO bno);

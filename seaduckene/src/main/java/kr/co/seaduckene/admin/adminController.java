@@ -78,13 +78,14 @@ public class adminController {
 	
 	// 공지사항 등록
 	@PostMapping("/adminNoticeCreate")
-	public String adminNoticeCreate(NoticeVO vo, @RequestParam(value="filename", required=false) List<String> summerfile) throws Exception {
+	public String adminNoticeCreate(NoticeVO noticeVo, @RequestParam(value="filename", required=false) List<String> summerfile) throws Exception {
 		String noticeContent;
-		noticeContent = vo.getNoticeContent();
+		noticeContent = noticeVo.getNoticeContent();
 		String editordata = noticeContent.replaceAll("summernoteImage","getImg");
-		vo.setNoticeContent(editordata);
-		service.write(vo);
+		noticeVo.setNoticeContent(editordata);
+		service.write(noticeVo);
 
+		// 공지사항용 썸머노트로 나중에 수정해야 함.
 		SummernoteCopy copy = new SummernoteCopy();
 		copy.summerCopy(summerfile);
 		
@@ -141,13 +142,13 @@ public class adminController {
 
 	// 문의 글쓰기 요청
 	@PostMapping("/askWrite")
-	public String askWrite(AskListVO vo) {
+	public String askWrite(AskListVO askListVo) {
 		
-		String content = ((String) vo.getAskListContent()).replace("\r\n","<br>");
+		String content = ((String) askListVo.getAskListContent()).replace("\r\n","<br>");
 		
-		vo.setAskListContent(content);
+		askListVo.setAskListContent(content);
 		
-		service.setAsk(vo);
+		service.setAsk(askListVo);
 		
 		return "redirect:/admin/askWrite";
 	}
