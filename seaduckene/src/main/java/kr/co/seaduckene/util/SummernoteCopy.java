@@ -14,18 +14,16 @@ import org.springframework.stereotype.Service;
 public class SummernoteCopy {
 	
 	// 게시글용
-	public Map<String, Object> summerCopy(List<String> summerfileNames, int boardNo) throws Exception {
+	public Map<String, Object> summerCopy(List<String> summerfileNames, List<String> summerfileBnNames, int boardNo) throws Exception {
 
 		Map<String, Object> result = new HashMap<String, Object>();
 
-		String boardNoStr = Integer.toString(boardNo);
-		
 		if(summerfileNames != null ) {
 			for (int i = 0; i < summerfileNames.size(); i++) {
 				String oriFilePath = "c:/imgduck/temp/" + summerfileNames.get(i);
 
 				// 복사될 파일경로
-				String copyFilePath = ("c:/imgduck/board/" + summerfileNames.get(i)).replace("_", boardNoStr);
+				String copyFilePath = "c:/imgduck/board/" + summerfileBnNames.get(i);
 
 				try {
 					// 파일 이름은 안 건드리고 내부 byte[]만 복사한다

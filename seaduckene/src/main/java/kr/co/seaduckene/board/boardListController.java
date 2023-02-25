@@ -115,17 +115,23 @@ public class boardListController {
 		boardVo.setBoardNo(boardNo);
 		
 		if (summerfileNames != null) {
-			log.info("summerFile: " + summerfileNames);
+			log.info("summerfileNames: " + summerfileNames);
+			
+			List<String> summerfileBnNames = new ArrayList<String>();
+			
+			for (String summerfileName : summerfileNames) {
+				String summerfileBnName = summerfileName.replaceAll("_", Integer.toString(boardNo));
+				summerfileBnNames.add(summerfileBnName);
+				
+				boardService.boardImageAdd(boardNo, summerfileBnName);
+			}
 			
 			try {
-				summerfileUpload(boardVo, summerfileNames);
+				summerfileUpload(boardVo, summerfileNames, summerfileBnNames);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			
-			for (String summerfileName : summerfileNames) {
-				boardService.boardImageAdd(boardNo, summerfileName);
-			}
 		}
 		
 		if (thumbnail.getSize() != 0) {
@@ -155,14 +161,14 @@ public class boardListController {
 		return "redirect:/board/boardList/" + boardVo.getBoardCategoryNo();
 	}
 	
-	private void summerfileUpload(BoardVO boardVo, List<String> summerfileNames) throws Exception {
+	private void summerfileUpload(BoardVO boardVo, List<String> summerfileNames, List<String> summerfileBnNames) throws Exception {
 		String boardContent;
 		boardContent = boardVo.getBoardContent();
 		String imgEditedContent = boardContent.replaceAll("summernoteImage", "getImg");
 		boardVo.setBoardContent(imgEditedContent);
 		
 		// temp 폴더에서 board폴더로 파일을 복사하고 기존 temp의 파일을 삭제해준다.
-		summernoteCopy.summerCopy(summerfileNames, boardVo.getBoardNo());
+		summernoteCopy.summerCopy(summerfileNames, summerfileBnNames, boardVo.getBoardNo());
 		
 
 	}
@@ -254,17 +260,23 @@ public class boardListController {
 		updatedBoardVo.setBoardThumbnailFileRealName(previousBoardVo.getBoardThumbnailFileRealName());
 		
 		if (summerfileNames != null) {
-			log.info("summerFile: " + summerfileNames);
+			log.info("summerfileNames: " + summerfileNames);
+			
+			List<String> summerfileBnNames = new ArrayList<String>();
+			
+			for (String summerfileName : summerfileNames) {
+				String summerfileBnName = summerfileName.replaceAll("_", Integer.toString(boardNo));
+				summerfileBnNames.add(summerfileBnName);
+				
+				boardService.boardImageAdd(boardNo, summerfileBnName);
+			}
 			
 			try {
-				summerfileUpload(updatedBoardVo, summerfileNames);
+				summerfileUpload(updatedBoardVo, summerfileNames, summerfileBnNames);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			
-			for (String summerfileName : summerfileNames) {
-				boardService.boardImageAdd(boardNo, summerfileName);
-			}
 		}
 		
 		if (thumbnail.getSize() != 0) {
