@@ -28,9 +28,9 @@
 
 	<select id="checkAddr" resultType="int">
 		SELECT COUNT(*) FROM address
-		WHERE address_user_no=#{userNo} AND
-		REPLACE(address_detail,' ','')=#{OrderAddressDetail} AND
-		address_zip_num=#{zipNum}
+		WHERE address_user_no = #{userNo}
+				AND REPLACE(address_detail,' ','') = #{OrderAddressDetail}
+				AND address_zip_num = #{zipNum}
 	</select>
 
 	<update id="updateAddr">
@@ -66,7 +66,8 @@
 	</select>
 	
 	<update id="modiAddressNoAndRepresent">
-		UPDATE address SET address_no = #{modiAddressNo}, address_representative = #{modiAddressRprsttv} WHERE address_no = #{whereAddressNo} AND address_user_no = #{whereUserNo}
+		UPDATE address SET address_no = #{modiAddressNo}, address_representative = #{modiAddressRprsttv} 
+		WHERE address_no = #{whereAddressNo} AND address_user_no = #{whereUserNo}
 	</update>
 	
 	<delete id="deleteUserAllInfo">
