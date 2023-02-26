@@ -38,7 +38,7 @@
             	LEFT JOIN duck_user u
             	ON d.board_user_no = u.user_no
 		        WHERE d.board_category_no = #{categoryNo}
-                ORDER BY d.board_no DESC
+                ORDER BY d.board_reg_date DESC
 		        ) tbl
 		    )
 		WHERE rn > (#{paging.pageNum}-1) * #{paging.cpp}
@@ -210,6 +210,7 @@
 		            SELECT *
 		            FROM board
 		            WHERE board_user_no=#{userNo}
+		            ORDER BY board_reg_date DESC
 		        ) tbl
 		    ) s
 		WHERE rn > (#{page.pageNum}-1) * #{page.cpp}

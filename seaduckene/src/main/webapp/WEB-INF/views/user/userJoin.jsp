@@ -75,25 +75,25 @@
 					<a href="##" id="add-category"><i class="bi bi-plus-square"></i></a>
 					<ul id="category-wrap"> <!-- JS로 ul 자식에 li를 추가해서 추가 카테고리 정보를 받는다. -->
 						<li style="display: none;" data-index='0' >
-							<select  name="categoryMajorTitle" class="form-select join-category" aria-label="Default select example">
+							<select  name="categoryMajorTitles" class="form-select join-category" aria-label="Default select example">
                                     <option selected disabled>대 카테고리</option>
                                     <c:forEach var="i" begin="0" end="${majorLength}" step="1">
                                     	<option>${categoryList[i].categoryMajorTitle}</option>
                                     </c:forEach>
                             </select>
-                            <select  name="categoryMinorTitle" class="form-select join-category " aria-label="Default select example" >
+                            <select  name="categoryMinorTitles" class="form-select join-category " aria-label="Default select example" >
                                     <option selected disabled>소 카테고리</option>
                             </select>
                             <a href="##" id="del-category"><i class="bi bi-dash-square"></i></a>
 						</li>
 						<li data-index='1'>
-							<select  name="categoryMajorTitle" class="form-select join-category" aria-label="Default select example">
+							<select  name="categoryMajorTitles" class="form-select join-category" aria-label="Default select example">
                                     <option selected disabled>대 카테고리</option>
                                     <c:forEach var="i" begin="0" end="${majorLength}" step="1">
                                     	<option>${categoryList[i].categoryMajorTitle}</option>
                                     </c:forEach>
                             </select>
-                            <select  name="categoryMinorTitle" class="form-select join-category " aria-label="Default select example" >
+                            <select  name="categoryMinorTitles" class="form-select join-category " aria-label="Default select example" >
                                     <option selected disabled>소 카테고리</option>
                             </select>
                             <a href="##" id="del-category"><i class="bi bi-dash-square"></i></a>
@@ -186,7 +186,7 @@
 			}
 		});
 		
-		$('#category-wrap').on('change', 'select[name=categoryMajorTitle]', function(e) {
+		$('#category-wrap').on('change', 'select[name=categoryMajorTitles]', function(e) {
 			const chosenMajor = $(this).val();
 			const minorText1 = '${categoryList}';
 			const minorText2 = minorText1.split('), ');
@@ -227,13 +227,13 @@
 		});
 	
 		// 카테고리 선택 시 중복 방지
-		$('#category-wrap').on('change', 'select[name=categoryMinorTitle]', function(e) {
+		$('#category-wrap').on('change', 'select[name=categoryMinorTitles]', function(e) {
 			const chosenMinor = $(this).val();
 			const chosenMajor = $(this.previousElementSibling).val();
 			
 			const chosenLiIndex = $(this.parentNode).data('index');
 			
-			const selectedMajors = $('select[name=categoryMajorTitle]');
+			const selectedMajors = $('select[name=categoryMajorTitles]');
 			const selectedMajorsMaxIndex = selectedMajors.length;
 			
 			// 현재 선택된 모든 대 카테고리의 값을 반복문으로 조회.
@@ -655,7 +655,7 @@
 				$('#userEmail').focus();				
 				return;
 			} else {
-				const majors = $('select[name=categoryMajorTitle]');
+				const majors = $('select[name=categoryMajorTitles]');
 				
 				if (majors.length <= 1) {
 					alert('카테고리를 선택은 필수입니다.');
@@ -670,7 +670,7 @@
 					}	  
 				}
 				
-				const minors = $('select[name=categoryMinorTitle]');
+				const minors = $('select[name=categoryMinorTitles]');
 				for (let i = 1; i < minors.length; i++) {
 					if (minors[i].value === '소 카테고리') {
 						alert('소 카테고리를 선택하세요.');

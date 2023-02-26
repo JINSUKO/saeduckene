@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -126,11 +127,16 @@ public class UserController {
 		return modelAndView;
 	}
 	
+	// 파라미터로 여러 name에서 List로 받아오려면
+	// @RequestParam를 사용하여 요청파라미터 키를 명시해주어야 List로 받을 수 있다. 
 	@PostMapping("/userJoin")
-	public ModelAndView userjoin(UserVO userVO, AddressVO addressVO, CategoryVO categoryVO, ModelAndView modelAndView, MultipartFile profilePic) {
+	public ModelAndView userjoin(UserVO userVO, AddressVO addressVO
+			, @RequestParam("categoryMajorTitles") List<String> categoryMajorTitles, @RequestParam("categoryMinorTitles") List<String> categoryMinorTitles
+			, ModelAndView modelAndView, MultipartFile profilePic) {
 		log.info(userVO);
 		log.info(addressVO);
-		log.info(categoryVO);
+		log.info(categoryMajorTitles);
+		log.info(categoryMinorTitles);
 		log.info(profilePic);
 		
 		if (profilePic.getSize() != 0) {
@@ -174,8 +180,11 @@ public class UserController {
 		int registerdUserNo = registeredUserVO.getUserNo();
 		addressVO.setAddressUserNo(registerdUserNo);
 		
+		String[] majorTitleArray = categoryMajorTitles.toArray(new String[categoryMajorTitles.size()]);
+		String[] minorTitleArray = categoryMinorTitles.toArray(new String[categoryMinorTitles.size()]);
+		
 		//favorite table 등록
-		userService.addUserFavorites(categoryVO, registerdUserNo);
+		userService.addUserFavorites(majorTitleArray, minorTitleArray, registerdUserNo);
 		
 		if (!addressVO.getAddressBasic().equals("")) {
 			// address table 등록
@@ -353,12 +362,17 @@ public class UserController {
 	}
 	
 	@PostMapping("/userUpdate") // 동일한 name으로 여러 태그에서 받아올때, String은 문자열 붙여서 들어오는데, List로 받아서 들어올 수도 있다.
-	public ModelAndView userUpdate(UserVO userVO, AddressVO addressVO, CategoryVO categoryVO
+	public ModelAndView userUpdate(UserVO userVO, @RequestParam(value = "addressBasics", required = false) List<String> addressBasics
+	, @RequestParam(value = "addressDetails", required = false) List<String> addressDetails, @RequestParam(value = "addressZipNums", required = false) List<String> addressZipNums
+	, @RequestParam("categoryMajorTitles") List<String> categoryMajorTitles, @RequestParam("categoryMinorTitles") List<String> categoryMinorTitles
 								, ModelAndView modelAndView, MultipartFile profilePic, String categoryIndex, String addressCount) {
 		log.info("/userUpdate");
 		log.info(userVO); 
-		log.info(addressVO); // 수정된 부분 확인 후 db 수정
-		log.info(categoryVO); // 삭제된 부분 조회 후 삭제 처리 먼저, 추가된 부분 확인 후 db favorite 추가. 
+		log.info(addressBasics); // 수정된 부분 확인 후 db 수정
+		log.info(addressDetails); // 수정된 부분 확인 후 db 수정
+		log.info(addressZipNums); // 수정된 부분 확인 후 db 수정
+		log.info(categoryMajorTitles); // 삭제된 부분 조회 후 삭제 처리 먼저, 추가된 부분 확인 후 db favorite 추가. 
+		log.info(categoryMinorTitles);  
 		log.info(profilePic);
 		log.info(categoryIndex);
 		log.info(addressCount);
@@ -401,30 +415,21 @@ public class UserController {
 			String[] currMajorArray = new String[currUserFavortiesCount];
 			String[] currMinorArray = new String[currUserFavortiesCount];
 			
-			String[] categoryMajorTitleList = categoryVO.getCategoryMajorTitle().split(",");
-			String[] categoryMinorTitleList = categoryVO.getCategoryMinorTitle().split(",");
-			
 			for (int i = 0; i < currUserFavortiesCount; i++) {
-				currMajorArray[i] = categoryMajorTitleList[i];
-				currMinorArray[i] = categoryMinorTitleList[i];
+				currMajorArray[i] = categoryMajorTitles.get(i);
+				currMinorArray[i] = categoryMinorTitles.get(i);
 			}
 			
-			String currMajorString = String.join(",", currMajorArray);
-			String currMinorString =  String.join(",", currMinorArray);
-			
-			CategoryVO modiCategoryVo = new CategoryVO();
-			modiCategoryVo.setCategoryMajorTitle(currMajorString);
-			modiCategoryVo.setCategoryMinorTitle(currMinorString);
-			
-			log.info(modiCategoryVo);
-			userService.updateUserFavorites(modiCategoryVo, userNo);
+			log.info(currMajorArray);
+			log.info(currMinorArray);
+			userService.updateUserFavorites(currMajorArray, currMinorArray, userNo);
 		}
 		
 		// 추가된 카테고리 insert 코드
-		log.info(categoryVO.getCategoryMajorTitle());
-		log.info(categoryVO.getCategoryMinorTitle());
+		log.info(categoryMajorTitles);
+		log.info(categoryMinorTitles);
 		
-		int allUserCategoriesCount = categoryVO.getCategoryMinorTitle().split(",").length;
+		int allUserCategoriesCount = categoryMajorTitles.size();
 		if (allUserCategoriesCount == 0) {
 			allUserCategoriesCount = 1;
 		}
@@ -436,23 +441,14 @@ public class UserController {
 			String[] newMajorArray = new String[allUserCategoriesCount - currUserFavortiesCount];
 			String[] newMinorArray = new String[allUserCategoriesCount - currUserFavortiesCount];
 			
-			String[] categoryMajorTitleList = categoryVO.getCategoryMajorTitle().split(",");
-			String[] categoryMinorTitleList = categoryVO.getCategoryMinorTitle().split(",");
-			
 			for (int i = currUserFavortiesCount; i < allUserCategoriesCount; i++) {
-				newMajorArray[i - currUserFavortiesCount] = categoryMajorTitleList[i];
-				newMinorArray[i - currUserFavortiesCount] = categoryMinorTitleList[i];
+				newMajorArray[i - currUserFavortiesCount] = categoryMajorTitles.get(i);
+				newMinorArray[i - currUserFavortiesCount] = categoryMinorTitles.get(i);
 			}
 			
-			String newMajorString = String.join(",", newMajorArray);
-			String newMinorString =  String.join(",", newMinorArray);
-			
-			CategoryVO newCategoryVo = new CategoryVO();
-			newCategoryVo.setCategoryMajorTitle(newMajorString);
-			newCategoryVo.setCategoryMinorTitle(newMinorString);
-			
-			log.info(newCategoryVo);
-			userService.addUserFavorites(newCategoryVo, userNo);
+			log.info(newMajorArray);
+			log.info(newMinorArray);
+			userService.addUserFavorites(newMajorArray, newMinorArray, userNo);
 		}
 		
 		
@@ -461,12 +457,12 @@ public class UserController {
 		
 		List<AddressVO> beforeDeleteAddressList = userService.getUserAddr(userNo);
 
-		if (addressVO.getAddressBasic() != null) {
-			log.info(Arrays.toString(addressVO.getAddressBasic().split(",")));
-			log.info(Arrays.toString(addressVO.getAddressDetail().split(",")));
-			log.info(Arrays.toString(addressVO.getAddressZipNum().split(",")));
+		if (addressBasics.size() != 0 ) {
+			log.info(addressBasics);
+			log.info(addressDetails);
+			log.info(addressZipNums);
 			
-			int allAddressCount = addressVO.getAddressBasic().split(",").length;
+			int allAddressCount = addressBasics.size();
 			int currAddressCount = addressCountList.size();
 			
 			// 저장된 주소 삭제 코드
@@ -492,55 +488,36 @@ public class UserController {
 			
 			// 저장된 주소 변경 코드
 			if (currAddressCount > 0) {
-				String[] addressBasicList = addressVO.getAddressBasic().split(",");
-				String[] addressDetailList = addressVO.getAddressDetail().split(",");
-				String[] addressZipNumList = addressVO.getAddressZipNum().split(",");
-				
 				String[] modiAddressBasicArray = new String[currAddressCount];
 				String[] modiAddressDetailArray = new String[currAddressCount];
 				String[] modiAddressZipNumArray = new String[currAddressCount];
 				
 				for (int i = 0; i < currAddressCount; i++) {
-					modiAddressBasicArray[i] = addressBasicList[i];
-					modiAddressDetailArray[i] = addressDetailList[i];
-					modiAddressZipNumArray[i] = addressZipNumList[i];
+					modiAddressBasicArray[i] = addressBasics.get(i);
+					modiAddressDetailArray[i] = addressDetails.get(i);
+					modiAddressZipNumArray[i] = addressZipNums.get(i);
 				}
 				
-				String modiAddressBasicString = String.join(",", modiAddressBasicArray);
-				String modiAddressDetailString = String.join(",", modiAddressDetailArray);
-				String modiAddressZipNumString = String.join(",", modiAddressZipNumArray);
-				
-				AddressVO modiAddressVo = new AddressVO(0, modiAddressDetailString, modiAddressBasicString, modiAddressZipNumString, 0, userNo);
-				userService.updateUserAddress(modiAddressVo, userNo);
+				userService.updateUserAddress(modiAddressBasicArray, modiAddressDetailArray, modiAddressZipNumArray, userNo);
 			}
 			
 			// 추가된 주소 insert 코드
-			if (currAddressCount < allAddressCount) {			
-				String[] addressBasicList = addressVO.getAddressBasic().split(",");
-				String[] addressDetailList = addressVO.getAddressDetail().split(",");
-				String[] addressZipNumList = addressVO.getAddressZipNum().split(",");
+			if (currAddressCount < allAddressCount) {
 				
 				String[] newAddressBasicArray = new String[allAddressCount - currAddressCount];
 				String[] newAddressDetailArray = new String[allAddressCount - currAddressCount];
 				String[] newAddressZipNumArray = new String[allAddressCount - currAddressCount];
 				
 				for (int i = currAddressCount; i < allAddressCount; i++) {
-					newAddressBasicArray[i - currAddressCount] = addressBasicList[i];
-					newAddressDetailArray[i - currAddressCount] = addressDetailList[i];
-					newAddressZipNumArray[i - currAddressCount] = addressZipNumList[i];
-				}
+					newAddressBasicArray[i - currAddressCount] = addressBasics.get(i);
+					newAddressDetailArray[i - currAddressCount] = addressDetails.get(i);
+					newAddressZipNumArray[i - currAddressCount] = addressZipNums.get(i);
+				}	
 				
-				String newAddressBasicString = String.join(",", newAddressBasicArray);
-				String newAddressDetailString =  String.join(",", newAddressDetailArray);
-				String newAddressZipNumString =  String.join(",", newAddressZipNumArray);
-				
-				AddressVO newAddressVo = new AddressVO();
-				newAddressVo.setAddressBasic(newAddressBasicString);
-				newAddressVo.setAddressDetail(newAddressDetailString);		
-				newAddressVo.setAddressZipNum(newAddressZipNumString);		
-				
-				log.info(newAddressVo);
-				userService.addNewAddress(newAddressVo, userNo);
+				log.info(newAddressBasicArray);
+				log.info(newAddressDetailArray);
+				log.info(newAddressZipNumArray);
+				userService.addNewAddress(newAddressBasicArray, newAddressDetailArray, newAddressZipNumArray, userNo);
 			}
 			
 			log.info("allAddressCount: " + allAddressCount);

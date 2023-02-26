@@ -141,13 +141,13 @@
 							<ul class="category-wrap">
 							<c:forEach var="userCategory" items="${userCategoryList}" varStatus="status">
 								<li class="li-category currCategories" data-index='${status.index}'>
-									<select  name="categoryMajorTitle" class="form-select join-category" aria-label="Default select example" >
+									<select  name="categoryMajorTitles" class="form-select join-category" aria-label="Default select example" >
 		                                    <option selected disabled>대 카테고리</option>
 		                                    <c:forEach var="i" begin="0" end="${majorLength}" step="1">
 		                                    	<option>${categoryList[i].categoryMajorTitle}</option>
 		                                    </c:forEach>
 		                            </select>
-		                            <select name="categoryMinorTitle" class="form-select join-category " aria-label="Default select example" >
+		                            <select name="categoryMinorTitles" class="form-select join-category " aria-label="Default select example" >
 		                                    <!-- <option selected disabled>소 카테고리</option> -->
 		                            </select>
 		                            <a href="##" id="del-category"><i class="bi bi-dash-square"></i></a>
@@ -158,13 +158,13 @@
 							<a href="##" id="add-category"><i class="bi bi-plus-square"></i></a>
 							<ul id="category-wrap" class="category-wrap"> <!-- JS로 ul 자식에 li를 추가해서 추가 카테고리 정보를 받는다. -->
 								<li style="display: none;">
-									<select name="categoryMajorTitle" class="form-select join-category" aria-label="Default select example">
+									<select name="categoryMajorTitles" class="form-select join-category" aria-label="Default select example">
 		                                    <option selected disabled>대 카테고리</option>
 		                                    <c:forEach var="i" begin="0" end="${majorLength}" step="1">
 		                                    	<option>${categoryList[i].categoryMajorTitle}</option>
 		                                    </c:forEach>
 		                            </select>
-		                            <select name="categoryMinorTitle" class="form-select join-category " aria-label="Default select example" >
+		                            <select name="categoryMinorTitles" class="form-select join-category " aria-label="Default select example" >
 		                                    <option selected disabled>소 카테고리</option>
 		                            </select>
 		                            <a href="##" id="del-category"><i class="bi bi-dash-square"></i></a>
@@ -238,17 +238,17 @@
 						                        	</c:if>
 													<div class="input-group inputArea">
 									                    <div class="col-md-12 col-sm-12 col-12">
-									                        <input name="addressBasic" class="form-control join-input addrBasic" type="text" placeholder="기본 주소" value="${addr.addressBasic}" readonly />
+									                        <input name="addressBasics" class="form-control join-input addrBasic" type="text" placeholder="기본 주소" value="${addr.addressBasic}" readonly />
 									                    </div>
 							                		</div>
 													<div class="input-group inputArea">
 									                    <div class="col-md-12 col-sm-12 col-12">
-									                        <input name="addressDetail" class="form-control join-input addrDetail" type="text" placeholder="상세 주소" value="${addr.addressDetail}" />
+									                        <input name="addressDetails" class="form-control join-input addrDetail" type="text" placeholder="상세 주소" value="${addr.addressDetail}" />
 									                    </div>
 							                		</div>
 													<div class="input-group inputArea">
 									                    <div class="col-md-12 col-sm-12 col-12">
-									                        <input name="addressZipNum" class="form-control join-input addrZipNum" type="text" placeholder="우편번호" value="${addr.addressZipNum}" readonly />
+									                        <input name="addressZipNums" class="form-control join-input addrZipNum" type="text" placeholder="우편번호" value="${addr.addressZipNum}" readonly />
 									                    </div>
 							                		</div>	<br>
 													<input type="button" class="sbtn cyan small rounded find-address" value="주소찾기">
@@ -357,7 +357,7 @@
 							<tbody id="contentDiv">
 								
 							</tbody>
-							 </table>
+						 </table>
 							<div class="row justify-content-center row-div-2">
 							  	<div class="col-1 w-auto mt-3">
 							  		<button type="button" class="sbtn cyan small rounded" id="the-btn" sty>더보기</button>
@@ -628,7 +628,7 @@ let emailConfirm = true;
 		
 		
 		// 대 카테고리 선택시 소 카테고리 바뀜.
-		$('.category-wrap').on('change', 'select[name=categoryMajorTitle]', function(e) {
+		$('.category-wrap').on('change', 'select[name=categoryMajorTitles]', function(e) {
 			const chosenMajor= $(this).val();
 			const minorText1 = '${categoryList}';
 			const minorText2 = minorText1.split('), ');
@@ -669,14 +669,14 @@ let emailConfirm = true;
 		});
 	
 		// 카테고리 선택 시 중복 방지
-		$('.category-wrap').on('change', 'select[name=categoryMinorTitle]', function(e) {
+		$('.category-wrap').on('change', 'select[name=categoryMinorTitles]', function(e) {
 		/* $('select[name=categoryMinorTitle]').change( function(e) { */
 			const chosenMinor = $(this).val();
 			const chosenMajor = $(this.previousElementSibling).val();
 			console.log(chosenMinor);
 			const chosenLiIndex = $(this.parentNode).data('index');
 			
-			const selectedMajors = $('select[name=categoryMajorTitle]');
+			const selectedMajors = $('select[name=categoryMajorTitles]');
 			const selectedMajorsMaxIndex = selectedMajors.length;
 			
 			// 현재 선택된 모든 대 카테고리의 값을 반복문으로 조회.
@@ -1095,11 +1095,11 @@ let emailConfirm = true;
 	   		$($addrDiv).addClass('address-infos');
 	   		$($addrDiv).data('index', newAddrIndex);
 	   		
-	   		$($addrDiv.querySelector('input.addrBasic')).attr('name', 'addressBasic');
+	   		$($addrDiv.querySelector('input.addrBasic')).attr('name', 'addressBasics');
 	   		$($addrDiv.querySelector('input.addrBasic')).val('');
-	   		$($addrDiv.querySelector('input.addrDetail')).attr('name', 'addressDetail');
+	   		$($addrDiv.querySelector('input.addrDetail')).attr('name', 'addressDetails');
 	   		$($addrDiv.querySelector('input.addrDetail')).val('');
-	   		$($addrDiv.querySelector('input.addrZipNum')).attr('name', 'addressZipNum');
+	   		$($addrDiv.querySelector('input.addrZipNum')).attr('name', 'addressZipNums');
 	   		$($addrDiv.querySelector('input.addrZipNum')).val('');
 	   		
 			$fragNode.appendChild($addrDiv);
@@ -1497,7 +1497,7 @@ let emailConfirm = true;
 			alert('이메일을 인증하세요.');
 			return;
 		} else {
-			const majors = $('select[name=categoryMajorTitle]');
+			const majors = $('select[name=categoryMajorTitles]');
 			let currCategories_index = $('.currCategories').length - 1;
 			
 			if (majors.length <= 1) {
@@ -1516,7 +1516,7 @@ let emailConfirm = true;
 				}	  
 			}
 			
-			const minors = $('select[name=categoryMinorTitle]');
+			const minors = $('select[name=categoryMinorTitles]');
 			for (let i = currCategories_index + 2; i < minors.length; i++) {
 				
 				if (minors[i].value === '소 카테고리') {
