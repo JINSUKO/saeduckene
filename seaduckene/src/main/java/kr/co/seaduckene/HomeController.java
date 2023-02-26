@@ -36,10 +36,10 @@ public class HomeController {
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
 	@Autowired
-	private IProductService service;
+	private IProductService productService;
 	
 	@Autowired
-	private IBoardService bService;
+	private IBoardService boardService;
 	
 	/**
 	 * Simply selects the home view to render by returning its name.
@@ -53,26 +53,26 @@ public class HomeController {
 		
 		String formattedDate = dateFormat.format(date);
 		
-		List<ProductImageVO> list;
-		List<BoardUserVO> bList;
+		List<ProductImageVO> productMainImgs;
+		List<BoardUserVO> boardList;
 		UserVO loginVo = (UserVO)session.getAttribute("login");
 		
 		if(loginVo == null) {
 			System.out.println("login 세션 없음");
-			list = service.mainImageNo();
-			bList = bService.bUserNoList();
+			productMainImgs = productService.mainImageNo();
+			boardList = boardService.bUserNoList();
 		
 		} else {
 			System.out.println("login 세션 있음");
-			list = service.mainImage(loginVo.getUserNo());
-			bList = bService.bUserList(loginVo.getUserNo());
+			productMainImgs = productService.mainImage(loginVo.getUserNo());
+			boardList = boardService.bUserList(loginVo.getUserNo());
 		}
 		
-		System.out.println("사진리스트:"+list);
+		System.out.println("사진리스트:"+productMainImgs);
 		
 
-		model.addAttribute("boardList", bList );
-		model.addAttribute("mainListImg", list );
+		model.addAttribute("boardList", boardList );
+		model.addAttribute("mainListImg", productMainImgs );
 		model.addAttribute("serverTime", formattedDate );
 
 		
