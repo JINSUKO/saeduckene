@@ -137,7 +137,7 @@ public class boardListController {
 			String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 			String fileRealName = thumbnail.getOriginalFilename();
 			String fileExtension = fileRealName.substring(fileRealName.lastIndexOf("."), fileRealName.length());
-			String boardThumbnailPath = "c:/imgduck/board/";
+			String boardThumbnailPath = "/imgduck/board/";
 			
 			boardVo.setBoardThumbnailPath(boardThumbnailPath);
 			boardVo.setBoardThumbnailFileName(uuid + fileExtension);
@@ -282,7 +282,7 @@ public class boardListController {
 			String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 			String fileRealName = thumbnail.getOriginalFilename();
 			String fileExtension = fileRealName.substring(fileRealName.lastIndexOf("."), fileRealName.length());
-			String boardThumbnailPath = "c:/imgduck/board/";
+			String boardThumbnailPath = "/imgduck/board/";
 			
 			updatedBoardVo.setBoardThumbnailPath(boardThumbnailPath);
 			updatedBoardVo.setBoardThumbnailFileName(uuid + fileExtension);
