@@ -35,7 +35,7 @@ public interface IUserService {
 	List<Categories> getCategories();
 	
 	// 유저 favorite table 연동
-	void addUserFavorites(CategoryVO categoryVO, int userNo);
+	void addUserFavorites(String[] categoryMajorTitles, String[] categoryMinorTitles, int userNo);
 	
 	// 유저에서 주소 테이블에 입력
 	String registAddr(AddressVO addressVO);
@@ -83,16 +83,16 @@ public interface IUserService {
 	void deleteUserFavorites(Map<String, Object> deletedCount);
 	
 	// 유저의 favorite 변경
-	void updateUserFavorites(CategoryVO newCategoryVO, int userNo);
+	void updateUserFavorites(String[] newMajorArray, String[] newMinorArray, int userNo);
 	
 	// 유저의 추가 주소 저장
-	void addNewAddress(AddressVO newAddressVo, int userNo);
+	void addNewAddress(String[] newAddressBasicArray, String[] newAddressDetailArray, String[] newAddressZipNumArray, int userNo);
 	
 	// 유저의 address 삭제
 	void deleteUserAddress(Map<String, Object> deletedCount);
 	
 	// 유저의 address 변경
-	void updateUserAddress(AddressVO newAddressVO, int userNo);
+	void updateUserAddress(String[] modiAddressBasicArray, String[] modiAddressDetailArray, String[] modiAddressZipNumArray, int userNo);
 	
 	// 유저의 address count 조회
 	int getCountUserAddress(int userNo);

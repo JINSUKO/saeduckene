@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import kr.co.seaduckene.board.command.BoardListVO;
 import kr.co.seaduckene.board.command.BoardVO;
 import kr.co.seaduckene.board.mapper.IBoardMapper;
 import kr.co.seaduckene.common.CategoryVO;
@@ -19,108 +20,103 @@ import kr.co.seaduckene.util.PageVO;
 public class BoardServiceImpl implements IBoardService {
 
 	@Autowired
-	private IBoardMapper mapper;
+	private IBoardMapper boardMapper;
 
 	@Override
 	public void write(BoardVO vo) {
 		System.out.println("서비스 vo 들어옮" + vo);
-		mapper.write(vo);
+		boardMapper.write(vo);
 	}
 
 	@Override
-	public List<BoardVO> list(PageVO paging, int categoryNo) {
+	public List<BoardListVO> list(PageVO paging, int categoryNo) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("paging", paging);
 		map.put("categoryNo", categoryNo);
 
-		return mapper.list(map);
+		return boardMapper.list(map);
 	}
 	
 	@Override
 	public int getTotal(int categoryNo) {
-		return mapper.getTotal(categoryNo);
+		return boardMapper.getTotal(categoryNo);
 	}
 	
 	@Override
 	public int getMyBoardTotal(int userNo) {
-		return mapper.getMyBoardTotal(userNo);
+		return boardMapper.getMyBoardTotal(userNo);
 	}
 
 	@Override
 	public CategoryVO getCategory(int categoryNo) {
-		return mapper.getCategory(categoryNo);
+		return boardMapper.getCategory(categoryNo);
 	}
 	
 	@Override
 	public int getNoticeTotal() {
-		return mapper.getNoticeTotal();
+		return boardMapper.getNoticeTotal();
 	}
 
 	@Override
-	public BoardVO content(int bno) {
-		return mapper.content(bno);
+	public BoardVO getBoardDetailVo(int bno) {
+		return boardMapper.getBoardDetailVo(bno);
 	}
 
 	@Override
 	public void update(BoardVO vo) {
-		mapper.update(vo);
+		boardMapper.update(vo);
 
 	}
 
 	@Override
 	public void delete(int bno) {
-		mapper.delete(bno);
+		boardMapper.delete(bno);
 
 	}
 
 	@Override
 	public List<ProductVO> proList(int categoryNo) {
-		return mapper.proList(categoryNo);
+		return boardMapper.proList(categoryNo);
 	}
 
 	@Override
 	public List<BoardUserVO> bUserList(int userNo) {
-		return mapper.bUserList(userNo);
+		return boardMapper.bUserList(userNo);
 	}
 
 	@Override
 	public List<BoardUserVO> bUserNoList() {
-		return mapper.bUserNoList();
+		return boardMapper.bUserNoList();
 	}
 
 	@Override
 	public List<NoticeVO> noticeList() {
-		return mapper.noticeList();
+		return boardMapper.noticeList();
 	}
 
 	@Override
 	public List<NoticeVO> noticeLists(PageVO paging) {
-		return mapper.noticeLists(paging);
+		return boardMapper.noticeLists(paging);
 	}
 
 	@Override
 	public int boardNoSearch(int boardUserNo) {
-		return mapper.boardNoSearch(boardUserNo);
+		return boardMapper.boardNoSearch(boardUserNo);
 	}
 
 	@Override
 	public void boardImageAdd(int boardNo, String UUID) {
-		mapper.boardImageAdd(boardNo, UUID);
+		boardMapper.boardImageAdd(boardNo, UUID);
 	}
 
 	@Override
 	public void addViewCount(int boardNo) {
-		mapper.addViewCount(boardNo);
+		boardMapper.addViewCount(boardNo);
 	}
 
 	@Override
 	public List<BoardVO> getMyList(Map<String, Object> data) {
-		return mapper.getMyList(data);
+		return boardMapper.getMyList(data);
 	}
-
-
-
-
-
 	
 }

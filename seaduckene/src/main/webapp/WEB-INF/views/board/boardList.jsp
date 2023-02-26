@@ -156,7 +156,7 @@ $(function() {
 				      <svg width="100%" height="225">
 				      
 				      
-				      <image href="/board/getImg/` + list[i].boardImageUuid + `" width="100%" height="100%"/>
+				      <image href="/board/getImg/` + list[i].boardThumbnailFileName + `" width="100%" height="100%"/>
 				      
 				      </svg>
 				      <div class="card-body container">
@@ -166,7 +166,7 @@ $(function() {
 							<p class="col-8"></p>
 							<p class="col-4" style="color: #5c5e5e; margin-bottom: 0;"><small >조회수&nbsp;` + list[i].boardViews + `</small></p>
 							<p class="col-8"></p>
-							<p class="col-4"  style="color: #5c5e5e; margin-bottom: 0;"><small >작성자&nbsp;` + (list[i].writer===null?'탈퇴회원':list[i].writer) + `</small></p>
+							<p class="col-4"  style="color: #5c5e5e; margin-bottom: 0;"><small >작성자&nbsp;` + (list[i].writer === null ? '탈퇴회원' : list[i].writer) + `</small></p>
 				        </div>
 				      </div>
 				    </div>

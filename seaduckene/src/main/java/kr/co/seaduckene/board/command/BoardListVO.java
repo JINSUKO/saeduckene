@@ -31,22 +31,19 @@ AND rn <= 9
 @Getter
 @Setter
 @ToString
-@NoArgsConstructor // 메게변수 없는 생성자
-@AllArgsConstructor // 메게변수 다 있는 생성자
-public class BoardImageVO {
+@NoArgsConstructor // 매개변수 없는 생성자
+@AllArgsConstructor // 매개변수 다 있는 생성자
+public class BoardListVO {
 	
 	private int boardNo;
 	private String boardTitle;
 	private String boardContent;
 	private int boardViews;
+	private String boardThumbnailFileName;
 	private Timestamp boardRegDate;
 	private Timestamp boardUpDate;
 	private int boardUserNo;
 	private int boardCategoryNo;
-	private int boardImageNo;
-	private String boardImageUuid;
-	private int boardBoardNo;
-	private int boardThumbnail;
 	private int categoryNo;
 	private String categoryMajorTitle;
 	private String categoryMinorTitle;

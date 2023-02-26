@@ -25,26 +25,25 @@
    </div>
 </div>
 
-<form action="${pageContext.request.contextPath}/board/boardModify"
-	id="writeForm" method="post">
+<form action="${pageContext.request.contextPath}/board/boardModify" id="writeForm" method="post">
 
 	<div class="container">
 		<!-- <div class="card mb-4">
 			<div class="card-body"> -->
 				<div class="mb-3">
-					<input type="hidden" name="boardNo" value="${ list.boardNo }">
-					<input type="hidden" name="boardCategoryNo" value="${ list.boardCategoryNo }">
+					<input type="hidden" name="boardNo" value="${ board.boardNo }">
+					<input type="hidden" name="boardCategoryNo" value="${ board.boardCategoryNo }">
 					<label for="title" class="form-label"></label> <input type="text"
 						class="form-control" id="title" name="boardTitle"
-						value="${list.boardTitle}" readonly>
+						value="${board.boardTitle}" readonly>
 						
 				<div class="col d-flex flex-row justify-content-end"
 					id="board-detail-item">
 		
 					<p>
-						<fmt:formatDate value="${list.boardRegDate}" pattern="yyyy/MM/dd" />
+						<fmt:formatDate value="${board.boardRegDate}" pattern="yyyy/MM/dd" />
 					</p>
-					<p>&nbsp;&nbsp;조회수: ${list.boardViews }</p>
+					<p>&nbsp;&nbsp;조회수: ${board.boardViews }</p>
 				</div>
 
 				<div class="col d-flex flex-row justify-content-end"
@@ -61,7 +60,7 @@
 
 				</div>
 				<div id="board-detail-button">
-					<a href='<c:url value='/board/boardList/${list.boardCategoryNo}'/>'
+					<a href='<c:url value='/board/boardList/${board.boardCategoryNo}'/>'
 						class="right sbtn blue small rounded" id="listBtn">목록가기</a>
 					<button type="submit" class="right sbtn cyan small rounded" id="ModBtn">수정하기</button>
 				</div>
@@ -83,11 +82,11 @@
 			<c:if test="${login != null}">
 				<div class="col">
 					<div class="d-flex align-items-center mb-1"  >
-						<h6 class="me-auto mb-0" id="replyBoardNo">&nbsp;${login.userNickname}</h6>
+						<h6 class="me-auto mb-0" id="replyBoardNo">&nbsp;${loginUser.userNickname}</h6>
 					</div>
 
 					<div class="d-flex align-items-center">
-						<input type="hidden" value="${login.userNo}" id="replyUserNo"></input>
+						<input type="hidden" value="${loginUser.userNo}" id="replyUserNo"></input>
 						<textarea class="form-control" rows="3" id="reply"></textarea>
 					</div>
 					<br>
@@ -168,7 +167,7 @@
 
 	$(document).ready(function() {
 		
-		console.log('카테고리 번호' + '${list.boardCategoryNo}');
+		console.log('카테고리 번호' + '${board.boardCategoryNo}');
 
 		$(function() {
 			$('#summernote').summernote({
@@ -176,7 +175,7 @@
 				minHeight : 500
 			});
 			$('#summernote').summernote('disable');
-			$('#summernote').summernote('pasteHTML', `${list.boardContent}`);
+			$('#summernote').summernote('pasteHTML', `${board.boardContent}`);
 			$('.note-statusbar').hide();
 			$('.note-editable').css('background', '	#fff9d6');
 		});
@@ -187,7 +186,7 @@
 			const userNo = '${login.userNo}';
 			console.log(userNo + 'userNo');
 			
-			const boardUserNo = '${list.boardUserNo}';
+			const boardUserNo = '${board.boardUserNo}';
 			console.log(boardUserNo + 'boardUserNo');
 			
 			if(userNo !== boardUserNo) {
@@ -205,7 +204,7 @@
 		
 		$('#replyRegist').click(function() {
 
-			const boardNo = '${list.boardNo}';
+			const boardNo = '${board.boardNo}';
 			const reply = $('#reply').val();
 			const replyUserNo = $('#replyUserNo').val();
 			console.log('dwadwadwa' + replyUserNo);
@@ -263,7 +262,7 @@
 
 		function getList(pageNum, reset) {
 
-			const bno = '${list.boardNo}';
+			const bno = '${board.boardNo}';
 			
 			$.getJSON(
 					"<c:url value='/reply/getList/' />" + bno + "/" + pageNum,

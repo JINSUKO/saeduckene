@@ -38,19 +38,30 @@ import org.springframework.web.util.WebUtils;
 
 import com.google.gson.JsonObject;
 
+import kr.co.seaduckene.board.command.BoardListVO;
 import kr.co.seaduckene.board.command.BoardVO;
 import kr.co.seaduckene.board.service.IBoardService;
 import kr.co.seaduckene.common.NoticeVO;
 import kr.co.seaduckene.user.command.UserVO;
+import kr.co.seaduckene.user.service.IUserService;
 import kr.co.seaduckene.util.PageVO;
-import kr.co.seaduckene.util.summernoteCopy;
+import kr.co.seaduckene.util.SummernoteCopy;
+import lombok.extern.log4j.Log4j;
 
+@Log4j
 @Controller
 @RequestMapping("/board")
 public class boardListController {
 	
 	@Autowired
-	private IBoardService service;
+	private IBoardService boardService;
+	
+	@Autowired
+	private IUserService userService;
+	
+	// summernote로 이미지 파일 복사하는 기능이 있는 클래스
+	@Autowired
+	private SummernoteCopy summernoteCopy;
 
 	//게시판 목록으로 이동
 	@GetMapping("/boardList/{categoryNo}")
@@ -59,9 +70,9 @@ public class boardListController {
 		// a태그 달때 ? 프로덕트 넘버 달아서 넘기기 GET
 		System.out.println("게시판 목록으로 이동!");
 		model.addAttribute("categoryNo", categoryNo);
-		model.addAttribute("productList", service.proList(categoryNo));
-		model.addAttribute("category",service.getCategory(categoryNo));
-		model.addAttribute("total", service.getTotal(categoryNo));
+		model.addAttribute("productList", boardService.proList(categoryNo));
+		model.addAttribute("category",boardService.getCategory(categoryNo));
+		model.addAttribute("total", boardService.getTotal(categoryNo));
 		
 		return "board/boardList";
 	}
@@ -69,11 +80,11 @@ public class boardListController {
 	//페이징
 	@GetMapping("/boardLists")
 	@ResponseBody
-	public List<BoardVO> boardList(PageVO paging, int categoryNo) {
+	public List<BoardListVO> boardList(PageVO paging, int categoryNo) {
 		
 		paging.setCpp(9);
 		
-		return service.list(paging,categoryNo);
+		return boardService.list(paging,categoryNo);
 	}
 	
 	//글쓰기 페이지로 이동 요청
@@ -81,50 +92,89 @@ public class boardListController {
 	public String boardWrite(@PathVariable int categoryNo, Model model, HttpSession session) {
 		System.out.println("/board/boardWrite: GET");
 		model.addAttribute("categoryNo", categoryNo);
-		model.addAttribute("category",service.getCategory(categoryNo));
+		model.addAttribute("category",boardService.getCategory(categoryNo));
 		
-		UserVO vo = (UserVO)session.getAttribute("login");
-		model.addAttribute("nickName", vo.getUserNickname());
+		int userNo = ((UserVO) session.getAttribute("login")).getUserNo();
+		UserVO userVo = userService.getUserVoWithNo(userNo);
+		model.addAttribute("nickName", userVo.getUserNickname());
 		
 		return "board/boardWrite";
 	}
-	
+	// TODO Auto-generated catch block
 	//게시글을 DB 등록 요청
 	@PostMapping("/boardWrite")
-	public String boardWrite(BoardVO vo, @RequestParam(value="filename", required=false) List<String> summerfile) throws Exception {
-		System.out.println("글 등록 요청이 들어옴!");
-		if(summerfile == null) {
-			System.out.println("vo: " + vo);
+	public String boardWrite(BoardVO boardVo, @RequestParam(value="filename", required=false) List<String> summerfileNames,
+			MultipartFile thumbnail) {
+		log.info("글 등록 요청이 들어옴!");
+		log.info("vo: " + boardVo);
+		
+		boardService.write(boardVo);
+		int boardNo = boardService.boardNoSearch(boardVo.getBoardUserNo());
+		boardVo.setBoardContent(boardVo.getBoardContent().replaceAll("_", Integer.toString(boardNo)));
+		boardVo.setBoardNo(boardNo);
+		
+		if (summerfileNames != null) {
+			log.info("summerfileNames: " + summerfileNames);
 			
-			service.write(vo);
+			List<String> summerfileBnNames = new ArrayList<String>();
 			
-			int boardNo = service.boardNoSearch(vo.getBoardUserNo());
-			service.boardImageAdd(boardNo, "saeduckBoardImage.png");
-		} else {
-			System.out.println("summerFile: " + summerfile);
-			System.out.println("첫번째 이미지: " + summerfile.get(0));
-			System.out.println("vo: " + vo);
+			for (String summerfileName : summerfileNames) {
+				String summerfileBnName = summerfileName.replaceAll("_", Integer.toString(boardNo));
+				summerfileBnNames.add(summerfileBnName);
+				
+				boardService.boardImageAdd(boardNo, summerfileBnName);
+			}
 			
-			String boardContent;
-			boardContent = vo.getBoardContent();
-			String editordata = boardContent.replaceAll("summernoteImage","getImg");
-			vo.setBoardContent(editordata);
-			service.write(vo);
+			try {
+				summerfileUpload(boardVo, summerfileNames, summerfileBnNames);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			
-			summernoteCopy copy = new summernoteCopy();
-			copy.summerCopy(summerfile);
-			
-			int boardNo = service.boardNoSearch(vo.getBoardUserNo());
-			service.boardImageAdd(boardNo, summerfile.get(0));
 		}
+		
+		if (thumbnail.getSize() != 0) {
+			String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+			String fileRealName = thumbnail.getOriginalFilename();
+			String fileExtension = fileRealName.substring(fileRealName.lastIndexOf("."), fileRealName.length());
+			String boardThumbnailPath = "c:/imgduck/board/";
+			
+			boardVo.setBoardThumbnailPath(boardThumbnailPath);
+			boardVo.setBoardThumbnailFileName(uuid + fileExtension);
+			boardVo.setBoardThumbnailFileRealName(fileRealName);
+			
+			// 나중에 날짜로 폴더명 구분할 때 사용함.
+			/*File folder = new File(boardThumbnailPath);
+			if(!folder.exists()) {
+				folder.mkdirs();
+			}*/
+			File saveFile = new File(boardThumbnailPath + uuid + fileExtension);
+			try {
+				thumbnail.transferTo(saveFile);
+			} catch (IllegalStateException | IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		boardService.update(boardVo);
+		return "redirect:/board/boardList/" + boardVo.getBoardCategoryNo();
+	}
+	
+	private void summerfileUpload(BoardVO boardVo, List<String> summerfileNames, List<String> summerfileBnNames) throws Exception {
+		String boardContent;
+		boardContent = boardVo.getBoardContent();
+		String imgEditedContent = boardContent.replaceAll("summernoteImage", "getImg");
+		boardVo.setBoardContent(imgEditedContent);
+		
+		// temp 폴더에서 board폴더로 파일을 복사하고 기존 temp의 파일을 삭제해준다.
+		summernoteCopy.summerCopy(summerfileNames, summerfileBnNames, boardVo.getBoardNo());
+		
 
-
-		return "redirect:/board/boardList/" + vo.getBoardCategoryNo();
 	}
 	
 	//상세보기 페이지
 	@GetMapping("/boardDetail/{boardNo}")
-	public String boardDetail(@PathVariable int boardNo, PageVO vo, Model model, 
+	public String boardDetail(@PathVariable int boardNo, PageVO pageVo, Model model, 
 							HttpSession session, HttpServletRequest request, HttpServletResponse response) {
 		System.out.println("boardNo" + boardNo);
 		
@@ -132,6 +182,8 @@ public class boardListController {
 		if(session.getAttribute("login") != null) {
 			UserVO userVo = (UserVO) session.getAttribute("login");
 			userNo = userVo.getUserNo();
+			userVo = userService.getUserVoWithNo(userNo);
+			model.addAttribute("loginUser", userVo);
 		} else {
 			userNo = 0;
 		}
@@ -143,7 +195,7 @@ public class boardListController {
 			Cookie newCookie = new Cookie("countView"+userNo, "bNo"+boardNo);
 			newCookie.setMaxAge(60*60*2); // 두시간
 			response.addCookie(newCookie);
-			service.addViewCount(boardNo);
+			boardService.addViewCount(boardNo);
 		} else {
 			System.out.println("countView 있지롱");
 			
@@ -156,7 +208,7 @@ public class boardListController {
 				Cookie newCookie = new Cookie("countView"+userNo, value + "bNo"+boardNo);
 				newCookie.setMaxAge(60*60*2); // 두시간
 				response.addCookie(newCookie);
-				service.addViewCount(boardNo);
+				boardService.addViewCount(boardNo);
 			}
 		}
 
@@ -164,35 +216,108 @@ public class boardListController {
 		 * model.addAttribute("list", service.content(boardNo));
 		 */
 	
-		BoardVO board = service.content(boardNo);
-		int categoryNo = board.getBoardCategoryNo();
+		BoardVO boardVo = boardService.getBoardDetailVo(boardNo);
+		int categoryNo = boardVo.getBoardCategoryNo();
 
-		model.addAttribute("category",service.getCategory(categoryNo));
-		model.addAttribute("list", board);
+		model.addAttribute("category",boardService.getCategory(categoryNo));
+		model.addAttribute("board", boardVo);
+		
 		
 		return "board/boardDetail";
 	}
 	
 	//수정 페이지로 이동
 	@PostMapping("/boardModify")
-	public void modify(@ModelAttribute("list") BoardVO vo, Model model) {
-		int categoryNo = vo.getBoardCategoryNo();
-		model.addAttribute("category",service.getCategory(categoryNo));
-		System.out.println(vo);
+	public void modify(@ModelAttribute("board") BoardVO boardVo, Model model, HttpSession session) {
+		log.info(boardVo);
+		int categoryNo = boardVo.getBoardCategoryNo();
+		model.addAttribute("category", boardService.getCategory(categoryNo));
+		
+		int userNo = ((UserVO) session.getAttribute("login")).getUserNo();
+		UserVO userVo = userService.getUserVoWithNo(userNo);
+		
+		model.addAttribute("nickName", userVo.getUserNickname());
 	}
 	
+	/** 
+	 * // TODO Auto-generated catch block
+	 * */
 	//글 수정 처리
 	@PostMapping("/boardUpdate")
-	public String boardUpdate(BoardVO vo) {
-		System.out.println(vo);
-		service.update(vo);
-		return "redirect:/board/boardDetail/" + vo.getBoardNo();
+	public String boardUpdate(BoardVO updatedBoardVo, @RequestParam(value="filename", required=false) List<String> summerfileNames, MultipartFile thumbnail) {
+		log.info(updatedBoardVo);
+		log.info("글 수정 요청이 들어옴!");
+
+		int boardNo = updatedBoardVo.getBoardNo();
+		updatedBoardVo.setBoardContent(updatedBoardVo.getBoardContent().replaceAll("_", Integer.toString(boardNo)));
+		
+		BoardVO previousBoardVo = boardService.getBoardDetailVo(boardNo);
+		
+		updatedBoardVo.setBoardThumbnailPath(previousBoardVo.getBoardThumbnailPath());
+		updatedBoardVo.setBoardThumbnailFolder(previousBoardVo.getBoardThumbnailFolder());
+		updatedBoardVo.setBoardThumbnailFileName(previousBoardVo.getBoardThumbnailFileName());
+		updatedBoardVo.setBoardThumbnailFileRealName(previousBoardVo.getBoardThumbnailFileRealName());
+		
+		if (summerfileNames != null) {
+			log.info("summerfileNames: " + summerfileNames);
+			
+			List<String> summerfileBnNames = new ArrayList<String>();
+			
+			for (String summerfileName : summerfileNames) {
+				String summerfileBnName = summerfileName.replaceAll("_", Integer.toString(boardNo));
+				summerfileBnNames.add(summerfileBnName);
+				
+				boardService.boardImageAdd(boardNo, summerfileBnName);
+			}
+			
+			try {
+				summerfileUpload(updatedBoardVo, summerfileNames, summerfileBnNames);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+		}
+		
+		if (thumbnail.getSize() != 0) {
+			String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+			String fileRealName = thumbnail.getOriginalFilename();
+			String fileExtension = fileRealName.substring(fileRealName.lastIndexOf("."), fileRealName.length());
+			String boardThumbnailPath = "c:/imgduck/board/";
+			
+			updatedBoardVo.setBoardThumbnailPath(boardThumbnailPath);
+			updatedBoardVo.setBoardThumbnailFileName(uuid + fileExtension);
+			updatedBoardVo.setBoardThumbnailFileRealName(fileRealName);
+			
+			// 나중에 날짜로 폴더명 구분할 때 사용함.
+			/*File folder = new File(boardThumbnailPath);
+			if(!folder.exists()) {
+				folder.mkdirs();
+			}*/
+			File saveFile = new File(boardThumbnailPath + uuid + fileExtension);
+			try {
+				thumbnail.transferTo(saveFile);
+			} catch (IllegalStateException | IOException e) {
+				e.printStackTrace();
+			}
+			
+			// 이전 썸네일 파일 지우는 코드
+		    File previousThumbnailFile = new File(previousBoardVo.getBoardThumbnailPath() +
+//				previousBoardVo.getBoardThumbnailFolder() + "/" +
+			    previousBoardVo.getBoardThumbnailFileName());
+		
+		    previousThumbnailFile.delete();
+			  
+			 
+		}
+		
+		boardService.update(updatedBoardVo);
+		return "redirect:/board/boardDetail/" + boardNo;
 	}
 	
 	//글 삭제 처리
 	@PostMapping("/boardDelete")
 	public String boardDelete(int boardNo, int boardCategoryNo) {
-		service.delete(boardNo);
+		boardService.delete(boardNo);
 		
 		return "redirect:/board/boardList/" + boardCategoryNo;
 	}
@@ -201,14 +326,14 @@ public class boardListController {
 	@GetMapping("/noticeList")
 	@ResponseBody
 	public List<NoticeVO> noticeList() {
-		System.out.println("noticeList :" + service.noticeList() );
-		return service.noticeList();
+		System.out.println("noticeList :" + boardService.noticeList() );
+		return boardService.noticeList();
 	}
 	
 	// 공지사항페이지 이동
 	@GetMapping("/notice")
 	public void notice(Model model) {
-		model.addAttribute("total", service.getNoticeTotal());
+		model.addAttribute("total", boardService.getNoticeTotal());
 	}
 	
 	// 공지사항 페이징
@@ -217,30 +342,34 @@ public class boardListController {
 	public List<NoticeVO> noticeLists(PageVO paging) {
 		
 		paging.setCpp(10);
-		System.out.println("noticeLists :" + service.noticeLists(paging) );
-		return service.noticeLists(paging);
+		System.out.println("noticeLists :" + boardService.noticeLists(paging) );
+		return boardService.noticeLists(paging);
 	}
 	
 	@PostMapping(value="/uploadSummernoteImageFile", produces = "application/json")
 	@ResponseBody
-	public String uploadSummernoteImageFile(@RequestParam("file") MultipartFile multipartFile) {
-		System.out.println("uploadSummernoteImageFile POST : " + multipartFile);
+	public String uploadSummernoteImageFile(@RequestParam("file") MultipartFile multipartFile,
+										String categoryNo) {
+		log.info("uploadSummernoteImageFile POST : " + multipartFile);
+		log.info("categoryNo : " + categoryNo);
 		
 		JsonObject jsonObject = new JsonObject();
 		
 		String fileRoot = "/imgduck/temp/";	//저장될 외부 파일 경로
 		String originalFileName = multipartFile.getOriginalFilename();	//오리지날 파일명
-		String extension = originalFileName.substring(originalFileName.lastIndexOf("."));	//파일 확장자
+		String extension = originalFileName.substring(originalFileName.lastIndexOf("."));	//파일 확장자 
 				
-		String savedFileName = UUID.randomUUID() + extension;	//저장될 파일 명
+		categoryNo = categoryNo.length() == 1 ? "0" + categoryNo : categoryNo;
+		
+		String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+		String savedFileName = uuid + "(BN_CN" + categoryNo + ")" + extension;	//저장될 파일명
 		
 		File targetFile = new File(fileRoot + savedFileName);	
 		
 		try { 
 			InputStream fileStream = multipartFile.getInputStream();
 			FileUtils.copyInputStreamToFile(fileStream, targetFile);	//파일 저장
-			jsonObject.addProperty("url", "/board/summe"
-					+ "rnoteImage/"+savedFileName);
+			jsonObject.addProperty("url", "/board/summernoteImage/"+savedFileName);
 			jsonObject.addProperty("responseCode", "success");
 				
 		} catch (IOException e) {
@@ -305,6 +434,7 @@ public class boardListController {
 	
 	//임시파일 삭제 요청
 	@PostMapping("/tempDelete")
+	@ResponseBody
 	public void tempDelete(@RequestBody List<String> list) {
 		System.out.println("임시 파일 삭제 요청!");
 		System.out.println("deleteFiles: " + list);
@@ -329,7 +459,7 @@ public class boardListController {
 		paging.setPageNum(pageNum);
 		data.put("page", paging);
 		data.put("userNo", userNo);
-		List<BoardVO> list= service.getMyList(data);
+		List<BoardVO> list= boardService.getMyList(data);
 		
 		System.out.println("가져온 리스트:"+list);
 		

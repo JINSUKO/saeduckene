@@ -33,7 +33,7 @@
 		<typeAlias type="kr.co.seaduckene.common.NoticeVO" alias="notice"/>
 		<typeAlias type="kr.co.seaduckene.board.command.BoardReplyVO" alias="boardReply"/>
 		<typeAlias type="kr.co.seaduckene.board.command.BoardReplyListVO" alias="boardReplyList"/>
-		<typeAlias type="kr.co.seaduckene.board.command.BoardImageVO" alias="boardImage"/>
+		<typeAlias type="kr.co.seaduckene.board.command.BoardListVO" alias="boardList"/>
 		<typeAlias type="kr.co.seaduckene.admin.command.AdminVO" alias="admin"/>
 		<typeAlias type="kr.co.seaduckene.admin.command.AdminDateVO" alias="adminDate"/>
 		<typeAlias type="kr.co.seaduckene.product.command.ProductOrderVO" alias="order"/>

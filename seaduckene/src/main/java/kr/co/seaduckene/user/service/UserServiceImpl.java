@@ -66,24 +66,17 @@ public class UserServiceImpl implements IUserService {
 	}
 	
 	@Override
-	public void addUserFavorites(CategoryVO categoryVO, int userNo) {
+	public void addUserFavorites(String[] categoryMajorTitles, String[] categoryMinorTitles, int userNo) {
 		
-		// 카테고리 한 개에서도 작동하는 지 봐야 함.
-		// -> 카테고리 한 개도 잘 동작 하는 듯.
-		String[] majorList = categoryVO.getCategoryMajorTitle().split(",");
-		log.info(majorList);
-		String[] minorList = categoryVO.getCategoryMinorTitle().split(",");
-		log.info(minorList);
-		
-		
-		for (int i = 0; i < majorList.length; i++) {
-			CategoryVO borVo = new CategoryVO(0, majorList[i], minorList[i], null);
+		for (int i = 0; i < categoryMajorTitles.length; i++) {
+			CategoryVO categoryVo = new CategoryVO(0, categoryMajorTitles[i], categoryMinorTitles[i], null);
 			Map<String, Integer> map = new HashMap<String, Integer>();
-			map.put("categoryNo", userMapper.getCategoryNo(borVo));
+			map.put("categoryNo", userMapper.getCategoryNo(categoryVo));
 			map.put("userNo", userNo);
 			
 			userMapper.insertFavorite(map);
 		}
+		
 	}
 	
 	@Override
@@ -195,23 +188,18 @@ public class UserServiceImpl implements IUserService {
 	}
 	
 	@Override
-	public void updateUserFavorites(CategoryVO newCategoryVO, int userNo) {
-		
-		String[] newMajorList = newCategoryVO.getCategoryMajorTitle().split(",");
-		log.info(Arrays.toString(newMajorList));
-		String[] newMinorList = newCategoryVO.getCategoryMinorTitle().split(",");
-		log.info(Arrays.toString(newMinorList));
+	public void updateUserFavorites(String[] newMajorArray, String[] newMinorArray, int userNo) {
 		
 		List<CategoryVO> currCategoryVOs = userMapper.getUserCategories(userNo);
 		List<FavoriteVO> currFavoriteVOs = userMapper.getUserFavorites(userNo);
 		
 		for (int i = 0; i < currCategoryVOs.size(); i++) {
-			CategoryVO borVo = new CategoryVO(0, newMajorList[i], newMinorList[i], null);
+			CategoryVO categoryVo = new CategoryVO(0, newMajorArray[i], newMinorArray[i], null);
 			Map<String, Integer> map = new HashMap<String, Integer>();
-			if (currCategoryVOs.size() != 0 && currCategoryVOs.get(i).getCategoryNo() != userMapper.getCategoryNo(borVo)) {
+			if (currCategoryVOs.size() != 0 && currCategoryVOs.get(i).getCategoryNo() != userMapper.getCategoryNo(categoryVo)) {
 				log.info("curr: " + currCategoryVOs.get(i).getCategoryNo());
-				log.info("new: " + userMapper.getCategoryNo(borVo));
-				map.put("categoryNo", userMapper.getCategoryNo(borVo));
+				log.info("new: " + userMapper.getCategoryNo(categoryVo));
+				map.put("categoryNo", userMapper.getCategoryNo(categoryVo));
 				map.put("userNo", userNo);
 				log.info("currFavNo: " + currFavoriteVOs.get(i).getFavoriteNo());
 				map.put("favoriteNo", currFavoriteVOs.get(i).getFavoriteNo());
@@ -223,23 +211,20 @@ public class UserServiceImpl implements IUserService {
 	}
 	
 	@Override
-	public void addNewAddress(AddressVO newAddressVo, int userNo) {
+	public void addNewAddress(String[] addressBasicArray, String[] addressDetailArray, String[] addressZipNumArray, int userNo) {
 		
-		String[] addressBasicList = newAddressVo.getAddressBasic().split(",");
-		log.info(Arrays.toString(addressBasicList));
-		String[] addressDetailList = newAddressVo.getAddressDetail().split(",");
-		log.info(Arrays.toString(addressDetailList));
-		String[] addressZipNumList = newAddressVo.getAddressZipNum().split(",");
-		log.info(Arrays.toString(addressZipNumList));
+		log.info(addressBasicArray);
+		log.info(addressDetailArray);
+		log.info(addressZipNumArray);
 		
 		AddressVO addrVo = null;
 		
-		for (int i = 0; i < addressBasicList.length; i++) {
+		for (int i = 0; i < addressBasicArray.length; i++) {
 			
 			if (addressMapper.getUserAddr(userNo).size() == 0 && i == 0) {				
-				addrVo = new AddressVO(0, addressDetailList[i], addressBasicList[i], addressZipNumList[i], 1, userNo);
+				addrVo = new AddressVO(0, addressDetailArray[i], addressBasicArray[i], addressZipNumArray[i], 1, userNo);
 			} else {
-				addrVo = new AddressVO(0, addressDetailList[i], addressBasicList[i], addressZipNumList[i], 0, userNo);
+				addrVo = new AddressVO(0, addressDetailArray[i], addressBasicArray[i], addressZipNumArray[i], 0, userNo);
 			}
 			
 			log.info(addrVo);
@@ -254,23 +239,20 @@ public class UserServiceImpl implements IUserService {
 	}
 	
 	@Override
-	public void updateUserAddress(AddressVO newAddressVO, int userNo) {
+	public void updateUserAddress(String[] newAddressBasicArray, String[] newAddressDetailArray, String[] newAddressZipNumArray, int userNo) {
 		
-		String[] newAddressBasicList = newAddressVO.getAddressBasic().split(",");
-		log.info(Arrays.toString(newAddressBasicList));
-		String[] newAddressDetailList = newAddressVO.getAddressDetail().split(",");
-		log.info(Arrays.toString(newAddressDetailList));
-		String[] newAddressZipNumList = newAddressVO.getAddressZipNum().split(",");
-		log.info(Arrays.toString(newAddressZipNumList));
+		log.info(newAddressBasicArray);
+		log.info(newAddressDetailArray);
+		log.info(newAddressZipNumArray);
 		
 		List<AddressVO> currAddressVOs = addressMapper.getUserAddr(userNo);
 		
-		for (int i = 0; i < newAddressBasicList.length; i++) {
-			if (!currAddressVOs.get(i).getAddressBasic().equals(newAddressBasicList[i])
-				|| !currAddressVOs.get(i).getAddressDetail().trim().equals(newAddressDetailList[i].trim())
-				|| !currAddressVOs.get(i).getAddressZipNum().equals(newAddressZipNumList[i])) {
+		for (int i = 0; i < newAddressBasicArray.length; i++) {
+			if (!currAddressVOs.get(i).getAddressBasic().equals(newAddressBasicArray[i])
+				|| !currAddressVOs.get(i).getAddressDetail().trim().equals(newAddressDetailArray[i].trim())
+				|| !currAddressVOs.get(i).getAddressZipNum().equals(newAddressZipNumArray[i])) {
 
-				AddressVO modiAddressVo = new AddressVO(currAddressVOs.get(i).getAddressNo(), newAddressDetailList[i], newAddressBasicList[i], newAddressZipNumList[i], 0, userNo);
+				AddressVO modiAddressVo = new AddressVO(currAddressVOs.get(i).getAddressNo(), newAddressDetailArray[i], newAddressBasicArray[i], newAddressZipNumArray[i], 0, userNo);
 				
 				log.info(modiAddressVo);
 				

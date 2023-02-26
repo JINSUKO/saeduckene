@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
+import kr.co.seaduckene.board.command.BoardListVO;
 import kr.co.seaduckene.board.command.BoardVO;
 import kr.co.seaduckene.common.CategoryVO;
 import kr.co.seaduckene.common.NoticeVO;
@@ -18,7 +19,7 @@ public interface IBoardMapper {
 	void write(BoardVO vo);
 
 	// 글 목록
-	List<BoardVO> list(Map<String, Object> map);
+	List<BoardListVO> list(Map<String, Object> map);
 	
 	// category 글 수량
 	int getTotal(int categoryNo);
@@ -33,7 +34,7 @@ public interface IBoardMapper {
 	CategoryVO getCategory(int categoryNo);
 
 	// 상세보기
-	BoardVO content(int bno);
+	BoardVO getBoardDetailVo(int bno);
 
 	// 글 수정
 	void update(BoardVO bno);

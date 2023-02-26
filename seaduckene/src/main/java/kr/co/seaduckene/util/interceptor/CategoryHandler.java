@@ -16,7 +16,7 @@ import lombok.extern.log4j.Log4j;
 public class CategoryHandler implements HandlerInterceptor {
 	
 	@Autowired
-	private IProductService service;
+	private IProductService productService;
 	
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
@@ -24,11 +24,11 @@ public class CategoryHandler implements HandlerInterceptor {
 		System.out.println("Action CategoryHandler");
 		
 		
-		List<String> majorList = service.getMajor();	
+		List<String> majorList = productService.getMajor();	
 		//model.addAttribute("majorList", majorList);
 		request.setAttribute("majorListHeader", majorList);
 		
-		List<CategoryVO> categoryList = service.getCategory();
+		List<CategoryVO> categoryList = productService.getCategory();
 		//model.addAttribute("categoryList" , categoryList);
 		request.setAttribute("ctListHeader" , categoryList);
 		
