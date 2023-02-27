@@ -288,35 +288,38 @@ public class ProductController {
 		int cnum = productService.getCNum(map);
 		map.put("cnum", cnum);
 		productService.insertProduct(map);
+		int productNo = productService.getProductNoWithInfo(vo);
 		
-		ProductImageVO ivo = new ProductImageVO();
+		ProductImageVO productImageVo = new ProductImageVO();
+		productImageVo.setProductImageProductNo(productNo);
 		
 		SimpleDateFormat simple = new SimpleDateFormat("yyyyMMdd");
 		String today = simple.format(new Date());
-		ivo.setProductImageFolder(today);
+		productImageVo.setProductImageFolder(today);
 		list.add(thumb);
 		String uploadFolder ="c:/imgduck/product/"+today;
-		ivo.setProductImagePath("c:/imgduck/product/");
-		for(int i =0;i<list.size();i++ ) {
-				ivo.setProductThumbnail(0);
-			if(i==(list.size()-1)) {
-				ivo.setProductThumbnail(1);
+		productImageVo.setProductImagePath("c:/imgduck/product/");
+		
+		for(int i =0; i < list.size(); i++ ) {
+				productImageVo.setProductThumbnail(0);
+			if (i == (list.size() - 1)) {
+				productImageVo.setProductThumbnail(1);
 			}
 			String fileRealName = list.get(i).getOriginalFilename();
 			String fileExtension = fileRealName.substring(fileRealName.lastIndexOf("."),fileRealName.length());
-			ivo.setProdcutImageFileRealName(fileRealName);
+			productImageVo.setProductImageFileRealName(fileRealName);
 			
 			UUID uuid = UUID.randomUUID();
 			String uu = uuid.toString().replace("-","");
 			
-			ivo.setProductImageFileName(uu+fileExtension);
+			productImageVo.setProductImageFileName(uu+fileExtension);
 			
 			File folder = new File(uploadFolder);
 			if(!folder.exists()) {
 				folder.mkdirs();
 			}
 			File saveFile = new File(uploadFolder+"/"+uu+fileExtension);
-			productService.insertImg(ivo);
+			productService.insertImg(productImageVo);
 			try {
 				list.get(i).transferTo(saveFile);
 			} catch (IllegalStateException | IOException e) {
@@ -370,7 +373,7 @@ public class ProductController {
 				}
 				String fileRealName = list.get(i).getOriginalFilename();
 				String fileExtension = fileRealName.substring(fileRealName.lastIndexOf("."),fileRealName.length());
-				ivo.setProdcutImageFileRealName(fileRealName);
+				ivo.setProductImageFileRealName(fileRealName);
 				
 				UUID uuid = UUID.randomUUID();
 				String uu = uuid.toString().replace("-","");
@@ -382,7 +385,7 @@ public class ProductController {
 					folder.mkdirs();
 				}
 				File saveFile = new File(uploadFolder+"/"+uu+fileExtension);
-				productService.insertImg2(ivo);
+				productService.insertImg(ivo);
 				try {
 					list.get(i).transferTo(saveFile);
 				} catch (IllegalStateException | IOException e) {

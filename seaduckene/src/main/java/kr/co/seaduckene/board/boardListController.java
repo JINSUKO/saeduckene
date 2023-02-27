@@ -451,13 +451,12 @@ public class boardListController {
 	}
 	@GetMapping("boardMyList")
 	@ResponseBody
-	public List<BoardVO> myList(int pageNum,HttpSession session) {
-		System.out.println("GET boardMyList 요청");
+	public List<BoardVO> myList(PageVO paging, HttpSession session) {
+		log.info("GET boardMyList 요청");
 		int userNo = ((UserVO)session.getAttribute("login")).getUserNo();
 		Map<String, Object> data = new HashMap<String, Object>();
-		PageVO paging = new PageVO();
-		paging.setPageNum(pageNum);
-		data.put("page", paging);
+		paging.setCpp(20);
+		data.put("paging", paging);
 		data.put("userNo", userNo);
 		List<BoardVO> list= boardService.getMyList(data);
 		

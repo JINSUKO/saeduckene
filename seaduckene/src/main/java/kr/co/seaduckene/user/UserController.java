@@ -457,7 +457,7 @@ public class UserController {
 		
 		List<AddressVO> beforeDeleteAddressList = userService.getUserAddr(userNo);
 
-		if (addressBasics.size() != 0 ) {
+		if (addressBasics != null) {
 			log.info(addressBasics);
 			log.info(addressDetails);
 			log.info(addressZipNums);

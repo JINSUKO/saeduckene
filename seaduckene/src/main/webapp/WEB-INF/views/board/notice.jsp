@@ -15,7 +15,8 @@
 <body>
 
 	<%@ include file="../include/header.jsp" %>
-
+	
+	<h2 style="text-align: center;">공지사항</h2>
     <div class="container" style="margin-top:30px;">
         <div class="row">
             <div class="accordion accordion-flush" id="accordionFlushExample">
@@ -80,7 +81,7 @@
                     
     				if(total > page*10){
     					$('#the-noti-btn').css('display','block');
-    				}else {
+    				} else {
     					isFinish = true;
     					$('#the-noti-btn').css('display','none');
     				}

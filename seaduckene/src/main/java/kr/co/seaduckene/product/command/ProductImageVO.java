@@ -12,7 +12,7 @@ CREATE TABLE product_image(
     product_image_path VARCHAR2(100) NOT NULL,
     product_image_folder VARCHAR2(100) NOT NULL,
     product_image_file_name VARCHAR2(100) NOT NULL,
-    prodcut_image_file_real_name VARCHAR2(100) NOT NULL,
+    product_image_file_real_name VARCHAR2(100) NOT NULL,
     product_image_product_no NUMBER,
     product_thumbnail NUMBER default 0
 );
@@ -35,7 +35,7 @@ public class ProductImageVO {
     private String productImagePath; 
     private String productImageFolder;
     private String productImageFileName; 
-    private String prodcutImageFileRealName;
+    private String productImageFileRealName;
     private int productImageProductNo;
     private int productThumbnail;
 

@@ -46,40 +46,37 @@
 	</div>
 	<div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
 	<c:forEach var="proVo" items="${productList}" varStatus="status">
-		<c:if test="${status.index<3 }">
-		  <div class="col productcard">
-		  <a href="${pageContext.request.contextPath }/product/productDetail?productNo=${proVo.productNo}" id="cardA">
-		    <div class="card mb-4 rounded-3 shadow-sm ">
-		      <div class="card-header py-3" >
-		        <h5 class="my-0 fw-normal col-12 text-truncate">${proVo.productName }</h5>
-		      </div>
-		      
-		      		<img id="productThumb" src="<c:url value='/product/display2?no=${proVo.productNo }' />" alt="상품이미지" style="height:225px;">
-		      
-		      <div class="card-body">
-		        <h5 class="card-title pricing-card-title">&#8361;<fmt:formatNumber value="${proVo.productPriceSelling}" pattern="#,###" /></h5>
-		        <ul class="list-unstyled mt-3 mb-4 ">
-		          <li class="col-12 text-truncate mb-3" >${proVo.productDetail}</li>
-		           <c:if test="${proVo.productStock != 0 }">
-		          <li>재고수량:${proVo.productStock}</li>
-		          </c:if>
-		          <c:if test="${proVo.productStock == 0 }">
-		          	<li style="color:red;">품절</li>
-		          </c:if>
-		        </ul>
-		      </div>
-		    </div>
-		    </a>
-		  </div>
-		 </c:if> 
+	  <div class="col productcard">
+	  <a href="${pageContext.request.contextPath }/product/productDetail?productNo=${proVo.productNo}" id="cardA">
+	    <div class="card mb-4 rounded-3 shadow-sm ">
+	      <div class="card-header py-3" >
+	        <h5 class="my-0 fw-normal col-12 text-truncate">${proVo.productName }</h5>
+	      </div>
+	      
+	      		<img id="productThumb" src="<c:url value='/product/display2?no=${proVo.productNo }' />" alt="상품이미지" style="height:225px;">
+	      
+	      <div class="card-body">
+	        <h5 class="card-title pricing-card-title">&#8361;<fmt:formatNumber value="${proVo.productPriceSelling}" pattern="#,###" /></h5>
+	        <ul class="list-unstyled mt-3 mb-4 ">
+	          <li class="col-12 text-truncate mb-3" >${proVo.productDetail}</li>
+	           <c:if test="${proVo.productStock != 0 }">
+	          <li>재고수량:${proVo.productStock}</li>
+	          </c:if>
+	          <c:if test="${proVo.productStock == 0 }">
+	          	<li style="color:red;">품절</li>
+	          </c:if>
+	        </ul>
+	      </div>
+	    </div>
+	    </a>
+	  </div>
 	  </c:forEach>
 	</div>
 	<div style="text-align: center;">
-	  <c:if test="${fn:length(productList) > 3}">
-	  	<button id="moreProBtn" class="sbtn cyan small rounded">더보기</button>
+	  <c:if test="${fn:length(productList) == 3}">
+	  	<button id="moreProBtn" class="sbtn cyan small rounded">상품리스트 가기</button>
 	  </c:if>
-	  
-	  </div>
+    </div>
 </div>
 
 </section>

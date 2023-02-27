@@ -259,11 +259,6 @@ public class ProductServiceImpl implements IProductService {
 	}
 	
 	@Override
-	public void insertImg(ProductImageVO vo) {
-		productMapper.insertImg(vo);
-	}
-	
-	@Override
 	public ProductVO getContent(int num) {
 		return productMapper.getContent(num);
 	}
@@ -321,8 +316,8 @@ public class ProductServiceImpl implements IProductService {
 		
 	}
 	@Override
-	public void insertImg2(ProductImageVO vo) {
-		productMapper.insertImg2(vo);
+	public void insertImg(ProductImageVO vo) {
+		productMapper.insertImg(vo);
 		
 	}
 	
@@ -346,7 +341,10 @@ public class ProductServiceImpl implements IProductService {
 		return productMapper.getProductList(categoryNo);
 	}
 
-
+	@Override
+	public int getProductNoWithInfo(ProductVO productVo) {
+		return productMapper.getProductNoWithInfo(productVo);
+	}
 	
 	
 }

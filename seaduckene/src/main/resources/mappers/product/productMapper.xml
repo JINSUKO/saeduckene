@@ -78,28 +78,25 @@
 	<select id="getCNum" resultType="int">
 		SELECT category_no FROM category
 		WHERE category_major_title=#{major} AND category_minor_title=#{minor}
-
 	</select>
-
 	<insert id="insertProduct">
 		INSERT INTO product
 		(product_no,product_name,product_price_normal,product_price_selling,product_detail,product_stock,product_category_no)
 		VALUES
 		(product_seq.NEXTVAL,#{vo.productName},#{vo.productPriceNormal},#{vo.productPriceSelling},#{vo.productDetail},#{vo.productStock},#{cnum})
 	</insert>
+	
+<!-- 나중에 상품명 unique 거는 게 좋을 듯. -->
+	<select id="getProductNoWithInfo" resultType="int">
+		SELECT product_no FROM product
+		WHERE product_name = #{productName} AND product_price_normal = #{productPriceNormal} AND product_price_selling = #{productPriceSelling}
+	</select>
 
 	<insert id="insertImg">
 		INSERT INTO product_image
 		VALUES
 		(product_image_seq.NEXTVAL,#{productImagePath},#{productImageFolder},#{productImageFileName},
-		#{prodcutImageFileRealName},product_seq.CURRVAL,#{productThumbnail})
-	</insert>
-
-	<insert id="insertImg2">
-		INSERT INTO product_image
-		VALUES
-		(product_image_seq.NEXTVAL,#{productImagePath},#{productImageFolder},#{productImageFileName},
-		#{prodcutImageFileRealName},#{productImageProductNo},#{productThumbnail})
+		#{productImageFileRealName},#{productImageProductNo},#{productThumbnail})
 	</insert>
 
 	<delete id="deleteImage">
@@ -120,55 +117,43 @@
 	</select>
 
 	<select id="mainImage" resultType="productImage">
-        SELECT *
-		FROM
-		    (
-		    SELECT ROWNUM AS rn, tbl.* FROM
-		        (
-		            SELECT DISTINCT i.product_image_no, i.product_image_path, i.product_image_folder, i.product_image_file_name, i.prodcut_image_file_real_name, i.product_image_product_no, i.product_thumbnail
-		            FROM duck_user d INNER JOIN favorite f
-		                             ON f.favorite_user_no = #{userNo}
-		                             INNER JOIN category c
-		                             ON f.favorite_category_no = c.category_no
-		                             INNER JOIN product p
-		                             ON c.category_no = p.product_category_no
-		                             INNER JOIN product_image i
-		                             ON p.product_no = i.product_image_product_no
-		            WHERE i.product_thumbnail = 1
-		        ) tbl
-		    ) b
 		<![CDATA[
+        SELECT * FROM
+		    (
+			    SELECT ROWNUM AS rn, tbl.* FROM
+			        (
+						SELECT i.product_image_product_no, i.product_image_folder, i.product_image_file_name
+						FROM product p LEFT JOIN product_image i ON p.product_no = i.product_image_product_no
+						               LEFT JOIN category c ON p.product_category_no = c.category_no 
+						               LEFT JOIN favorite f ON c.category_no = f.favorite_category_no
+						WHERE i.product_thumbnail = 1 AND f.favorite_user_no = #{userNo}
+			            ORDER BY p.product_reg_date DESC
+			        ) tbl
+		    ) b
 		WHERE rn > 0
 		AND rn <= 9
 		]]>
 	</select>
-	
+	<!-- 나중에 카테고리별로 상품 3개 초과하게 못 나오게 바꿔야할 듯. -->
 	<select id="mainImageNo" resultType="productImage">
 		<![CDATA[
-
-		SELECT * FROM(
-		SELECT ROWNUM AS rn,a.* FROM
-          (
-          SELECT DISTINCT tbl.product_image_no, tbl.product_image_path, tbl.product_image_folder, tbl.product_image_file_name, tbl.prodcut_image_file_real_name, tbl.product_image_product_no, tbl.product_thumbnail FROM
-              (
-                  SELECT  i.product_image_no, i.product_image_path, i.product_image_folder, i.product_image_file_name, i.prodcut_image_file_real_name, i.product_image_product_no, i.product_thumbnail, b.board_views
-                  FROM board b INNER JOIN category c
-                                   ON b.board_category_no = c.category_no
-                                   INNER JOIN product p
-                                   ON c.category_no = p.product_category_no
-                                   INNER JOIN product_image i
-                                   ON p.product_no = i.product_image_product_no
-                  WHERE i.product_thumbnail = 1 
-                  ORDER BY b.board_views DESC
-              ) tbl
-          ) a
-            )
-      WHERE rn > 0
-      AND rn <= 9
-
+		SELECT * FROM
+			(
+				SELECT ROWNUM AS rn, tbl.* FROM
+                    (
+                        SELECT i.product_image_folder, i.product_image_file_name, i.product_image_product_no, MAX(b.board_views) board_views
+                        FROM product p LEFT JOIN product_image i ON p.product_no = i.product_image_product_no
+                                       LEFT JOIN category c ON p.product_category_no = c.category_no 
+                                       LEFT JOIN board b ON b.board_category_no = c.category_no 
+                        WHERE i.product_thumbnail = 1 
+                        group by i.product_image_product_no, i.product_image_folder, i.product_image_file_name
+                        ORDER BY board_views DESC
+                    ) tbl
+		    )
+		WHERE rn > 0
+		AND rn <= 9
 		]]>
 	</select>
-
 
 	<insert id="insertBasket">
 		INSERT INTO basket
@@ -226,7 +211,7 @@
 	<update id="refund">
 		UPDATE duck_order SET order_status=#{type},order_return_reason=#{reason} WHERE order_product_no=#{productNo}
 	</update>
-	
+	<!-- 여기부터 보기 -->
 	<select id="getProductList" resultType="prodcut">
 		SELECT *
 		FROM
