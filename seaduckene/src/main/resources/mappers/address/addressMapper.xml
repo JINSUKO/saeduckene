@@ -39,7 +39,7 @@
 	</update>
 	
 	<select id="getUserAddr" resultType="address">
-		SELECT * FROM address WHERE address_user_no = #{userNo} ORDER BY address_representative DESC, address_no DESC
+		SELECT * FROM address WHERE address_user_no = #{userNo} ORDER BY address_representative DESC, address_no
 	</select>	
 	
 	<insert id="addNewAddress">
