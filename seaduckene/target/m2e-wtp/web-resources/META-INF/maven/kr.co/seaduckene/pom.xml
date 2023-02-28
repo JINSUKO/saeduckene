@@ -138,7 +138,14 @@
 			<artifactId>ojdbc6</artifactId>
 			<version>11.2.0.4</version>
 		</dependency>
-
+		
+		<!-- https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client -->
+		<dependency>
+		    <groupId>org.mariadb.jdbc</groupId>
+		    <artifactId>mariadb-java-client</artifactId>
+		    <version>2.7.5</version>
+		</dependency>
+		
 		<!-- mybatis 라이브러리 -->
 		<dependency>
 			<groupId>org.mybatis</groupId>
