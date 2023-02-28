@@ -56,9 +56,6 @@ public interface IProductMapper {
 	// 카테고리넘버
 	int getCNum(Map<String, Object> map);
 
-	// 상품 이미지 삽입
-	void insertImg(ProductImageVO vo);
-
 	// 메인 상품 이미지 출력 세션있음
 	List<ProductImageVO> mainImage(int productNo);
 
@@ -90,7 +87,7 @@ public interface IProductMapper {
 	void updateProduct(ProductVO vo);
 	
 	//이미지 수정삽입
-	void insertImg2(ProductImageVO vo);
+	void insertImg(ProductImageVO vo);
 	
 	//기존사진 삭제
 	void deleteImage(int num);
@@ -106,5 +103,8 @@ public interface IProductMapper {
 	
 	// 상품 리스트 
 	List<ProductVO> getProductList(int categoryNo);
+	
+	// productNo 가져오기
+	int getProductNoWithInfo(ProductVO productVo);
 	
 }

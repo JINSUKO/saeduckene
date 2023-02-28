@@ -48,9 +48,6 @@ public interface IProductService {
 	// 카테고리넘버
 	int getCNum(Map<String, Object> map);
 
-	// 이미지 삽입
-	void insertImg(ProductImageVO vo);
-
 	// 메인 상품 이미지 출력 세션 있음
 	List<ProductImageVO> mainImage(int userNo);
 
@@ -82,7 +79,7 @@ public interface IProductService {
 	void updateProduct(ProductVO vo);
 
 	// 상품사진 수정 새로 등록
-	void insertImg2(ProductImageVO vo);
+	void insertImg(ProductImageVO vo);
 
 	// 기존사진 삭제
 	void deleteImage(int num);
@@ -92,4 +89,8 @@ public interface IProductService {
 	
 	// 상품 리스트 
 	List<ProductVO> getProductList(int categoryNo);
+	
+	// productNo 가져오기
+	int getProductNoWithInfo(ProductVO productVo);
+	
 }

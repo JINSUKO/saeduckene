@@ -66,22 +66,24 @@
 	</select>
 	
 	<select id="proList" resultType="prodcut">
+		<![CDATA[
 		SELECT *
 		FROM
 		    (
-		    SELECT ROWNUM AS rn, tbl.* FROM
+		    SELECT ROWNUM AS rn, tbl1.* FROM
 		        (
 		        SELECT * FROM product
 		        WHERE product_category_no = #{categoryNo}
 		        ORDER BY product_reg_date DESC
-		        ) tbl
-		    )
+		        ) tbl1
+		    ) 
+		WHERE rn > 0 AND rn < 4
+		]]>
 	</select>
 	
 	<!-- 글 등록 -->
 	<insert id="write">
-		INSERT INTO board
-		(board_no, board_title, board_content , board_user_no, board_category_no)
+		INSERT INTO board (board_no, board_title, board_content , board_user_no, board_category_no)
 		VALUES(board_no_seq.NEXTVAL, #{boardTitle}, #{boardContent}, #{boardUserNo}, #{boardCategoryNo})
 	</insert>
 	
@@ -94,9 +96,8 @@
 	<!-- 수정 -->
 	<update id="update">
 		UPDATE board
-		SET board_title = #{boardTitle}, board_content = #{boardContent}, board_reg_date = sysdate, 
-			<include refid="boardThumbnail"/>
-
+		SET board_title = #{boardTitle}, board_content = #{boardContent},
+		<include refid="boardThumbnail"/>
 		WHERE board_no = #{boardNo}
 	</update>
 
@@ -198,7 +199,7 @@
 		UPDATE board SET board_views = board_views + 1
 		WHERE board_no = #{boardNo}
 	</update>
-	
+
 	<select id="getMyList" resultType="board">
 		<![CDATA[
 		SELECT *
@@ -212,24 +213,11 @@
 		            ORDER BY board_reg_date DESC
 		        ) tbl
 		    ) s
-		WHERE rn > (#{page.pageNum}-1) * #{page.cpp}
-		AND rn <= #{page.pageNum} * #{page.cpp}
+		WHERE rn > (#{paging.pageNum}-1) * #{paging.cpp}
+		AND rn <= #{paging.pageNum} * #{paging.cpp}
 		]]>
 	</select>
 	
 </mapper>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

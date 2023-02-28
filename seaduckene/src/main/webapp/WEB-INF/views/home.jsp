@@ -20,7 +20,7 @@
 		<div class="swiper mySwiper">
 	      <div class="swiper-wrapper">
 	      	<c:forEach var="i" items="${mainListImg}">
-	        	<div class="swiper-slide img-fluid"><a href="<c:url value='/product/productDetail?productNo=${i.productImageProductNo }'/>" style="width: 100%; height: 100%; text-align: center; line-height: 50%;"><img src="<c:url value='/product/mainDisplayImg?fileLoca=${i.productImageFolder}&fileName=${i.productImageFileName}' />" alt=".."></a></div>
+	        	<div class="swiper-slide img-fluid"><a href="<c:url value='/product/productDetail?productNo=${i.productImageProductNo}&categoryNo=${i.categoryNo}'/>" style="width: 100%; height: 100%; text-align: center; line-height: 50%;"><img src="<c:url value='/product/mainDisplayImg?fileLoca=${i.productImageFolder}&fileName=${i.productImageFileName}' />" alt=".."></a></div>
 	        </c:forEach>
 	      </div>
 	    </div>
@@ -38,6 +38,8 @@
 		            <p>내가 선택한 카테고리의 인기글</p>
 		        </div>
 		        <div class="row mb_30 mt-2">
+		        
+		        <!-- 나중에 카테고리별로 상품 3개 초과하게 못 나오게 바꿔야할 듯. -->
 		        	<c:forEach var="b" items="${boardList}">
 		        	<input type="hidden" value="${b.boardNo}" class="bno">
 		            <div class="col-lg-4 col-md-6">

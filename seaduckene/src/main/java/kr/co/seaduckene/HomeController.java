@@ -2,11 +2,8 @@ package kr.co.seaduckene;
 
 import java.text.DateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -19,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import kr.co.seaduckene.board.service.IBoardService;
-import kr.co.seaduckene.common.CategoryVO;
 import kr.co.seaduckene.product.command.ProductImageVO;
 import kr.co.seaduckene.product.service.IProductService;
 import kr.co.seaduckene.user.command.UserVO;

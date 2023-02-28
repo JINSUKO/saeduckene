@@ -3,10 +3,6 @@
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
 <style>
 .carousel-item {
 	height: 50vh;
@@ -20,14 +16,20 @@
 #inputQuantity {
 	max-width: 4rem;
 }
+
+#board-list-container {
+	text-align: center;
+	margin-top: 30px;
+}
+
+#button-product-list {
+	text-align: center;
+	margin: 0 auto;
+}
 </style>
 
-</head>
-
-
-<body>
 	<%@ include file="../include/header.jsp"%>
-	<section class="py-5">
+	<section class="pt-5">
 		<div class="container px-4 px-lg-5 my-5">
 			<div class="row gx-4 gx-lg-5 align-items-center">
 				<div class="col-md-6">
@@ -82,7 +84,13 @@
 						<span class="text-decoration-line-through">&#8361;<fmt:formatNumber value="${vo.productPriceNormal }" pattern="#,###" /></span> &nbsp;
 						<span>&#8361;<fmt:formatNumber value="${vo.productPriceSelling }" pattern="#,###" /></span>
 					</div>
-					<p class="lead">${vo.productDetail }</p>
+					<p class="lead">${vo.productDetail}</p>
+					<ul class="p-0">
+			            <li>재고수량:${vo.productStock}</li>
+				        <c:if test="${vo.productStock == 0 }">
+				        	<li style="color:red;">품절</li>
+				        </c:if>
+					</ul>
 					<div class="d-flex ">
 						<input class="form-control text-center" id="inputQuantity"
 							type="number" value="0" min="0" max="${vo.productStock }">
@@ -100,12 +108,15 @@
 					</div>
 				</div>
 			</div>
+			<div class="row">
+				<div class="col align-self-center" id="board-list-container">
+					<button class="sbtn cyan small rounded" id="button-product-list" >상품리스트 가기</button>
+				</div>
+			</div>
 		</div>
 	</section>
 
 	<%@ include file="../include/footer.jsp"%>
-</body>
-</html>
 
 <script>
 	$(function() {
@@ -181,5 +192,9 @@
 	         }
 	        location.href='${pageContext.request.contextPath}/product/insertOrder?ea='+ea+'&pNo='+pNo;
 		});//바로주문 상품
+		
+		$('#button-product-list').on('click', function() {
+			location.href = '${pageContext.request.contextPath}/product/productList?categoryNo=${categoryNo}';
+		});
 	});// end jQuery
 </script>

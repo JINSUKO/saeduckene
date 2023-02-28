@@ -142,13 +142,14 @@ public class ProductController {
 	}
 	
 	@GetMapping("/productDetail")
-	public void detail(int productNo,Model model) {
+	public void detail(int productNo, Model model, int categoryNo) {
 		ProductVO vo = productService.getContent(productNo);
 		List<ProductImageVO> ivo = productService.getImg(productNo);
 		System.out.println(vo);
 		System.out.println(ivo);
 		model.addAttribute("vo", vo);
 		model.addAttribute("imgList", ivo);
+		model.addAttribute("categoryNo", categoryNo);
 	}
 	
 	@GetMapping("/display")
@@ -288,35 +289,38 @@ public class ProductController {
 		int cnum = productService.getCNum(map);
 		map.put("cnum", cnum);
 		productService.insertProduct(map);
+		int productNo = productService.getProductNoWithInfo(vo);
 		
-		ProductImageVO ivo = new ProductImageVO();
+		ProductImageVO productImageVo = new ProductImageVO();
+		productImageVo.setProductImageProductNo(productNo);
 		
 		SimpleDateFormat simple = new SimpleDateFormat("yyyyMMdd");
 		String today = simple.format(new Date());
-		ivo.setProductImageFolder(today);
+		productImageVo.setProductImageFolder(today);
 		list.add(thumb);
 		String uploadFolder ="/imgduck/product/"+today;
-		ivo.setProductImagePath("/imgduck/product/");
-		for(int i =0;i<list.size();i++ ) {
-				ivo.setProductThumbnail(0);
-			if(i==(list.size()-1)) {
-				ivo.setProductThumbnail(1);
+		productImageVo.setProductImagePath("/imgduck/product/");
+		
+		for(int i =0; i < list.size(); i++ ) {
+				productImageVo.setProductThumbnail(0);
+			if (i == (list.size() - 1)) {
+				productImageVo.setProductThumbnail(1);
 			}
 			String fileRealName = list.get(i).getOriginalFilename();
 			String fileExtension = fileRealName.substring(fileRealName.lastIndexOf("."),fileRealName.length());
-			ivo.setProdcutImageFileRealName(fileRealName);
+			productImageVo.setProductImageFileRealName(fileRealName);
 			
 			UUID uuid = UUID.randomUUID();
 			String uu = uuid.toString().replace("-","");
 			
-			ivo.setProductImageFileName(uu+fileExtension);
+			productImageVo.setProductImageFileName(uu+fileExtension);
 			
 			File folder = new File(uploadFolder);
 			if(!folder.exists()) {
 				folder.mkdirs();
 			}
 			File saveFile = new File(uploadFolder+"/"+uu+fileExtension);
-			productService.insertImg(ivo);
+			productService.insertImg(productImageVo);
 			try {
 				list.get(i).transferTo(saveFile);
 			} catch (IllegalStateException | IOException e) {
@@ -370,7 +374,7 @@ public class ProductController {
 				}
 				String fileRealName = list.get(i).getOriginalFilename();
 				String fileExtension = fileRealName.substring(fileRealName.lastIndexOf("."),fileRealName.length());
-				ivo.setProdcutImageFileRealName(fileRealName);
+				ivo.setProductImageFileRealName(fileRealName);
 				
 				UUID uuid = UUID.randomUUID();
 				String uu = uuid.toString().replace("-","");
@@ -382,7 +386,7 @@ public class ProductController {
 					folder.mkdirs();
 				}
 				File saveFile = new File(uploadFolder+"/"+uu+fileExtension);
-				productService.insertImg2(ivo);
+				productService.insertImg(ivo);
 				try {
 					list.get(i).transferTo(saveFile);
 				} catch (IllegalStateException | IOException e) {
