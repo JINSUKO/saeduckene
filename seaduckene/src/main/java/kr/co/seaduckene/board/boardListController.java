@@ -137,7 +137,7 @@ public class boardListController {
 			String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 			String fileRealName = thumbnail.getOriginalFilename();
 			String fileExtension = fileRealName.substring(fileRealName.lastIndexOf("."), fileRealName.length());
-			String boardThumbnailPath = "/imgduck/board/";
+			String boardThumbnailPath = "/ejsage3217/imgduck/board/";
 			
 			boardVo.setBoardThumbnailPath(boardThumbnailPath);
 			boardVo.setBoardThumbnailFileName(uuid + fileExtension);
@@ -282,7 +282,7 @@ public class boardListController {
 			String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 			String fileRealName = thumbnail.getOriginalFilename();
 			String fileExtension = fileRealName.substring(fileRealName.lastIndexOf("."), fileRealName.length());
-			String boardThumbnailPath = "/imgduck/board/";
+			String boardThumbnailPath = "/ejsage3217/imgduck/board/";
 			
 			updatedBoardVo.setBoardThumbnailPath(boardThumbnailPath);
 			updatedBoardVo.setBoardThumbnailFileName(uuid + fileExtension);
@@ -355,7 +355,7 @@ public class boardListController {
 		
 		JsonObject jsonObject = new JsonObject();
 		
-		String fileRoot = "/imgduck/temp/";	//저장될 외부 파일 경로
+		String fileRoot = "/ejsage3217/imgduck/temp/";	//저장될 외부 파일 경로
 		String originalFileName = multipartFile.getOriginalFilename();	//오리지날 파일명
 		String extension = originalFileName.substring(originalFileName.lastIndexOf("."));	//파일 확장자 
 				
@@ -392,7 +392,7 @@ public class boardListController {
 		System.out.println("요청 URI: " + reqUri);
 		System.out.println("미리보기 이미지 요청 호출!");
 		System.out.println("param: " + savedFileName);
-		String fileRoot = "/imgduck/temp/";
+		String fileRoot = "/ejsage3217/imgduck/temp/";
 		String filePath = fileRoot + savedFileName;
 		System.out.println("완성된 파일 경로: " + filePath);
 		File file = new File(filePath);
@@ -414,7 +414,7 @@ public class boardListController {
 	@GetMapping("/getImg/{savedFileName}")
 	public ResponseEntity<byte[]> getImgCopy(@PathVariable String savedFileName, HttpServletResponse response){
 	  
-	  String fileRoot = "/imgduck/board/";
+	  String fileRoot = "/ejsage3217/imgduck/board/";
 	  String filePath = fileRoot + savedFileName; 
 	  File file = new File(filePath);
 		
@@ -440,7 +440,7 @@ public class boardListController {
 		System.out.println("deleteFiles: " + list);
 		
 		for(String fileName : list) {
-			String tempRoot = "/imgduck/temp/";
+			String tempRoot = "/ejsage3217/imgduck/temp/";
 			File file = new File(tempRoot + fileName);
 			if(file.exists()) {
 				System.out.println("임시 파일 삭제 완료!");
