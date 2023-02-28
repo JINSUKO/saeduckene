@@ -2,234 +2,218 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper
-	namespace="kr.co.seaduckene.product.mapper.IProductMapper">
+<mapper namespace="kr.co.seaduckene.product.mapper.IProductMapper">
 
 	<insert id="order">
-		INSERT INTO duck_order
-		(order_no,order_product_no,order_num,order_user_no,order_quantity,order_price,
-		order_recipient_name,order_recipient_tel,order_address_zip_num,order_address_basic,order_address_detail,
-		order_payment_method,order_return_bank,order_return_account,payment_key)
-		VALUES(order_seq.NEXTVAL,#{orderProductNo},#{orderNum},#{orderUserNo},#{orderQuantity},#{orderPrice},
-		#{orderRecipientName},#{orderRecipientTel},#{orderAddressZipNum},#{orderAddressBasic},#{orderAddressDetail},
-		#{orderPaymentMethod},#{orderReturnBank},#{orderReturnAccount},#{paymentKey})
+		INSERT INTO duck_order (order_product_no, order_num, order_user_no, order_quantity, order_price
+				, order_recipient_name, order_recipient_tel, order_address_zip_num, order_address_basic, order_address_detail
+				, order_payment_method, order_return_bank, order_return_account, payment_key)
+		VALUES(#{orderProductNo}, #{orderNum}, #{orderUserNo}, #{orderQuantity}, #{orderPrice}
+		, #{orderRecipientName}, #{orderRecipientTel}, #{orderAddressZipNum}, #{orderAddressBasic}, #{orderAddressDetail}
+		, #{orderPaymentMethod}, #{orderReturnBank}, #{orderReturnAccount}, #{paymentKey})
 	</insert>
-
+	
 	<update id="updateEmail">
-		UPDATE duck_user SET user_email=#{userEmail}
-		WHERE
-		user_no=#{userNo}
+		UPDATE duck_user SET user_email = #{userEmail}
+		WHERE user_no = #{userNo}
 	</update>
-
+	
 	<select id="checkEmail" resultType="String">
-		SELECT user_email FROM
-		duck_user
-		WHERE user_no=#{userNo}
+		SELECT user_email FROM duck_user
+		WHERE user_no = #{userNo}
 	</select>
-
+	
 	<select id="getBasket" resultType="basket">
 		SELECT * FROM basket
-		WHERE
-		basket_user_no=#{userNo} AND
-		basket_product_no=#{productNo}
+		WHERE basket_user_no = #{userNo} AND basket_product_no = #{productNo}
 	</select>
-
+	
 	<select id="getBasketList" resultType="basket">
 		SELECT * FROM basket
-		WHERE
-		basket_user_no=#{userNo}
+		WHERE basket_user_no = #{userNo}
 	</select>
-
+	
 	<select id="getThumbnailImg" resultType="image">
-		SELECT * FROM
-		product_image
-		WHERE product_image_product_no=#{productNo} AND
-		product_thumbnail = 1
+		SELECT * FROM product_image
+		WHERE product_image_product_no = #{productNo} AND product_thumbnail = 1
 	</select>
-
+	
 	<update id="updateStock">
-		UPDATE product SET product_stock=#{stock}
-		WHERE
-		product_no = #{productNo}
+		UPDATE product SET product_stock = #{stock}
+		WHERE product_no = #{productNo}
 	</update>
-
+	
 	<delete id="deleteBasket">
 		DELETE basket
 		WHERE basket_user_no = #{userNo}
 	</delete>
-
+	
 	<select id="getCategory" resultType="category">
 		SELECT * FROM category
-		ORDER BY category_major_title , category_minor_title
+		ORDER BY category_major_title DESC, category_minor_title DESC
 	</select>
 	
 	<select id="getMajor" resultType="String">
 		SELECT DISTINCT category_major_title
 		FROM category
-		ORDER BY category_major_title 
+		ORDER BY category_major_title DESC
 	</select>
-
+	
 	<select id="getMinor" resultType="String">
 		SELECT category_minor_title
 		FROM category
-		WHERE category_major_title =#{major}
+		WHERE category_major_title = #{major}
 	</select>
-
+	
 	<select id="getCNum" resultType="int">
 		SELECT category_no FROM category
-		WHERE category_major_title=#{major} AND category_minor_title=#{minor}
+		WHERE category_major_title = #{major} AND category_minor_title = #{minor}
 	</select>
+	
 	<insert id="insertProduct">
-		INSERT INTO product
-		(product_no,product_name,product_price_normal,product_price_selling,product_detail,product_stock,product_category_no)
-		VALUES
-		(product_seq.NEXTVAL,#{vo.productName},#{vo.productPriceNormal},#{vo.productPriceSelling},#{vo.productDetail},#{vo.productStock},#{cnum})
+		INSERT INTO product (product_name, product_price_normal, product_price_selling, product_detail, product_stock, product_category_no)
+		VALUES (#{vo.productName}, #{vo.productPriceNormal}, #{vo.productPriceSelling}, #{vo.productDetail}, #{vo.productStock}, #{cnum})
 	</insert>
 	
-<!-- 나중에 상품명 unique 거는 게 좋을 듯. -->
+	<!-- 나중에 상품명 unique 거는 게 좋을 듯. -->
 	<select id="getProductNoWithInfo" resultType="int">
 		SELECT product_no FROM product
 		WHERE product_name = #{productName} AND product_price_normal = #{productPriceNormal} AND product_price_selling = #{productPriceSelling}
 	</select>
-
+	
 	<insert id="insertImg">
-		INSERT INTO product_image
-		VALUES
-		(product_image_seq.NEXTVAL,#{productImagePath},#{productImageFolder},#{productImageFileName},
-		#{productImageFileRealName},#{productImageProductNo},#{productThumbnail})
+		INSERT INTO product_image (product_image_path, product_image_folder, product_image_file_name 
+					, product_image_file_real_name, product_image_product_no, product_thumbnail)
+		VALUES (#{productImagePath}, #{productImageFolder}, #{productImageFileName}
+			, #{productImageFileRealName}, #{productImageProductNo}, #{productThumbnail})
 	</insert>
-
+	
 	<delete id="deleteImage">
-		DELETE FROM product_image WHERE
-		product_image_product_no=#{num}
+		DELETE FROM product_image 
+		WHERE product_image_product_no = #{num}
 	</delete>
-
+	
 	<select id="getContent" resultType="prodcut">
 		SELECT * FROM product
-		WHERE
-		product_no=#{num}
+		WHERE product_no = #{num}
 	</select>
-
+	
 	<select id="getImg" resultType="image">
 		SELECT * FROM product_image
-		WHERE
-		product_image_product_no=#{num}
+		WHERE product_image_product_no = #{num}
 	</select>
-
+	
 	<select id="mainImage" resultType="productImage">
 		<![CDATA[
-        SELECT * FROM
+	        SELECT * FROM
 		    (
-			    SELECT ROWNUM AS rn, tbl.* FROM
-			        (
-						SELECT i.product_image_product_no, i.product_image_folder, i.product_image_file_name, c.category_no
-						FROM product p LEFT JOIN product_image i ON p.product_no = i.product_image_product_no
-						               LEFT JOIN category c ON p.product_category_no = c.category_no 
-						               LEFT JOIN favorite f ON c.category_no = f.favorite_category_no
-						WHERE i.product_thumbnail = 1 AND f.favorite_user_no = #{userNo}
-			            ORDER BY p.product_reg_date DESC
-			        ) tbl
+		        SELECT (@ROWNUM := @ROWNUM + 1) rn, tbl.* FROM
+			    (
+				SELECT i.product_image_product_no, i.product_image_folder, i.product_image_file_name, c.category_no
+				FROM product p LEFT JOIN product_image i ON p.product_no = i.product_image_product_no
+					       LEFT JOIN category c ON p.product_category_no = c.category_no 
+					       LEFT JOIN favorite f ON c.category_no = f.favorite_category_no
+				WHERE i.product_thumbnail = 1 AND f.favorite_user_no = #{userNo}
+				ORDER BY p.product_reg_date DESC
+			    ) tbl,
+			    (SELECT @ROWNUM := 0) R
 		    ) b
-		WHERE rn > 0
-		AND rn <= 9
+		LIMIT 9
 		]]>
 	</select>
+	
 	<!-- 나중에 카테고리별로 상품 3개 초과하게 못 나오게 바꿔야할 듯. -->
 	<select id="mainImageNo" resultType="productImage">
 		<![CDATA[
 		SELECT * FROM
-			(
-				SELECT ROWNUM AS rn, tbl.* FROM
-                    (
-                        SELECT i.product_image_folder, i.product_image_file_name, i.product_image_product_no, c.category_no, MAX(b.board_views) board_views
-                        FROM product p LEFT JOIN product_image i ON p.product_no = i.product_image_product_no
-                                       LEFT JOIN category c ON p.product_category_no = c.category_no 
-                                       LEFT JOIN board b ON b.board_category_no = c.category_no 
-                        WHERE i.product_thumbnail = 1 
-                        group by i.product_image_product_no, i.product_image_folder, i.product_image_file_name, c.category_no
-                        ORDER BY board_views DESC
-                    ) tbl
-		    )
-		WHERE rn > 0
-		AND rn <= 9
+		    (
+			SELECT (@ROWNUM := @ROWNUM + 1) rn, tbl.* FROM
+			    (
+				SELECT i.product_image_folder, i.product_image_file_name, i.product_image_product_no, c.category_no, MAX(b.board_views) board_views
+				FROM product p LEFT JOIN product_image i ON p.product_no = i.product_image_product_no
+					       LEFT JOIN category c ON p.product_category_no = c.category_no 
+					       LEFT JOIN board b ON b.board_category_no = c.category_no 
+				WHERE i.product_thumbnail = 1 
+				GROUP BY i.product_image_product_no, i.product_image_folder, i.product_image_file_name, c.category_no
+				ORDER BY board_views DESC
+			    ) tbl,
+			    (SELECT @ROWNUM := 0) R
+		    )	
+		LIMIT 9
 		]]>
 	</select>
-
+	
+	
 	<insert id="insertBasket">
-		INSERT INTO basket
-		VALUES(basket_seq.NEXTVAL,#{basketProductName},#{basketProductNo},#{basketUserNo},#{basketQuantity},#{basketPrice})
+		INSERT INTO basket (basket_product_name, basket_product_no, basket_user_no, basket_quantity, basket_price)
+		VALUES (#{basketProductName}, #{basketProductNo}, #{basketUserNo}, #{basketQuantity}, #{basketPrice})
 	</insert>
-
+	
 	<update id="cQuantity">
-		UPDATE basket SET basket_quantity=#{q}
-		WHERE
-		basket_no=#{basketNo}
+		UPDATE basket SET basket_quantity = #{q}
+		WHERE basket_no = #{basketNo}
 	</update>
-
+	
 	<select id="basketChk" resultType="int">
-		SELECT count(*) FROM basket
-		WHERE basket_product_no=#{basketProductNo} AND basket_user_no
-		=#{basketUserNo}
+		SELECT COUNT(*) FROM basket
+		WHERE basket_product_no = #{basketProductNo} AND basket_user_no = #{basketUserNo}
 	</select>
-
+	
 	<delete id="delBasekt">
-		DELETE FROM basket WHERE basket_no=#{basketNo}
+		DELETE FROM basket WHERE basket_no = #{basketNo}
 	</delete>
-
+	
 	<select id="getOrder" resultType="order">
 		SELECT * FROM duck_order
-		WHERE
-		order_user_no = #{userNo}
-		ORDER BY order_no desc
+		WHERE order_user_no = #{userNo}
+		ORDER BY order_no DESC
 	</select>
-
+	
 	<select id="getCt" resultType="category">
-		SELECT * FROM category WHERE
-		category_no = #{categoryNo}
+		SELECT * FROM category
+		WHERE category_no = #{categoryNo}
 	</select>
-
+	
 	<update id="updateProduct">
-		UPDATE PRODUCT SET
-		product_name=#{productName},product_price_normal=#{productPriceNormal},product_price_selling=#{productPriceSelling},
-		product_detail=#{productDetail},product_stock=#{productStock},product_up_date=sysdate,product_category_no=#{productCategoryNo}
-		WHERE product_no=#{productNo}
+		UPDATE PRODUCT SET product_name = #{productName}, product_price_normal = #{productPriceNormal}, product_price_selling = #{productPriceSelling}
+					, product_detail = #{productDetail}, product_stock = #{productStock}, product_category_no = #{productCategoryNo}
+		WHERE product_no = #{productNo}
 	</update>
-
+	
 	<delete id="deleteUserAllInfoOrder">
 		DELETE FROM duck_order WHERE order_user_no =
 		#{userNo}
 	</delete>
-
+	
 	<delete id="deleteUserAllInfoBasket">
 		DELETE FROM basket WHERE basket_user_no = #{userNo}
 	</delete>	
 	
 	<delete id="delProduct">
-		DELETE FROM product WHERE product_no=#{no}
+		DELETE FROM product WHERE product_no = #{no}
 	</delete>
 	
 	<update id="refund">
-		UPDATE duck_order SET order_status=#{type},order_return_reason=#{reason} WHERE order_product_no=#{productNo}
+		UPDATE duck_order SET order_status = #{type}, order_return_reason = #{reason}
+		WHERE order_product_no = #{productNo}
 	</update>
-
+	
 	<select id="getProductList" resultType="prodcut">
 	<!-- 	SELECT *
 		FROM
 		    (
 		    SELECT ROWNUM AS rn, tbl.* FROM
-		        (
-		        SELECT * FROM product
-		        WHERE product_category_no = #{categoryNo}
-		        ORDER BY product_reg_date DESC
-		        ) tbl
+			(
+			SELECT * FROM product
+			WHERE product_category_no = #{categoryNo}
+			ORDER BY product_reg_date DESC
+			) tbl
 		    ) 페이징하려다가 그만둔듯. 나중에 해야 할듯.-->
 		    
 		SELECT * FROM product
 		WHERE product_category_no = #{categoryNo}
 		ORDER BY product_reg_date DESC
-	</select>
-	
-	
+	</select>	
 	
 </mapper>
     

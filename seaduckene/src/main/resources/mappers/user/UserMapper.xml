@@ -4,7 +4,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.co.seaduckene.user.mapper.IUserMapper">
-	
+
 	<resultMap type="kr.co.seaduckene.user.command.Categories" id="categories">
 		<result property="categoryMajorTitle" column="category_major_title"/>
 		<collection property="categoryMinorList" resultMap="minorList"/>
@@ -44,14 +44,15 @@
 		<foreach collection="deleted_favorite_index" item="item" index="index" separator="," open="(" close=")">
 			(SELECT tbl2.favorite_no
 				  FROM (
-					  SELECT ROWNUM rn, tbl1.*
+					  SELECT (@ROWNUM := @ROWNUM + 1) rn, tbl1.*
 						  FROM (
 								SELECT *
 								FROM favorite f JOIN duck_user u ON f.favorite_user_no = u.user_no
-								                JOIN category c ON f.favorite_category_no = c.category_no
+										JOIN category c ON f.favorite_category_no = c.category_no
 								WHERE u.user_no = #{userNo}
 								ORDER BY u.user_no, c.category_major_title, c.category_minor_title
-						  ) tbl1
+						  ) tbl1,
+						  (select @ROWNUM := 0) R
 					  ) tbl2
 			  WHERE rn = #{item})
 		</foreach>
@@ -59,10 +60,11 @@
 	
 	
 	<insert id="registUser">
-		INSERT INTO duck_user 
-		(user_no, user_id, user_pw, user_nickname, user_name, user_tel<include refid="profile_column" /><include refid="email_column" />)
-		VALUES (duck_user_seq.NEXTVAL, #{userId}, #{userPw}, #{userNickname},
-		 #{userName}, #{userTel}<include refid="profile_value" /><include refid="email_value" />)
+		INSERT INTO duck_user (user_id, user_pw, user_nickname, user_name, user_tel
+		<include refid="profile_column" />
+		<include refid="email_column" />)
+		VALUES (#{userId}, #{userPw}, #{userNickname}, #{userName}, #{userTel}
+			<include refid="profile_value" /> <include refid="email_value" />)
 	</insert>
 	
 	<select id="getUserVo" resultType="user">
@@ -74,12 +76,15 @@
 	</select>
 	
 	<select id="getCategories" resultMap="categories">
-		SELECT category_major_title, category_minor_title FROM category
+		SELECT category_major_title, category_minor_title
+		FROM category
 		ORDER BY category_major_title, category_minor_title 
 	</select>
 	
 	<select id="getCategoryNo" resultType="int">
-		SELECT category_no FROM category WHERE category_major_title = #{categoryMajorTitle} AND category_minor_title = #{categoryMinorTitle}
+		SELECT category_no
+		FROM category
+		WHERE category_major_title = #{categoryMajorTitle} AND category_minor_title = #{categoryMinorTitle}
 	</select>
 	
 	<select id="getUserNo" resultType="int">
@@ -87,14 +92,15 @@
 	</select>
 	
 	<insert id="insertFavorite">
-		INSERT INTO favorite (favorite_no, favorite_category_no, favorite_user_no) VALUES (favorite_seq.NEXTVAL, #{categoryNo}, #{userNo})
+		INSERT INTO favorite (favorite_category_no, favorite_user_no)
+		VALUES (#{categoryNo}, #{userNo})
 	</insert>
-
+	
 	<select id="getBasket" resultType="basket">
 		SELECT * FROM basket
 		WHERE basket_user_no = #{num}
 	</select>
-
+	
 	<select id="checkId" resultType="int">
 		SELECT COUNT(*) FROM duck_user WHERE user_id = #{userId}
 	</select>
@@ -106,7 +112,7 @@
 	<select id="getUserCategories" resultType="category">
 		SELECT *
 		FROM favorite f JOIN duck_user u ON f.favorite_user_no = u.user_no
-		                JOIN category c ON f.favorite_category_no = c.category_no
+				JOIN category c ON f.favorite_category_no = c.category_no
 		WHERE u.user_no = #{userNo}
 		ORDER BY u.user_no, c.category_major_title, c.category_minor_title
 	</select>
@@ -120,7 +126,7 @@
 		UPDATE duck_user SET user_pw = #{tmpPw}
 		WHERE user_id = #{userId}
 	</select>
-
+	
 	<update id="setAutoLogin">
 		UPDATE duck_user SET user_session_id = #{userSessionId}, user_cookie_expire_date = #{userCookieExpireDate} WHERE user_no = #{userNo}
 	</update>
@@ -130,7 +136,8 @@
 	</select>
 	
 	<update id="undoAutoLogin">
-		UPDATE duck_user SET user_session_id = null, user_cookie_expire_date = null WHERE user_no = #{userNo}
+		UPDATE duck_user SET user_session_id = null, user_cookie_expire_date = null
+		WHERE user_no = #{userNo}
 	</update>
 	
 	<select id="checkCurrPw" resultType="int">
@@ -142,15 +149,15 @@
 	</update>
 	
 	<update id="updateUserInfo">
-		UPDATE duck_user SET user_nickname = #{userNickname}, user_name = #{userName}, user_tel = #{userTel}, 
-											user_email = #{userEmail} <include refid="user_update_profile" />
+		UPDATE duck_user SET user_nickname = #{userNickname}, user_name = #{userName}, user_tel = #{userTel}, user_email = #{userEmail} 
+					<include refid="user_update_profile" />
 		WHERE user_id = #{userId}
 	</update>
 	
 	<select id="getUserFavorites" resultType="favorite">
 		SELECT *
 		FROM favorite f JOIN duck_user u ON f.favorite_user_no = u.user_no
-		                JOIN category c ON f.favorite_category_no = c.category_no
+				JOIN category c ON f.favorite_category_no = c.category_no
 		WHERE u.user_no = #{userNo}
 		ORDER BY u.user_no, c.category_major_title, c.category_minor_title
 	</select>

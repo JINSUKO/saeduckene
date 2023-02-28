@@ -6,10 +6,10 @@
 <mapper namespace="kr.co.seaduckene.admin.mapper.IAdminMapper">
 
 	<sql id="orderSearch">
-		<if test="type == 'name'">WHERE u.user_name LIKE '%'||#{keyword}||'%'</if>
-		<if test="type == 'phone'">WHERE u.user_tel LIKE '%'||#{keyword}||'%'</if>
-		<if test="type == 'orderNum'">WHERE d.order_num LIKE '%'||#{keyword}||'%'</if>
-		<if test="type == 'orderStatus'">WHERE d.order_status LIKE '%'||#{keyword}||'%'</if>
+		<if test="type == 'name'">WHERE u.user_name LIKE '%' || #{keyword} || '%'</if>
+		<if test="type == 'phone'">WHERE u.user_tel LIKE '%' || #{keyword} || '%'</if>
+		<if test="type == 'orderNum'">WHERE d.order_num LIKE '%' || #{keyword} ||' %'</if>
+		<if test="type == 'orderStatus'">WHERE d.order_status LIKE '%' || #{keyword} || '%'</if>
 	</sql>
 	
 	<sql id="askSearch">
@@ -25,21 +25,18 @@
 	</sql>
 	
 	<sql id="productSearch">
-		<if test="type == 'productNo'">WHERE product_no LIKE '%'||#{keyword}||'%'</if>
-		<if test="type == 'productName'">WHERE product_name LIKE '%'||#{keyword}||'%'</if>
+		<if test="type == 'productNo'">WHERE product_no LIKE '%' || #{keyword} || '%'</if>
+		<if test="type == 'productName'">WHERE product_name LIKE '%' || #{keyword} || '%'</if>
 	</sql>
 	
-	<resultMap type="askCategoryBoard" id="askCategoryBoardCLOB">
-		<result property="askBoardContent" column="ask_board_content" jdbcType="CLOB" javaType="java.lang.String" />
-	</resultMap>
 	
 	<select id="getAdminVo" resultType="admin">
 		SELECT * FROM admin_login WHERE admin_id = #{adminId} AND admin_pw = #{adminPw}
 	</select>
 	
 	<insert id="write">
-		INSERT INTO notice (notice_no, notice_title, notice_content) 
-		VALUES (notice_no_seq.NEXTVAL, #{noticeTitle}, #{noticeContent})
+		INSERT INTO notice (notice_title, notice_content) 
+		VALUES (#{noticeTitle}, #{noticeContent})
 	</insert>
 	
 	<select id="usersSearch" resultType="adminSearch">
@@ -56,13 +53,13 @@
 		<include refid="orderSearch" />
 		ORDER BY d.order_reg_date DESC
 	</select>
-
+	
 	<update id="insertInvoice">
-		UPDATE duck_order SET order_invoice_no = #{invoiceNum},order_status = '배송중'
+		UPDATE duck_order SET order_invoice_no = #{invoiceNum}, order_status = '배송중'
 		WHERE order_num = #{orderNum}
 	</update>
 	
-		<update id="cancleOrder">
+	<update id="cancleOrder">
 		UPDATE duck_order SET order_status = '취소완료'
 		WHERE order_num = #{orderNum}
 	</update>
@@ -78,8 +75,8 @@
 	</select>
 	
 	<insert id="setAsk">
-		INSERT INTO ask_list (ask_list_no, ask_list_user_no, ask_list_select_no, ask_list_content)
-		VALUES (ask_list_seq.NEXTVAL, #{askListUserNo}, #{askListSelectNo}, #{askListContent})
+		INSERT INTO ask_list (ask_list_user_no, ask_list_select_no, ask_list_content)
+		VALUES (#{askListUserNo}, #{askListSelectNo}, #{askListContent})
 	</insert>
 	
 	<select id="getAskLisk" resultType="askList">
@@ -104,11 +101,12 @@
 	<update id="setAskReply">
 		UPDATE ask_list SET ask_list_reply_content = #{reply} WHERE ask_list_no = #{askNo}
 	</update>
-
+	
 	<insert id="insertCategoryBoard">
-		INSERT INTO ask_category_board
-		VALUES (ask_category_board_seq.NEXTVAL, #{askBoardMajorCategory}, #{askBoardMinorCategory}, #{askBoardTitle}
-		, #{askBoardContent}, default, null , #{askBoardReplyContent}, #{askBoardUserNo})
+		INSERT INTO ask_category_board (ask_board_major_category, ask_board_minor_category, ask_board_title
+					, ask_board_content, ask_board_reply_content, ask_board_user_no)
+		VALUES (#{askBoardMajorCategory}, #{askBoardMinorCategory}, #{askBoardTitle}
+		, #{askBoardContent}, #{askBoardReplyContent}, #{askBoardUserNo})
 	</insert>
 	
 	<select id="getUserAskCategoryBoardList" resultType="askCategoryBoard">
@@ -117,20 +115,20 @@
 		ORDER BY ask_board_no DESC
 	</select>
 	
-	<select id="getAskCategoryBoard" resultMap="askCategoryBoardCLOB">
+	<select id="getAskCategoryBoard" resultMap="askCategoryBoard">
 		SELECT * FROM ask_category_board
 		WHERE ask_board_no = #{askBoardNo}
 	</select>
 	
 	<select id="getAllAskCategoryBoardList" resultType="askCategoryBoard">
-		SELECT a.*, (SELECT user_name FROM duck_user WHERE user_no = a.ask_board_user_no) as ask_board_user_name
+		SELECT a.*, (SELECT user_name FROM duck_user WHERE user_no = a.ask_board_user_no) AS ask_board_user_name
 		FROM ask_category_board a
 		<include refid="askCategorySearch" />
 		ORDER BY a.ask_board_no DESC
 	</select>
 	
 	<update id="setAskCategoryReply">
-		UPDATE ask_category_board SET ask_board_reply_content = #{reply}, ask_board_update_date = sysdate WHERE ask_board_no = #{askNo}
+		UPDATE ask_category_board SET ask_board_reply_content = #{reply} WHERE ask_board_no = #{askNo}
 		ORDER BY ask_board_no DESC
 	</update>
 
