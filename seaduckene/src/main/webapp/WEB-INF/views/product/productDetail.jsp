@@ -131,8 +131,7 @@
 				return;
 			}
 			let ea = $('#inputQuantity').val();
-	         console.log(ea);
-	         console.log(bStock);
+	         
 	         if(ea <= 0){
 	            alert('0개 이하는 주문이 안됩니다!');
 	            $('#inputQuantity').val(0);
@@ -179,8 +178,6 @@
 				return;
 			}
 			let ea = $('#inputQuantity').val();
-	         console.log(ea);
-	         console.log(bStock);
 	         if(ea <= 0){
 	            alert('0개 이하는 주문이 안됩니다!');
 	            $('#inputQuantity').val(0);

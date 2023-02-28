@@ -264,7 +264,6 @@
 			
 
 			const email = $('#userEmail').val();
-			console.log('이메일: ' + email);
 			
 			if(email.trim() === ''){
 				alert('인증받을 메일 주소를 먼저 입력해 주세요.');
@@ -278,7 +277,6 @@
 					contentType: 'application/json',
 					success: function(data) {
 						code = data; // 인증번호를 전역변수에 저장.
-						console.log(code);
 						alert('인증메일이 전송되었습니다.\n입력하신 메일주소에서 전송된 인증번호를 확인해주세요.');
 					},
 					error: function() {
@@ -315,7 +313,6 @@
 		// 아이디 중복 확인.
 		$('#account-check').click(function() {
 			const userId = $('#userId').val();
-			console.log();
 			
 			if(userId === '') {
 				idCheck = false;
@@ -602,7 +599,6 @@
         
         // 카테고리 제거
         $('#category-wrap').on('click', '#del-category' ,function() {
-        	console.log(this);
         	this.parentNode.remove();
         });
 

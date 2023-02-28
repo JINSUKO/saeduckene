@@ -76,7 +76,6 @@
 		});
 			
 		const bnoo = $('.bno');
-		console.log(bnoo);
 		for (let $bnoo of bnoo) {
 			$('.items' + $bnoo.value).click(function() {
 				location.href='${pageContext.request.contextPath}/board/boardDetail/'+$bnoo.value;

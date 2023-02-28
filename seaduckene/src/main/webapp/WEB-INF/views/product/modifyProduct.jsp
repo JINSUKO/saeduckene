@@ -230,7 +230,6 @@
 		// 썸네일 이미지파일 제한
         $('#thumbnailImg').change(function(e) {
      	
-       		console.log(this.files[0]);
        		if (this.files[0]) {
 				if (!this.files[0].type.includes('image/')) {
 					alert("이미지 파일만 등록 가능합니다.");
@@ -254,7 +253,6 @@
         	
      	
 			for (let i = 0; i < this.files.length; i++) {
-        		console.log(this.files[i].type);
         		if (this.files[i]) {
 					if (!this.files[i].type.includes('image/')) {
 						alert("이미지 파일만 등록 가능합니다.");
@@ -270,7 +268,6 @@
         // 썸네일 이미지파일 제한
         $('#thumbnailImg').change(function(e) {
      	
-       		console.log(this.files[0]);
        		if (this.files[0]) {
 				if (!this.files[0].type.includes('image/')) {
 					alert("이미지 파일만 등록 가능합니다.");

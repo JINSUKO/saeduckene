@@ -147,12 +147,10 @@
 				contentType : false,
 				processData : false,
 				success : function(result) {
-					console.log(result);
 					boardFileJsonArray.push(result);
 					$(editor).summernote('insertImage', result["url"]);
 				},
 				error : function(e) {
-				    console.log(e);
 				}
 			});
 		}
@@ -180,15 +178,11 @@
 	    function deleteTempFile() {
 		   
 	    	for(let i = 0; i<boardFileJsonArray.length; i++){
-	            console.log('반복문 동작!');
 	            let str = boardFileJsonArray[i].url;
-	            console.log(str);
 	            let result = str.split('/');
-	            console.log('정제된 데이터: ' + result);
 	            deleteFiles.push(result[3]);
 	      	}
 	    	
-	      console.log(deleteFiles);
 	      
 	      $.ajax({
 	         type: 'post',
@@ -200,7 +194,6 @@
 	 
 	   /*  
 	    $('.note-editable').click(function() {
-			console.log('기본 이벤트!');
 			
 			let boardContent = $('.note-editable').html();
 			let boardContentLength = boardContent.length;
@@ -217,7 +210,6 @@
 	     */
 	    
 		$('.boardContent-summernote').keydown(function() {
-			console.log('키 이벤트 발생');
 			
 			// textarea 값
 			let boardContent = $('.note-editable').html();
@@ -226,8 +218,6 @@
 			let boardContentLength = boardContent.length;
 			let boardContentByteLength = 0;
 			
-			console.log(boardContent, 'boardContent');
-			console.log(boardContentLength, 'boardContentLength');
 			
 			boardContentByteLength = (function(s,b,i,c) {
 				for(b=i=0;c=s.charCodeAt(i++);b+=c>>11?3:c>>7?2:1);
@@ -239,7 +229,6 @@
 				return;
 			};
 			
-			console.log('boardContentByteLength', boardContentByteLength);
 			$('.textCount').text(boardContentByteLength);
 			
 		}); // 글자 수 event 끝.
@@ -251,10 +240,6 @@
 			
 			const bno = '${ board.boardNo }';
 			const no = '${board.boardCategoryNo}';
-			console.log(bno);
-			console.log(no);
-			
-			console.log('글 등록 버튼 이벤트 발생!');
 	    	// textarea 값
 			let boardContent = $('.note-editable').html();  
 			
@@ -262,8 +247,6 @@
 			let boardContentLength = boardContent.length;
 			let boardContentByteLength = 0;
 			
-			console.log(typeof(boardContent), 'boardContentByteLength');
-			console.log(boardContentLength, 'boardContentLength');
 			
 			
 			boardContentByteLength = (function(s,b,i,c) {
@@ -285,17 +268,12 @@
 				alert('100000byte를 넘을 경우 글을 수정할 수 없습니다!');
 				return;
 			} else {
-	             console.log('boardFileJsonArray: ' + boardFileJsonArray);
-	             console.log('길이: ' + boardFileJsonArray.length);
 	             
 	             for(let i = 0; i<boardFileJsonArray.length; i++){
-	                console.log('반복문 동작!');
 	                let str = boardFileJsonArray[i].url;
-	                console.log(str);
 	                // str의 값 : /board/summernoteImage/152210d9-a713-43ff-b81c-d9f1a3de0303(BN_CN10).jpg 
 	                // '='를 기준으로 자른다.
 	                let result = str.split('/');
-	                console.log('정제된 데이터: ' + result);
 	
 	                const $input = document.createElement('input');
 	                $input.setAttribute('name', 'filename');

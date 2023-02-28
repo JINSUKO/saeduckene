@@ -59,7 +59,6 @@
 				
 		
 		$('.check').click(function() {
-		console.log($('.check').is(':checked'));
 			
 			if ($('.check').is(':checked')) {
 				$('#autoLoginCheck').val(1);

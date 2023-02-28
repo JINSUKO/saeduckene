@@ -113,7 +113,6 @@
 		$('#confBtn').click(function() {
 			
 			const email = $('#userEmail').val();
-			console.log('이메일: ' + email);
 			
 			if(email.trim() === ''){
 				alert('인증받을 메일 주소를 먼저 입력해 주세요.');
@@ -128,7 +127,6 @@
 					success: function(data) {
 						alert('인증메일이 전송되었습니다.\n입력하신 메일주소에서 전송된 인증번호를 확인해주세요.');
 						authCode=data;
-						console.log(data);
 					},
 					error: function() {
 						authCode = 'fail';

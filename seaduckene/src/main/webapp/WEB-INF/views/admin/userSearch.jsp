@@ -245,12 +245,10 @@ prefix="c"%>
 
     		// 반복문 내 선택
     	    const orderNums = $('.orderNums');
-    		console.log(orderNums);
     		for(let orderNum of orderNums){
     			// 송장번호 등록 
     			$('.invoiceBtn'+orderNum.value).click(function() {
     				const invoiceNum = $('.invoiceInp' + orderNum.value).val();
-    				console.log('invoice' + invoiceNum);
 					if(invoiceNum.trim() == ''){
 						alert('송장번호를 입력해주세요.');
 					} else {
@@ -273,8 +271,6 @@ prefix="c"%>
     			});
     		}	
     		
-    		
-    			
     		
     		
 		});

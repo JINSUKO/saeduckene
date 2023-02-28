@@ -43,7 +43,6 @@
     	let no = parseInt('${param.no}');
     	
     	const total = parseInt('${total}');
-    	console.log('total' + total);
         
         //등록하기 버튼 클릭 이벤트
         $('#the-noti-btn').click(function() {
@@ -51,7 +50,6 @@
                 page++;
                 getLists(page, false);
             } else {
-                console.log('더이상 불러올 목록이 없다.');
             }
         });
         
@@ -65,10 +63,6 @@
         let noticeNo = 0;
         function getLists(page, reset) {
             
-            console.log('getList 함수 호출');
-            console.log('page: ' + page);
-            console.log('reset: ' + reset);
-            
             if(reset === true) {
                 str = ''; //화면 리셋 여부가 true라면 str변수를 초기화.
             }
@@ -76,8 +70,6 @@
             $.getJSON(
                 '<c:url value="/board/noticeLists?pageNum='+ page +'" />',
                 function(lists) {
-                    console.log("list.length : " + lists.length);
-                    console.log("list : " + lists);
                     
     				if(total > page*10){
     					$('#the-noti-btn').css('display','block');

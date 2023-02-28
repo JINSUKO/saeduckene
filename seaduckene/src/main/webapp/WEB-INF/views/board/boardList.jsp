@@ -87,7 +87,6 @@
 $(function() {
 	
 	const total = parseInt('${total}');
-	console.log('total' + total);
 	
 	//더보기 버튼 클릭 이벤트
 	$('#the-btn').click(function() {
@@ -107,14 +106,10 @@ $(function() {
 	let str = '';
 	let page = 1;
 	let isFinish = false;
-	console.log(categoryNo);
 	getList(1, false);
 	
 	function getList(page, reset) {
 		
-		console.log('getList 함수 호출');
-		console.log('page: ' + page);
-		console.log('reset: ' + reset);
 		
 		if(reset === true) {
 			str = ''; //화면 리셋 여부가 true라면 str변수를 초기화.
@@ -123,8 +118,6 @@ $(function() {
 		$.getJSON(
 			'<c:url value="/board/boardLists?pageNum='+ page +'&categoryNo='+ categoryNo +'" />',
 			function(list) {
-				console.log(list.length);
-				console.log(list);
 				
 				if(total > page*9){
 					$('#div-btn').css('display','block');
@@ -169,7 +162,6 @@ $(function() {
 				    </div>
 			  		</div>`;
 				}
-				console.log(str);
 				
 				$('#contentDiv').html(str);
 				
@@ -178,16 +170,13 @@ $(function() {
 		); //end getJSON()
 		
 		$('#contentDiv').on('click', '.detailButton', function(e) {
-			console.log($(this)[0]);
 			const bno = $(this).data('bno');
-			console.log(bno);
 			location.href='${pageContext.request.contextPath}/board/boardDetail/' + bno;
 			
 			
 		});
 		
 		function timeForToday(value) {
-			console.log(value);
 	        const today = new Date();
 	        const timeValue = new Date(value);
 

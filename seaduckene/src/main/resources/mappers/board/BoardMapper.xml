@@ -32,7 +32,7 @@
 					ORDER BY d.board_reg_date DESC
 				) tbl,
 				(SELECT @ROWNUM := 0) R
-		    )
+		    ) tbl2
 		LIMIT ((#{paging.pageNum}-1) * #{paging.cpp}), 9
 		]]>
 	</select>
@@ -67,7 +67,7 @@
 						ORDER BY product_reg_date DESC
 					) tbl,
 				(SELECT @ROWNUM := 0) R
-		    )
+		    ) tbl2
 		LIMIT 3
 	</select>
 	
@@ -78,7 +78,7 @@
 	</insert>
 	
 	<!-- 글 상세 보기 -->
-	<select id="getBoardDetailVo" resultMap="board">
+	<select id="getBoardDetailVo" resultType="board">
 		SELECT * FROM board
 		WHERE board_no = #{boardNo}
 	</select> 
@@ -97,7 +97,7 @@
 		WHERE board_no = #{boardNo}
 	</delete>
 	
-	<select id="bUserList" resultMap="boardUser">
+	<select id="bUserList" resultType="boardUser">
 		<![CDATA[
 		SELECT * FROM
 			(
@@ -113,12 +113,12 @@
 						ORDER BY b.board_views DESC, b.board_reg_date DESC
 					) tbl,
 					(SELECT @ROWNUM := 0) R
-			)
+			) tbl2
 		LIMIT 9
 		]]>
 	</select>
 	
-	<select id="bUserNoList" resultMap="boardUser">
+	<select id="bUserNoList" resultType="boardUser">
 		<![CDATA[
 		SELECT * FROM
 		    (
@@ -130,24 +130,23 @@
 				    ORDER BY b.board_views DESC, b.board_reg_date DESC
 				) tbl,
 				(SELECT @ROWNUM := 0) R
-		    ) 
+		    ) tbl2
 		LIMIT 9
 		]]>
 	</select>
 	
 	<select id="noticeList" resultType="notice">
 		<![CDATA[
-		SELECT *
-		FROM
+		SELECT * FROM
 		    (
-		    SELECT (@ROWNUM := @ROWNUM + 1) rn, tbl.* FROM
-			(
-			    SELECT *
-			    FROM notice
-			    ORDER BY notice_no DESC
-			) tbl,
-			(SELECT @ROWNUM := 0) R
-		    )
+			    SELECT (@ROWNUM := @ROWNUM + 1) rn, tbl.* FROM
+					(
+					    SELECT *
+					    FROM notice
+					    ORDER BY notice_no DESC
+					) tbl,
+					(SELECT @ROWNUM := 0) R
+		    ) tbl2
 		LIMIT 5
 		]]>
 	</select>
@@ -157,15 +156,15 @@
 		SELECT *
 		FROM
 		    (
-		    SELECT (@ROWNUM := @ROWNUM + 1) rn, tbl.* FROM
-			(
-			    SELECT *
-			    FROM notice
-			    ORDER BY notice_no DESC
-			) tbl,
-			(SELECT @ROWNUM := 0) R
-		    ) s
-		LIMIT (#{pageNum}-1) * #{cpp}, 10
+			    SELECT (@ROWNUM := @ROWNUM + 1) rn, tbl.* FROM
+					(
+					    SELECT *
+					    FROM notice
+					    ORDER BY notice_no DESC
+					) tbl,
+				(SELECT @ROWNUM := 0) R
+		    ) tbl2
+		LIMIT ((#{pageNum}-1) * #{cpp}), 10
 		]]>
 	</select>
 	
@@ -180,7 +179,7 @@
 					ORDER BY board_reg_date DESC
 				) tbl,
 				(SELECT @ROWNUM := 0) R
-			) s
+			) tbl2
 		WHERE rn = 1 
 	</select>
 	
@@ -199,15 +198,15 @@
 		SELECT *
 		FROM
 		    (
-		    SELECT (@ROWNUM := @ROWNUM + 1) rn, tbl.* FROM
-			(
-			    SELECT *
-			    FROM board
-			    WHERE board_user_no = #{userNo}
-			    ORDER BY board_reg_date DESC
-			) tbl,
-			(SELECT @ROWNUM := 0) R
-		    )
+			    SELECT (@ROWNUM := @ROWNUM + 1) rn, tbl.*
+			    FROM (
+					    SELECT *
+					    FROM board
+					    WHERE board_user_no = #{userNo}
+					    ORDER BY board_reg_date DESC
+					) tbl,
+					(SELECT @ROWNUM := 0) R
+		    ) tbl2
 		LIMIT ((#{paging.pageNum}-1) * #{paging.cpp}), 20
 		]]>
 	</select>

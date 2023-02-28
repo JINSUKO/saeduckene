@@ -83,13 +83,10 @@
   		
   		 $('#notice-Write-button').click(function() {
 			for(var i = 0; i<jsonArray.length; i++){
-				console.log('반복문 동작!');
 				var str = jsonArray[i].url;
-				console.log(str);
 				// str의 값 : common/getImg.do?savedFileName=bc395afe-2324-438d-ae68-1a0a75d0a431.png 
 				// '='를 기준으로 자른다.
 				var result = str.split('/');
-				console.log('정제된 데이터: ' + result);
 				
 				const $input = document.createElement('input');
 				$input.setAttribute('name', 'filename');
@@ -165,7 +162,6 @@
 				processData : false,
 				success : function(result) {
 	            	//항상 업로드된 파일의 url이 있어야 한다.
-	               console.log(result);
 	               jsonArray.push(result);
 					$(editor).summernote('insertImage', result.url);
 				}
@@ -186,15 +182,11 @@
 		 function deleteTempFile() {
 		   let deleteFiles = [];
 		 	for(var i = 0; i<jsonArray.length; i++){
-		         console.log('반복문 동작!');
 		         var str = jsonArray[i].url;
-		         console.log(str);
 		         var result = str.split('/');
-		         console.log('정제된 데이터: ' + result);
 		         deleteFiles.push(result[3]);
 		   }
 		
-		   console.log(deleteFiles);
 		   
 		   $.ajax({
 		      type: 'post',

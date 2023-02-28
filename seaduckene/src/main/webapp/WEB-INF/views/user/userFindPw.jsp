@@ -77,7 +77,6 @@
 	$(function() {
 
 		const msg = '${msg}';
-		console.log('msg:' + msg);
 		if(msg === 'noUser'){
 			alert('입력하신 정보와 일치하는 계정이 없습니다.\n정확한 정보를 확인하신 후 재 시도 부탁드립니다. \n 서비스 이용 시 이메일 인증을 받지 않은 경우 \n 아이디 찾기가 어려운 점 양해 부탁드리며, \n 재가입 부탁드립니다.');
 		}
@@ -88,7 +87,6 @@
 		$('#confBtn').click(function() {
 			
 			const email = $('#userEmail').val();
-			console.log('이메일: ' + email);
 			
 			if(email.trim() === ''){
 				alert('인증받을 메일 주소를 먼저 입력해 주세요.');
@@ -103,7 +101,6 @@
 					success: function(data) {
 						alert('인증메일이 전송되었습니다.\n입력하신 메일주소에서 전송된 인증번호를 확인해주세요.');
 						authCode=data;
-						console.log(data);
 					},
 					error: function() {
 						authCode = 'fail';

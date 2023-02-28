@@ -41,7 +41,6 @@ $(function(){
 	const customerName = '${orderVo.orderRecipientName}';
 	
 	var clientKey = '${clientKey}';
-	console.log('클라이언트키:' + clientKey);
 	var tossPayments = TossPayments(clientKey);
 	
 	function toss(){

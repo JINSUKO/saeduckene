@@ -600,7 +600,6 @@ let emailConfirm = true;
 			
 			e.preventDefault();
 			$('.title .breadcrumb .active').toggleClass('active');
-			console.log(this);
 			$(this).toggleClass('active');
 			
 			$('.tab-content .in').toggleClass('in');
@@ -673,7 +672,6 @@ let emailConfirm = true;
 		/* $('select[name=categoryMinorTitle]').change( function(e) { */
 			const chosenMinor = $(this).val();
 			const chosenMajor = $(this.previousElementSibling).val();
-			console.log(chosenMinor);
 			const chosenLiIndex = $(this.parentNode).data('index');
 			
 			const selectedMajors = $('select[name=categoryMajorTitles]');
@@ -683,7 +681,6 @@ let emailConfirm = true;
 			for (let i = 0; i < selectedMajorsMaxIndex; i++) {
 				
 				let selectedLiIndex = $(selectedMajors[i].parentNode).data('index');
-				console.log(selectedLiIndex);
 				
 				if (selectedLiIndex !== chosenLiIndex) {
 					if (selectedMajors[i].value === chosenMajor && selectedMajors[i].nextElementSibling.value === chosenMinor) {
@@ -709,7 +706,6 @@ let emailConfirm = true;
 			
 
 			const email = $('#userEmail').val();
-			console.log('이메일: ' + email);
 			
 			if(email.trim() === ''){
 				alert('인증받을 메일 주소를 먼저 입력해 주세요.');
@@ -723,7 +719,6 @@ let emailConfirm = true;
 					contentType: 'application/json',
 					success: function(data) {
 						code = data; // 인증번호를 전역변수에 저장.
-						console.log(code);
 						alert('인증메일이 전송되었습니다.\n입력하신 메일주소에서 전송된 인증번호를 확인해주세요.');
 						
 					},
@@ -762,7 +757,6 @@ let emailConfirm = true;
 		// 닉네임 중복 확인.
 		$('#nickname-check').click(function() {
 			const userNickname = $('#userNickname').val();
-			console.log();
 			
 			if(userNickname === '') {
 				nicknameCheck = false;
@@ -1043,9 +1037,7 @@ let emailConfirm = true;
        	let indexLi = +($($lastLi).data('index'));
         $('#add-category').click(function() {
         	
-        	console.log($lastLi);
      		indexLi = indexLi + 1;
-        	console.log(indexLi);
         	
         	const $cloneLi = document.getElementById('category-wrap').firstElementChild.cloneNode(true);
         	$($cloneLi).attr('data-index', indexLi);
@@ -1059,8 +1051,6 @@ let emailConfirm = true;
      	   
     	// 카테고리 제거
         $('.category-wrap').on('click', '#del-category' ,function(e) {
-        	console.log(this);
-        	console.log($(this).css('opacity'));
         	if($(this).css('opacity') == 0) {
         		
 				$(this).hover(function() {
@@ -1073,7 +1063,6 @@ let emailConfirm = true;
     	 
     	// 주소추가 버튼 클릭 이벤트 타겟 전달하기.
     	$('#addrListModal').on('click', '.find-address', function(e) {
-    		console.log(e);
     	
     		searchAddress(e);
     		//  커서를 상세주소 필드로 이동한다. - 주소 중복 제거 change 이벤트 때문에 포커스 다시 입힘.
@@ -1084,11 +1073,9 @@ let emailConfirm = true;
     	let newAddrIndex = +('${userAddrList.size()}') + 1;
     	$('.address-add').click(function(e) {
 	
-    		console.log(newAddrIndex);
     		
 	   		const $fragNode = document.createDocumentFragment();
 	   		const $addrDiv = this.nextElementSibling.cloneNode(true);
-	   		console.log($addrDiv);
 	   		const $br = document.createElement('br');
 	   		
 	   		$($addrDiv).css('display', 'block');
@@ -1119,7 +1106,6 @@ let emailConfirm = true;
     	$('#addrListModal').on('click', '.set-main', function(e) {
    
     		const addressCount = $(this.parentNode).data('index');
-    		console.log(addressCount);
     		
     		if (confirm('선택한 주소 정보를 메인 주소로 설정하시겠습니까?\n설정 시 기본 변경 사항들은 초기화 됩니다.')) {
 				$.ajax({
@@ -1145,13 +1131,10 @@ let emailConfirm = true;
     	// 주소록 모달에서 addressDetail keyup 시 중복 체크 이벤트 추가
     	$('#address-outter').on('keyup', 'input.addrDetail', function(e) {
     		
-    		console.log($('.address-infos'));
  			 for (let $addressInfo of $('.address-infos')) {
 	    		if ($(this.parentNode.parentNode.parentNode).data('index') == $($addressInfo).data('index')) {
 					continue;	
 				}
-	    		console.log($($addressInfo.querySelector('input.addrBasic')).val());
-	    		console.log(this.parentNode.parentNode.previousElementSibling.firstElementChild.firstElementChild.value);
 				if ($($addressInfo.querySelector('input.addrBasic')).val() === this.parentNode.parentNode.previousElementSibling.firstElementChild.firstElementChild.value
 						&& $($addressInfo.querySelector('input.addrZipNum')).val() === this.parentNode.parentNode.nextElementSibling.firstElementChild.firstElementChild.value
 						&& $($addressInfo.querySelector('input.addrDetail')).val().trim() === this.value.trim()) {
@@ -1196,7 +1179,6 @@ let emailConfirm = true;
 			
 			// 서버에서 대 카테고리 전체를 받아서 선택된 대 카테고리 값과 매칭한다.
 			const majorss = ('${categoryList}').split('), ');
-			/* console.log(majorss); */
 			
 			let arrMajor = [];
 			
@@ -1275,7 +1257,6 @@ let emailConfirm = true;
                     addr = data.jibunAddress;
                 }
 				
-                console.log(e.target);
                 // 우편번호와 주소 정보를 해당 필드에 넣는다.
                 e.target.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.firstElementChild.firstElementChild.value = addr;
                 e.target.previousElementSibling.previousElementSibling.firstElementChild.firstElementChild.value = data.zonecode;
@@ -1435,7 +1416,6 @@ let emailConfirm = true;
 			dataType:'text',
 			data:JSON.stringify(array),
 			success: function(result) {
-				console.log(result);
 				
 				if (result === 'wrongPw') {
 					alert('현재 비밀번호 입력이 잘못되었습니다.\n 다시 입력해주세요.');
@@ -1446,7 +1426,7 @@ let emailConfirm = true;
 				}
 			},
 			error: function(request, status, error) {
-				console.log('서버 연결에 실패했습니다.\n관리자에게 문의해주세요.');
+				alert('서버 연결에 실패했습니다.\n관리자에게 문의해주세요.');
 			}
 		});
 		
@@ -1540,13 +1520,10 @@ let emailConfirm = true;
 		
 		/* if (true) {
 			
-			console.log($('.address-infos'));
 			
 			// 메인 주소, 그 외 주소들과 추가한 주소의 null 체크
 			// null 인 상태로 주소록 모달 창을 닫을 수가 없으니까 null 체크 안해도 됨.
 			 for (let $addressInfo of $('.address-infos')) {
-				console.log($addressInfo);
-				console.log($($addressInfo).data('index'));
 				if ($addressInfo.querySelector('.addrBasic').value.trim() === '') {
 					alert('주소록에 생성한 주소란에 값을 입력해주세요.');
 					hidePwModal();
@@ -1590,7 +1567,6 @@ let emailConfirm = true;
 		for (let $div_address of $('.div-address')) {
 			address_count_list.push($($div_address).data('index'));
 		}
-		console.log(address_count_list);
 		
 		category_index_list = JSON.stringify(category_index_list);
 		address_count_list = JSON.stringify(address_count_list);
@@ -1598,8 +1574,6 @@ let emailConfirm = true;
 		$('#category-index').val(category_index_list);
 		$('#address-count').val(address_count_list);
 			
-		console.log(category_index_list);
-		console.log(address_count_list);
 		
 		$.ajax({
 			type:'POST',
@@ -1608,7 +1582,6 @@ let emailConfirm = true;
 			dataType:'text',
 			data:JSON.stringify(array),
 			success: function(result) {
-				console.log(result);
 				
 				if (result == 1) {
 					if (confirm('현재 적용된 내용으로 모든 정보가 수정됩니다.\n수정하시겠습니까?')) {
@@ -1621,7 +1594,7 @@ let emailConfirm = true;
 				}
 			},
 			error: function(request, status, error) {
-				console.log('서버 연결에 실패했습니다.\n관리자에게 문의해주세요.');
+				alert('서버 연결에 실패했습니다.\n관리자에게 문의해주세요.');
 			}
 		});
 		
@@ -1650,7 +1623,6 @@ let emailConfirm = true;
 			dataType:'text',
 			data:JSON.stringify(array),
 			success: function(result) {
-				console.log(result);
 				
 				if (result == 1) {
 					if (confirm('계정을 삭제하시면 되돌릴 수 없습니다.\n삭제하시겠습니까?')) {
@@ -1663,7 +1635,7 @@ let emailConfirm = true;
 				}
 			},
 			error: function(request, status, error) {
-				console.log('서버 연결에 실패했습니다.\n관리자에게 문의해주세요.');
+				alert('서버 연결에 실패했습니다.\n관리자에게 문의해주세요.');
 			}
 		});
 		
@@ -1672,9 +1644,7 @@ let emailConfirm = true;
 
 	//장바구니 삭제
 	$('.basketDel').on('click',function(e){
-		console.log('장바구니삭제 클릭')
 		const bno = $(e.target.parentNode.nextElementSibling).html();
-		console.log(bno);
 		if(confirm('삭제하시겠습니까?')){
 			location.href="<c:url value='/product/basketDel?basketNo="+bno+"'/>"
 		}else{
@@ -1741,7 +1711,6 @@ let emailConfirm = true;
 				page++;
 				getList(page, false);
 			} else {
-				console.log('더이상 불러올 목록이 없다.');
 			}
 		});
 		
@@ -1753,9 +1722,6 @@ let emailConfirm = true;
 		
 		function getList(page, reset) {
 			
-			console.log('getList 함수 호출');
-			console.log('page: ' + page);
-			console.log('reset: ' + reset);
 			
 			if(reset === true) {
 				str = ''; //화면 리셋 여부가 true라면 str변수를 초기화.
@@ -1764,8 +1730,6 @@ let emailConfirm = true;
 			$.getJSON(
 				'<c:url value="/board/boardMyList?pageNum='+ page +'" />',
 				function(list) {
-					console.log(list.length);
-					console.log(list);
 					
 					if(total > page*20){
 						$('#the-btn').css('display','block');
@@ -1777,7 +1741,6 @@ let emailConfirm = true;
 					for(let i=0; i<list.length; i++) {
 						
 						let date = new Date(list[i].boardRegDate)
-						console.log(date);
 						str += 
 							`
 				        

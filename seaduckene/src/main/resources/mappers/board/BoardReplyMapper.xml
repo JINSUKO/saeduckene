@@ -18,16 +18,16 @@
 					, tbl.reply_up_date, tbl.reply_board_no, tbl.reply_user_no, tbl2.user_no, tbl2.user_nickname
 					, (SELECT COUNT(*) FROM replylike WHERE like_reply_no = tbl.reply_no AND like_state = 1) AS like_count
 				FROM (
-					SELECT * FROM reply r
-					WHERE r.reply_board_no = #{bno}
+						SELECT * FROM reply r
+						WHERE r.reply_board_no = #{bno}
 				      ) tbl,
 				      (
-					SELECT * FROM duck_user
+						SELECT * FROM duck_user
 				      ) tbl2,
 				      (select @ROWNUM := 0) R
 				WHERE tbl.reply_user_no = tbl2.user_no
 				ORDER BY tbl.reply_no DESC
-			)
+			) tbl3
 		limit ((#{paging.pageNum}-1) * #{paging.cpp}), 5
 		]]>
 	</select>

@@ -115,7 +115,7 @@
 		ORDER BY ask_board_no DESC
 	</select>
 	
-	<select id="getAskCategoryBoard" resultMap="askCategoryBoard">
+	<select id="getAskCategoryBoard" resultType="askCategoryBoard">
 		SELECT * FROM ask_category_board
 		WHERE ask_board_no = #{askBoardNo}
 	</select>

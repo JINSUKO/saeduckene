@@ -117,7 +117,7 @@
 				ORDER BY p.product_reg_date DESC
 			    ) tbl,
 			    (SELECT @ROWNUM := 0) R
-		    ) b
+		    ) tbl2
 		LIMIT 9
 		]]>
 	</select>
@@ -138,7 +138,7 @@
 				ORDER BY board_views DESC
 			    ) tbl,
 			    (SELECT @ROWNUM := 0) R
-		    )	
+		    ) tbl2
 		LIMIT 9
 		]]>
 	</select>

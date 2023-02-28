@@ -19,7 +19,7 @@
 							( SELECT @ROWNUM := 0 ) R
 					) tbl2
 			  WHERE rn = #{item}
-			  )
+			  ) tbl3
 		</foreach>
 	</sql>
 	
@@ -45,7 +45,7 @@
 	</select>	
 	
 	<insert id="addNewAddress">
-		INSERT INTO address(address_detail, adderss_basic, address_zip_num, address_representative, adderss_user_no)
+		INSERT INTO address (address_detail, adderss_basic, address_zip_num, address_representative, adderss_user_no)
 		VALUES (#{addressDetail}, #{addressBasic}, #{addressZipNum}, #{addressRepresentative}, #{addressUserNo})
 	</insert>
 	
@@ -65,7 +65,7 @@
 					    ORDER BY address_representative DESC, address_no 
 				    ) tbl,
 				    (SELECT @ROWNUM := 0) R
-			)
+			) tbl2
 		WHERE rn = #{addressRn}
 	</select>
 	

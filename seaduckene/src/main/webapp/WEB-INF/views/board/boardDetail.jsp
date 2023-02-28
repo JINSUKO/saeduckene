@@ -167,7 +167,6 @@
 
 	$(document).ready(function() {
 		
-		console.log('카테고리 번호' + '${board.boardCategoryNo}');
 
 		$(function() {
 			$('#summernote').summernote({
@@ -181,13 +180,10 @@
 		});
 		
 		$(function() {
-			console.log('수정버튼 클릭됨');
 
 			const userNo = '${login.userNo}';
-			console.log(userNo + 'userNo');
 			
 			const boardUserNo = '${board.boardUserNo}';
-			console.log(boardUserNo + 'boardUserNo');
 			
 			if(userNo !== boardUserNo) {
 				$('#ModBtn').css('display', 'none');
@@ -207,9 +203,6 @@
 			const boardNo = '${board.boardNo}';
 			const reply = $('#reply').val();
 			const replyUserNo = $('#replyUserNo').val();
-			console.log('dwadwadwa' + replyUserNo);
-			console.log(reply);
-			console.log(boardNo);
 			
 			if($('#reply').val().trim() === '') {
 				alert('내용을 입력해주세요!');
@@ -227,7 +220,6 @@
 				dataType : 'text',
 				contentType : 'application/json',
 				success : function(data) {
-					console.log('통신 성공!: ' + data);
 					$('#reply').val('');
 					getList(1, true);
 				},
@@ -267,35 +259,20 @@
 			$.getJSON(
 					"<c:url value='/reply/getList/' />" + bno + "/" + pageNum,
 					function(data) {
-						console.log('data', data);
-						
-						console.log("data " + data.total);
-							
 						let total = data.total;
 						let replyList = data.list;
 						let like = data.like;
-						
-						console.log("total "+ total);
-						console.log("reply ", replyList);
-						console.log("like" , like);
-					/* 	console.log("like" , like[0].likeNo);
-						console.log("like" , like[0].likeReplyNo);
-						console.log("like" , like[0].likeUserNo);
-						console.log("like" , like[0].likeState); */
 						
 						if(reset) {
 							strAdd = '';
 							page = 1; 
 						}
 						
-						console.log('현재 페이지: ' + page);
-						/* console.log('인규: ' + replyList.userNickname); */
 						if(total <= page * 5) {
 							$('#moreList').css('display', 'none');
 						} else {
 							$('#moreList').css('display', 'inline');
 						}
-						/* console.log("최고인규" + data.length); */
 						if(data.length <= 0) return;
 						
 						for(let i=0; i<replyList.length ; i++) {
@@ -343,7 +320,6 @@
 			if ('${login.userNickname}' === $(this)[0].parentNode.firstElementChild.textContent){
 				const replyNo = $(this).data('replyNo');
 				$('#modalRno').val(replyNo);
-				console.log($(this).html());
 				$('#modalReply').val($(this).html().replaceAll('<br>', '\n'));
 				$('#replyModal').modal('show');
 				}
@@ -356,18 +332,12 @@
 		
 		$('#replyList').on('click', '.classlikeBtn', function(e) {
 			e.preventDefault();
-			console.log('좋아요!');
-			console.log(e.target);
 			
 			let str = '';
 			const userNo = '${login.userNo}';
 			const replyNo = this.parentNode.nextElementSibling.value;
 			let span = this.nextElementSibling;
 			
-			console.log("replyNo의 값 : ", replyNo);
-			console.log("this.nextElementSibling : " , this.nextElementSibling);
-			console.log("userNo의 값 : " + userNo);
-			console.log("str의 값 : " + str);
 			if(userNo==''){
 				alert('좋아요기능은 로그인이 필요합니다');
 				return;
@@ -378,11 +348,9 @@
 			        	 if(result === 1) {
 			        		 e.target.setAttribute('src', '${pageContext.request.contextPath}/img/like2.png');
 			        		 span.textContent = +span.textContent + 1;
-			        		 console.log("span.textContent : ",span.textContent);
 			        	 } else {
 			        		 e.target.setAttribute('src', '${pageContext.request.contextPath}/img/like.png');
 			        		 span.textContent = +span.textContent - 1;
-			        		 console.log("span.textContent : ",span.textContent);
 			        		
 			        	 }
 			        	 
@@ -397,9 +365,6 @@
 			const replyNo = $('#modalRno').val();
 			/* const replyPw = '${login.userPw}'; */
 			
-			console.log('reply : ' + reply);
-			console.log('replyNo : ' + replyNo);
-			/* console.log('replyPw: ', replyPw); */
 			
 			/* if(reply === '' || replyPw === '') {
 				alert('내용, 비밀번호 입력 부탁드려요!')

@@ -59,14 +59,11 @@ $(function() {
 	let str = '';
 	let page = 1;
 	let isFinish = false;
-	console.log(categoryNo);
 	// 페이징 하려다가 그만한듯 -> 나중에 해야할 듯
 	/* getList(1, false); */
 		
 		$('#contentDiv').on('click', '.detailButton', function(e) {
-			console.log($(this)[0]);
 			const bno = $(this).data('bno');
-			console.log(bno);
 			location.href='${pageContext.request.contextPath}/board/boardDetail/' + bno;
 		});
 	

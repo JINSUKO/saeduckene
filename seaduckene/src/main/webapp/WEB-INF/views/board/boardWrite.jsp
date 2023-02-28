@@ -150,7 +150,6 @@
 				processData : false,
 				success : function(result) { // result는 자바스크립트 객체이다. api로 넘어올떄 string(json)을 자바스크립트 객체로 변환해주는듯.
 	            	//항상 업로드된 파일의 url이 있어야 한다.
-	                console.log(result);
 	                boardFileJsonArray.push(result);
 					$(editor).summernote('insertImage', result.url);
 				}
@@ -178,15 +177,11 @@
 	    function deleteTempFile() {
 	      let deleteFiles = [];
 	    	for(let i = 0; i<boardFileJsonArray.length; i++){
-	            console.log('반복문 동작!');
 	            let str = boardFileJsonArray[i].url;
-	            console.log(str);
 	            let result = str.split('/');
-	            console.log('정제된 데이터: ' + result);
 	            deleteFiles.push(result[3]);
 	      }
 	
-	      console.log(deleteFiles);
 	      
 	      $.ajax({
 	         type: 'post',
@@ -198,7 +193,6 @@
 	    
 	    
 		$('.boardContent-summernote').keydown(function() {
-			console.log('키 이벤트 발생');
 			
 			// textarea 값
 			let boardContent = $('.note-editable').html();
@@ -207,8 +201,6 @@
 			let boardContentLength = boardContent.length;
 			let boardContentByteLength = 0;
 			
-			console.log(boardContent, 'boardContent');
-			console.log(boardContentLength, 'boardContentLength');
 			
 			
 			boardContentByteLength = (function(s,b,i,c) {
@@ -221,7 +213,6 @@
 				return;
 			};
 			
-			console.log('boardContentByteLength', boardContentByteLength);
 			$('.textCount').text(boardContentByteLength);
 			
 		});
@@ -231,17 +222,12 @@
 	    
 		
 	    $('#board-Write-button').click(function() {
-	        console.log('글 등록 버튼 이벤트 발생!');
 	    	// textarea 값
 			let boardContent = $('.note-editable').html();
 			
 			// textarea length
 			let boardContentLength = boardContent.length;
 			let boardContentByteLength = 0;
-			
-			console.log(boardContent, 'boardContent');
-			console.log(boardContentLength, 'boardContentLength');
-			
 			
 			boardContentByteLength = (function(s,b,i,c) {
 				for(b=i=0;c=s.charCodeAt(i++);b+=c>>11?3:c>>7?2:1);
@@ -258,17 +244,12 @@
 	         	alert('내용은 100000byte를 넘을 수 없습니다.');
 	         	return;
 	          } else {
-	             console.log('boardFileJsonArray: ' + boardFileJsonArray);
-	             console.log('길이: ' + boardFileJsonArray.length);
 	             
 	             for(let i = 0; i<boardFileJsonArray.length; i++){
-	                console.log('반복문 동작!');
 	                let str = boardFileJsonArray[i].url;
-	                console.log(str);
 	                // str의 값 : /board/summernoteImage/152210d9-a713-43ff-b81c-d9f1a3de0303(BN_CN10).jpg 
 	                // '='를 기준으로 자른다.
 	                let result = str.split('/');
-	                console.log('정제된 데이터: ' + result);
 	
 	                const $input = document.createElement('input');
 	                $input.setAttribute('name', 'filename');

@@ -297,23 +297,17 @@
 	//선택된 주소값 뿌리기
 	$('.addrbtn').on('click',function(e){
 		const no = e.target.value;
-		console.log(no);
-		console.log($('.modal-body p'));
 		
 		for (let p of $('.modal-body p')) {
-			console.log(p);	
 			if ($(p).data('zip') == no) {
-				console.log($(p).text());
 				const zip = $(p).text();
 				$('#orderAddressZipNum').val(zip);
 			}
 			if ($(p).data('basic') == no) {
-				console.log($(p).text());
 				const basic = $(p).text();
 				$('#orderAddressBasic').val(basic);
 			}
 			if ($(p).data('detail') == no) {
-				console.log($(p).text());
 				const detail = $(p).text();
 				$('#orderAddressDetail').val(detail);
 			}
@@ -329,7 +323,6 @@
 
 	// 사전 이메일 인증여부 확인
 	const msg = '${msg}';
-	console.log(msg);
 	if (msg !== 'null') {
 		$('#conf-email').css('display', 'none');
 		emailFlag = true;
@@ -339,7 +332,6 @@
 	let authCode = '';
 	$('#confBtn').click(function() {
 		const email = $('#userEmail').val();
-		console.log('이메일: ' + email);
 
 		if (email.trim() === '') {
 			alert('인증받을 메일 주소를 먼저 입력해 주세요.');
@@ -354,7 +346,6 @@
 				success : function(data) {
 					alert('인증메일이 전송되었습니다.\n입력하신 메일주소에서 전송된 인증번호를 확인해주세요.');
 					authCode = data;
-					console.log(authCode);
 					
 				},
 				error : function() {
@@ -422,9 +413,7 @@
 
 						// 우편번호와 주소 정보를 해당 필드에 넣는다.
 						document.getElementById('orderAddressZipNum').value = data.zonecode;
-						console.log(data.zonecode);
 						document.getElementById('orderAddressBasic').value = addr;
-						console.log(addr);
 						// 커서를 상세주소 필드로 이동한다.
 						document.getElementById('orderAddressDetail').focus();
 					}
@@ -521,7 +510,6 @@
 
 	const checkStock = '${result}';
 	const productName = '${productName}'
-	console.log(checkStock);
 	if (checkStock === 'lack') {
 		alert('"'+productName +'" 상품의 재고수량이 부족합니다.\n 상품의 재고수량 이하로 주문해 주세요.');
 	}
