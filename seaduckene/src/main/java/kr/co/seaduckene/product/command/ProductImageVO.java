@@ -38,5 +38,7 @@ public class ProductImageVO {
     private String productImageFileRealName;
     private int productImageProductNo;
     private int productThumbnail;
+    
+    private int categoryNo;
 
 }

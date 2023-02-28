@@ -142,13 +142,14 @@ public class ProductController {
 	}
 	
 	@GetMapping("/productDetail")
-	public void detail(int productNo,Model model) {
+	public void detail(int productNo, Model model, int categoryNo) {
 		ProductVO vo = productService.getContent(productNo);
 		List<ProductImageVO> ivo = productService.getImg(productNo);
 		System.out.println(vo);
 		System.out.println(ivo);
 		model.addAttribute("vo", vo);
 		model.addAttribute("imgList", ivo);
+		model.addAttribute("categoryNo", categoryNo);
 	}
 	
 	@GetMapping("/display")

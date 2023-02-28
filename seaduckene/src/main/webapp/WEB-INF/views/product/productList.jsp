@@ -23,7 +23,7 @@
 	<div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
 	<c:forEach var="proVo" items="${productList}">
 		  <div class="col productcard">
-		  <a href="${pageContext.request.contextPath }/product/productDetail?productNo=${proVo.productNo}" id="cardA">
+		  <a href="${pageContext.request.contextPath }/product/productDetail?productNo=${proVo.productNo}&categoryNo=${category.categoryNo}" id="cardA">
 		    <div class="card mb-4 rounded-3 shadow-sm">
 		      <div class="card-header py-3">
 		        <h4 class="my-0 fw-normal">${proVo.productName }</h4>
@@ -60,7 +60,8 @@ $(function() {
 	let page = 1;
 	let isFinish = false;
 	console.log(categoryNo);
-	getList(1, false);
+	// 페이징 하려다가 그만한듯 -> 나중에 해야할 듯
+	/* getList(1, false); */
 		
 		$('#contentDiv').on('click', '.detailButton', function(e) {
 			console.log($(this)[0]);

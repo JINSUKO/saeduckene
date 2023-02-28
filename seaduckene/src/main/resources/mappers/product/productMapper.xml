@@ -122,7 +122,7 @@
 		    (
 			    SELECT ROWNUM AS rn, tbl.* FROM
 			        (
-						SELECT i.product_image_product_no, i.product_image_folder, i.product_image_file_name
+						SELECT i.product_image_product_no, i.product_image_folder, i.product_image_file_name, c.category_no
 						FROM product p LEFT JOIN product_image i ON p.product_no = i.product_image_product_no
 						               LEFT JOIN category c ON p.product_category_no = c.category_no 
 						               LEFT JOIN favorite f ON c.category_no = f.favorite_category_no
@@ -141,12 +141,12 @@
 			(
 				SELECT ROWNUM AS rn, tbl.* FROM
                     (
-                        SELECT i.product_image_folder, i.product_image_file_name, i.product_image_product_no, MAX(b.board_views) board_views
+                        SELECT i.product_image_folder, i.product_image_file_name, i.product_image_product_no, c.category_no, MAX(b.board_views) board_views
                         FROM product p LEFT JOIN product_image i ON p.product_no = i.product_image_product_no
                                        LEFT JOIN category c ON p.product_category_no = c.category_no 
                                        LEFT JOIN board b ON b.board_category_no = c.category_no 
                         WHERE i.product_thumbnail = 1 
-                        group by i.product_image_product_no, i.product_image_folder, i.product_image_file_name
+                        group by i.product_image_product_no, i.product_image_folder, i.product_image_file_name, c.category_no
                         ORDER BY board_views DESC
                     ) tbl
 		    )
@@ -211,9 +211,9 @@
 	<update id="refund">
 		UPDATE duck_order SET order_status=#{type},order_return_reason=#{reason} WHERE order_product_no=#{productNo}
 	</update>
-	<!-- 여기부터 보기 -->
+
 	<select id="getProductList" resultType="prodcut">
-		SELECT *
+	<!-- 	SELECT *
 		FROM
 		    (
 		    SELECT ROWNUM AS rn, tbl.* FROM
@@ -222,7 +222,11 @@
 		        WHERE product_category_no = #{categoryNo}
 		        ORDER BY product_reg_date DESC
 		        ) tbl
-		    )
+		    ) 페이징하려다가 그만둔듯. 나중에 해야 할듯.-->
+		    
+		SELECT * FROM product
+		WHERE product_category_no = #{categoryNo}
+		ORDER BY product_reg_date DESC
 	</select>
 	
 	

@@ -47,7 +47,7 @@
 	<div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
 	<c:forEach var="proVo" items="${productList}" varStatus="status">
 	  <div class="col productcard">
-	  <a href="${pageContext.request.contextPath }/product/productDetail?productNo=${proVo.productNo}" id="cardA">
+	  <a href="${pageContext.request.contextPath }/product/productDetail?productNo=${proVo.productNo}&categoryNo=${category.categoryNo}" id="cardA">
 	    <div class="card mb-4 rounded-3 shadow-sm ">
 	      <div class="card-header py-3" >
 	        <h5 class="my-0 fw-normal col-12 text-truncate">${proVo.productName }</h5>
