@@ -159,7 +159,7 @@ public class ProductController {
 		System.out.println("fileName:" + fileName);
 		System.out.println("fileLoca:" + fileLoca);
 		
-		File file = new File("/imgduck/product/" +fileLoca+"/"+fileName);
+		File file = new File("/ejsage3217/imgduck/product/" +fileLoca+"/"+fileName);
 		System.out.println(file);
 		
 		byte[] result = null;
@@ -185,7 +185,7 @@ public class ProductController {
 		String fileName = vo.getProductImageFileName();
 		
 		
-		File file = new File("/imgduck/product/" +fileLoca+"/"+fileName);
+		File file = new File("/ejsage3217/imgduck/product/" +fileLoca+"/"+fileName);
 		System.out.println(file);
 		
 		byte[] result = null;
@@ -298,8 +298,8 @@ public class ProductController {
 		String today = simple.format(new Date());
 		productImageVo.setProductImageFolder(today);
 		list.add(thumb);
-		String uploadFolder ="/imgduck/product/"+today;
-		productImageVo.setProductImagePath("/imgduck/product/");
+		String uploadFolder ="/ejsage3217/imgduck/product/"+today;
+		productImageVo.setProductImagePath("/ejsage3217/imgduck/product/");
 		
 		for(int i =0; i < list.size(); i++ ) {
 				productImageVo.setProductThumbnail(0);
@@ -364,8 +364,8 @@ public class ProductController {
 			String today = simple.format(new Date());
 			ivo.setProductImageFolder(today);
 			list.add(thumb);
-			String uploadFolder ="/imgduck/product/"+today;
-			ivo.setProductImagePath("/imgduck/product/");
+			String uploadFolder ="/ejsage3217/imgduck/product/"+today;
+			ivo.setProductImagePath("/ejsage3217/imgduck/product/");
 			for(int i =0;i<list.size();i++ ) {
 					ivo.setProductThumbnail(0);
 					ivo.setProductImageProductNo(vo.getProductNo());
@@ -404,7 +404,7 @@ public class ProductController {
 	@GetMapping("/mainDisplayImg")
 	public ResponseEntity<byte[]> mainDisplayImg(String fileLoca, String fileName) {
 		
-		File file = new File("/imgduck/product/" + fileLoca + "/" + fileName);
+		File file = new File("/ejsage3217/imgduck/product/" + fileLoca + "/" + fileName);
 		ResponseEntity<byte[]>result = null;
 		HttpHeaders headers = new HttpHeaders();
 		try {

@@ -7,7 +7,7 @@
 	
 	<sql id="boardThumbnail">
 		<if test="boardThumbnailFileRealName == null">
-			board_thumbnail_path = '/imgduck/board/', board_thumbnail_file_name = 'BoardThumbnail.png'
+			board_thumbnail_path = '/ejsage3217/imgduck/board/', board_thumbnail_file_name = 'BoardThumbnail.png'
 			, board_thumbnail_file_real_name = 'BoardThumbnail.png'
 		</if>
 		<if test="boardThumbnailFileRealName != null">

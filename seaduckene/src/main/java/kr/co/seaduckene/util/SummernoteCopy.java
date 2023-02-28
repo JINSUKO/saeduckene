@@ -20,10 +20,10 @@ public class SummernoteCopy {
 
 		if(summerfileNames != null ) {
 			for (int i = 0; i < summerfileNames.size(); i++) {
-				String oriFilePath = "/imgduck/temp/" + summerfileNames.get(i);
+				String oriFilePath = "/ejsage3217/imgduck/temp/" + summerfileNames.get(i);
 
 				// 복사될 파일경로
-				String copyFilePath = "/imgduck/board/" + summerfileBnNames.get(i);
+				String copyFilePath = "/ejsage3217/imgduck/board/" + summerfileBnNames.get(i);
 
 				try {
 					// 파일 이름은 안 건드리고 내부 byte[]만 복사한다
@@ -59,10 +59,10 @@ public class SummernoteCopy {
 
 		if(summerfileNames != null ) {
 			for (int i = 0; i < summerfileNames.size(); i++) {
-				String oriFilePath = "/imgduck/temp/" + summerfileNames.get(i);
+				String oriFilePath = "/ejsage3217/imgduck/temp/" + summerfileNames.get(i);
 
 				// 복사될 파일경로
-				String copyFilePath = "/imgduck/board/" + summerfileNames.get(i);
+				String copyFilePath = "/ejsage3217/imgduck/board/" + summerfileNames.get(i);
 
 				try {
 					// 파일 이름은 안 건드리고 내부 byte[]만 복사한다
