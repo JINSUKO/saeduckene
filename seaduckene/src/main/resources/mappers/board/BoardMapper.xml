@@ -170,7 +170,7 @@
 	
 	<!-- boardNo 찾기 -->
 	<select id="boardNoSearch" resultType="int">
-		SELECT s.board_no FROM
+		SELECT tbl2.board_no FROM
 			(
 			SELECT (@ROWNUM := @ROWNUM + 1) rn, tbl.* FROM 
 				(
