@@ -33,7 +33,8 @@
 				) tbl,
 				(SELECT @ROWNUM := 0) R
 		    ) tbl2
-		LIMIT ((#{paging.pageNum}-1) * #{paging.cpp}), 9
+		WHERE rn > (#{paging.pageNum}-1) * #{paging.cpp}
+		AND rn <=(#{paging.pageNum}) * #{paging.cpp}
 		]]>
 	</select>
 	
@@ -57,6 +58,7 @@
 	</select>
 	
 	<select id="proList" resultType="prodcut">
+		<![CDATA[
 		SELECT *
 		FROM
 		    (
@@ -68,7 +70,8 @@
 					) tbl,
 				(SELECT @ROWNUM := 0) R
 		    ) tbl2
-		LIMIT 3
+		WHERE rn > 0 AND rn <= 3
+		]]>
 	</select>
 	
 	<!-- 글 등록 -->
@@ -114,7 +117,7 @@
 					) tbl,
 					(SELECT @ROWNUM := 0) R
 			) tbl2
-		LIMIT 9
+		WHERE rn > 0 AND rn <= 9
 		]]>
 	</select>
 	
@@ -131,7 +134,7 @@
 				) tbl,
 				(SELECT @ROWNUM := 0) R
 		    ) tbl2
-		LIMIT 9
+		WHERE rn > 0 AND rn <= 9
 		]]>
 	</select>
 	
@@ -147,7 +150,7 @@
 					) tbl,
 					(SELECT @ROWNUM := 0) R
 		    ) tbl2
-		LIMIT 5
+		WHERE rn > 0 AND rn <= 5
 		]]>
 	</select>
 	
@@ -164,7 +167,8 @@
 					) tbl,
 				(SELECT @ROWNUM := 0) R
 		    ) tbl2
-		LIMIT ((#{pageNum}-1) * #{cpp}), 10
+		WHERE rn > (#{pageNum}-1) * #{cpp}
+		AND rn <= (#{pageNum}) * #{cpp}
 		]]>
 	</select>
 	
@@ -207,7 +211,8 @@
 					) tbl,
 					(SELECT @ROWNUM := 0) R
 		    ) tbl2
-		LIMIT ((#{paging.pageNum}-1) * #{paging.cpp}), 20
+		WHERE rn > ((#{paging.pageNum}-1) * #{paging.cpp})
+		AND rn <= ((#{paging.pageNum}) * #{paging.cpp})
 		]]>
 	</select>
 

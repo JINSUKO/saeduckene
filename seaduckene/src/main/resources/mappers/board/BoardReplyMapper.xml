@@ -28,7 +28,8 @@
 				WHERE tbl.reply_user_no = tbl2.user_no
 				ORDER BY tbl.reply_no DESC
 			) tbl3
-		limit ((#{paging.pageNum}-1) * #{paging.cpp}), 5
+		WHERE rn > ((#{paging.pageNum}-1) * #{paging.cpp})
+		AND rn <= ((#{paging.pageNum}) * #{paging.cpp}) 
 		]]>
 	</select>
 	
