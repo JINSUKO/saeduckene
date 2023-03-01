@@ -99,7 +99,7 @@ $(function() {
 	});
 	
 	$('#moreProBtn').click(function() {
-		location.href = '${pageContext.request.contextPath}/product/productList?categoryNo='+categoryNo;
+		location.href = '${pageContext.request.contextPath}/product/productList?categoryNo=${categoryNo};
 	});
 	
 	const categoryNo = '${categoryNo}';
