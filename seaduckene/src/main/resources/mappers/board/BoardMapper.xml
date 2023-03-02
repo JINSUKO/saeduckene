@@ -22,16 +22,16 @@
 		SELECT *
 		FROM
 		    (
-			SELECT (@ROWNUM := @ROWNUM + 1) rn, tbl.* 
-			FROM
-				(
-					SELECT d.*, c.*, u.user_nickname AS writer
-					FROM board d LEFT JOIN category c ON d.board_category_no = c.category_no
-						     LEFT JOIN duck_user u ON d.board_user_no = u.user_no
-					WHERE d.board_category_no = #{categoryNo}
-					ORDER BY d.board_reg_date DESC
-				) tbl,
-				(SELECT @ROWNUM := 0) R
+				SELECT (@ROWNUM := @ROWNUM + 1) rn, tbl.* 
+				FROM
+					(
+						SELECT d.*, c.*, u.user_nickname AS writer
+						FROM board d LEFT JOIN category c ON d.board_category_no = c.category_no
+							     	 LEFT JOIN duck_user u ON d.board_user_no = u.user_no
+						WHERE d.board_category_no = #{categoryNo}
+					) tbl,
+					(SELECT @ROWNUM := 0) R
+				ORDER BY tbl.board_reg_date DESC
 		    ) tbl2
 		WHERE rn > (#{paging.pageNum}-1) * #{paging.cpp}
 		AND rn <=(#{paging.pageNum}) * #{paging.cpp}
@@ -66,9 +66,9 @@
 					(
 						SELECT * FROM product
 						WHERE product_category_no = #{categoryNo}
-						ORDER BY product_reg_date DESC
 					) tbl,
 				(SELECT @ROWNUM := 0) R
+				ORDER BY tbl.product_reg_date DESC
 		    ) tbl2
 		WHERE rn > 0 AND rn <= 3
 		]]>
@@ -110,12 +110,12 @@
 							, c.category_major_title, c.category_minor_title, d.user_nickname
 							, d.user_no, f.favorite_category_no, f.favorite_user_no
 						FROM board b LEFT JOIN duck_user d ON b.board_user_no= d.user_no
-							     LEFT JOIN category c ON b.board_category_no = c.category_no
-							     LEFT JOIN favorite f ON c.category_no = f.favorite_category_no
+							     	 LEFT JOIN category c ON b.board_category_no = c.category_no
+							     	 LEFT JOIN favorite f ON c.category_no = f.favorite_category_no
 						WHERE f.favorite_user_no = #{userNo}
-						ORDER BY b.board_views DESC, b.board_reg_date DESC
 					) tbl,
 					(SELECT @ROWNUM := 0) R
+				ORDER BY tbl.board_views DESC, tbl.board_reg_date DESC
 			) tbl2
 		WHERE rn > 0 AND rn <= 9
 		]]>
@@ -126,13 +126,13 @@
 		SELECT * FROM
 		    (
 			    SELECT (@ROWNUM := @ROWNUM + 1) rn, tbl.* FROM
-				(
-				    SELECT b.board_no, b.board_title, b.board_views, b.board_reg_date, c.category_major_title, c.category_minor_title, d.user_nickname
-				    FROM board b LEFT JOIN category c ON b.board_category_no = c.category_no
-						 LEFT JOIN duck_user d ON b.board_user_no = d.user_no
-				    ORDER BY b.board_views DESC, b.board_reg_date DESC
-				) tbl,
-				(SELECT @ROWNUM := 0) R
+					(
+					    SELECT b.board_no, b.board_title, b.board_views, b.board_reg_date, c.category_major_title, c.category_minor_title, d.user_nickname
+					    FROM board b LEFT JOIN category c ON b.board_category_no = c.category_no
+							 		 LEFT JOIN duck_user d ON b.board_user_no = d.user_no
+					) tbl,
+					(SELECT @ROWNUM := 0) R
+				ORDER BY tbl.board_views DESC, tbl.board_reg_date DESC
 		    ) tbl2
 		WHERE rn > 0 AND rn <= 9
 		]]>
@@ -146,9 +146,9 @@
 					(
 					    SELECT *
 					    FROM notice
-					    ORDER BY notice_no DESC
 					) tbl,
 					(SELECT @ROWNUM := 0) R
+				ORDER BY tbl.notice_no DESC
 		    ) tbl2
 		WHERE rn > 0 AND rn <= 5
 		]]>
@@ -163,9 +163,9 @@
 					(
 					    SELECT *
 					    FROM notice
-					    ORDER BY notice_no DESC
 					) tbl,
-				(SELECT @ROWNUM := 0) R
+					(SELECT @ROWNUM := 0) R
+				ORDER BY tbl.notice_no DESC
 		    ) tbl2
 		WHERE rn > (#{pageNum}-1) * #{cpp}
 		AND rn <= (#{pageNum}) * #{cpp}
@@ -180,9 +180,9 @@
 				(
 					SELECT board_no FROM board
 					WHERE board_user_no = #{boardUserNo}
-					ORDER BY board_reg_date DESC
 				) tbl,
 				(SELECT @ROWNUM := 0) R
+				ORDER BY tbl.board_reg_date DESC
 			) tbl2
 		WHERE rn = 1 
 	</select>
@@ -207,9 +207,9 @@
 					    SELECT *
 					    FROM board
 					    WHERE board_user_no = #{userNo}
-					    ORDER BY board_reg_date DESC
 					) tbl,
 					(SELECT @ROWNUM := 0) R
+				ORDER BY tbl.board_reg_date DESC
 		    ) tbl2
 		WHERE rn > ((#{paging.pageNum}-1) * #{paging.cpp})
 		AND rn <= ((#{paging.pageNum}) * #{paging.cpp})

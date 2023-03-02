@@ -44,15 +44,15 @@
 		<foreach collection="deleted_favorite_index" item="item" index="index" separator="," open="(" close=")">
 			(SELECT tbl2.favorite_no
 				  FROM (
-					  SELECT (@ROWNUM := @ROWNUM + 1) rn, tbl1.*
-						  FROM (
-								SELECT *
-								FROM favorite f JOIN duck_user u ON f.favorite_user_no = u.user_no
-										JOIN category c ON f.favorite_category_no = c.category_no
-								WHERE u.user_no = #{userNo}
-								ORDER BY u.user_no, c.category_major_title, c.category_minor_title
-						  ) tbl1,
-						  (select @ROWNUM := 0) R
+						  SELECT (@ROWNUM := @ROWNUM + 1) rn, tbl1.*
+					  	  FROM (
+									SELECT *
+									FROM favorite f JOIN duck_user u ON f.favorite_user_no = u.user_no
+											JOIN category c ON f.favorite_category_no = c.category_no
+									WHERE u.user_no = #{userNo}
+							  ) tbl1,
+							  (select @ROWNUM := 0) R
+						  ORDER BY tbl1.user_no, tbl1.category_major_title, tbl1.category_minor_title
 					  ) tbl2
 			  WHERE rn = #{item})
 		</foreach>

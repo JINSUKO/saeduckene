@@ -14,10 +14,10 @@
 								SELECT *
 								FROM address
 								WHERE address_user_no = #{userNo}
-								ORDER BY address_representative DESC, address_no 
 							) tbl1,
 							( SELECT @ROWNUM := 0 ) R
-					) tbl2
+					  ORDER BY tbl1.address_representative DESC, tbl1.address_no 
+				  ) tbl2
 			  WHERE rn = #{item}
 			  ) tbl3
 		</foreach>
@@ -62,9 +62,9 @@
 				    (
 					    SELECT * FROM address
 					    WHERE address_user_no = #{userNo}
-					    ORDER BY address_representative DESC, address_no 
 				    ) tbl,
 				    (SELECT @ROWNUM := 0) R
+				ORDER BY tbl.address_representative DESC, tbl.address_no
 			) tbl2
 		WHERE rn = #{addressRn}
 	</select>

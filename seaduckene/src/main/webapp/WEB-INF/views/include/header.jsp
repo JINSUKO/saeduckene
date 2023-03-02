@@ -37,9 +37,6 @@
    
 </head>
 <body>
-<script type="text/javascript">
-	console.log('${category.categoryMajorTitle}');
-</script>
 
    <header>
       <div class="container" id="main-img">

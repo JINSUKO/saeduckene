@@ -97,12 +97,12 @@ $(function() {
 			alert('더이상 불러올 목록이 없습니다.');
 		}
 	});
+	const categoryNo = '${categoryNo}';
 	
 	$('#moreProBtn').click(function() {
-		location.href = '${pageContext.request.contextPath}/product/productList?categoryNo=${categoryNo};
+		location.href = '${pageContext.request.contextPath}/product/productList?categoryNo=${categoryNo}';
 	});
 	
-	const categoryNo = '${categoryNo}';
 	let str = '';
 	let page = 1;
 	let isFinish = false;
@@ -118,7 +118,6 @@ $(function() {
 		$.getJSON(
 			'<c:url value="/board/boardLists?pageNum='+ page +'&categoryNo='+ categoryNo +'" />',
 			function(list) {
-				
 				if(total > page*9){
 					$('#div-btn').css('display','block');
 				}else {
