@@ -222,6 +222,7 @@ public class ProductController {
 				session.setAttribute("orderList", orderProductNoList);
 				session.setAttribute("orderVo", orderVo);
 				session.setAttribute("userEmail", userEmail);
+				session.setAttribute("ea", ea);
 				ra.addFlashAttribute("clientKey", clientKey);
 				return "redirect:/product/payment";
 			} else {
@@ -257,6 +258,7 @@ public class ProductController {
 				session.setAttribute("orderList", pNo);
 				session.setAttribute("orderVo", orderVo);
 				session.setAttribute("userEmail", userEmail);
+				session.setAttribute("ea", ea);
 				ra.addFlashAttribute("clientKey", clientKey);
 				return "redirect:/product/payment";
 			} else {
@@ -473,7 +475,7 @@ public class ProductController {
 	public void payment() {}
 	
 	@GetMapping("/success")
-	public String paycomplete(HttpSession session,@RequestParam String paymentKey) {
+	public String paycomplete(HttpSession session,@RequestParam String paymentKey, int ea) {
 		System.out.println("페이먼트 키: "+paymentKey);
 		
 		@SuppressWarnings("unchecked")
@@ -483,7 +485,11 @@ public class ProductController {
 		String userEmail = (String) session.getAttribute("userEmail");
 		
 		UserVO user = (UserVO)session.getAttribute("login");	
-		productService.order(orderProductNoList, orderVo, userEmail, user);
+		if (ea == 0) {
+			productService.order(orderProductNoList, orderVo, userEmail, user);
+		} else {
+			productService.order2(orderProductNoList, orderVo, userEmail, user, ea);
+		}
 		
 		return "redirect:/user/userMyPage/4";
 	}
