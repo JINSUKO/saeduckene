@@ -39,6 +39,7 @@ $(function(){
 	const orderId = '${login.userId}${orderVo.orderRecipientTel}';
 	const orderName = 'seduckeneOrder' + '${orderVo.orderRecipientTel}';
 	const customerName = '${orderVo.orderRecipientName}';
+	const ea = '${ea}';
 	
 	var clientKey = '${clientKey}';
 	var tossPayments = TossPayments(clientKey);
@@ -49,10 +50,10 @@ $(function(){
 			orderId : orderId,
 			orderName : orderName,
 			customerName : customerName,
-			/* successUrl: 'http://13.209.230.106/product/success',
-			failUrl : 'http://13.209.230.106/product/fail' */
- 			successUrl: '${pageContext.request.contextPath}/product/success',
-			failUrl : '${pageContext.request.contextPath}/product/fail' 
+			successUrl: 'http://sussaeduck.store/product/success?ea=' + ea,
+			failUrl : 'http://sussaeduck.store/product/fail'
+ 			/* successUrl: '${pageContext.request.contextPath}/product/success',
+			failUrl : '${pageContext.request.contextPath}/product/fail'  */
 		});
 	}
 	toss();

@@ -257,7 +257,7 @@
 			const bno = '${board.boardNo}';
 			
 			$.getJSON(
-					"<c:url value='/reply/getList/' />" + bno + "/" + pageNum,
+					"<c:url value='/reply/getList/' " + bno + "/" + pageNum +"/>" ,
 					function(data) {
 						let total = data.total;
 						let replyList = data.list;

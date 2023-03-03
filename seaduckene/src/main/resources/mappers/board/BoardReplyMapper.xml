@@ -16,7 +16,7 @@
 			(
 				SELECT (@ROWNUM := @ROWNUM + 1) rn, tbl.reply_no, tbl.reply_content, tbl.reply_reg_date
 					, tbl.reply_up_date, tbl.reply_board_no, tbl.reply_user_no, tbl2.user_no, tbl2.user_nickname
-					, (SELECT COUNT(*) FROM replylike WHERE like_reply_no = tbl.reply_no AND like_state = 1) AS like_count
+					, (SELECT COUNT(*) FROM replyLike WHERE like_reply_no = tbl.reply_no AND like_state = 1) AS like_count
 				FROM (
 						SELECT * FROM reply r
 						WHERE r.reply_board_no = #{bno}

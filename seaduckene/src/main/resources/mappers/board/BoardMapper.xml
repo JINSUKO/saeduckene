@@ -178,7 +178,7 @@
 			(
 			SELECT (@ROWNUM := @ROWNUM + 1) rn, tbl.* FROM 
 				(
-					SELECT board_no FROM board
+					SELECT board_no, board_reg_date FROM board
 					WHERE board_user_no = #{boardUserNo}
 				) tbl,
 				(SELECT @ROWNUM := 0) R
