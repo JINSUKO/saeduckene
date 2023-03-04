@@ -171,7 +171,8 @@
 		$(function() {
 			$('#summernote').summernote({
 				toolbar : false,
-				minHeight : 500
+				minHeight : 500,
+				disableDragAndDrop: true
 			});
 			$('#summernote').summernote('disable');
 			$('#summernote').summernote('pasteHTML', `${board.boardContent}`);
@@ -257,7 +258,7 @@
 			const bno = '${board.boardNo}';
 			
 			$.getJSON(
-					"<c:url value='/reply/getList/' " + bno + "/" + pageNum +"/>" ,
+					"<c:url value='/reply/getList/ " + bno + "/" + pageNum +"'/>" ,
 					function(data) {
 						let total = data.total;
 						let replyList = data.list;

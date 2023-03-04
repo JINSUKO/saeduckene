@@ -100,11 +100,29 @@ table {
 
 @font-face {
     font-family: 'GangwonEdu_OTFBoldA';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/GangwonEdu_OTFBoldA.woff') format('woff');
+   	src:
+	 url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/GangwonEdu_OTFBoldA.woff') format('woff')
+   	 ,url(summernote/font/summernote.eot)
+   	, url(summernote/font/summernote.eot?#iefix) format("embedded-opentype")
+	, url(summernote/font/summernote.woff2) format("woff2")
+	, url(summernote/font/summernote.woff) format("woff")
+	, url(summernote/font/summernote.ttf) format("truetype");
     font-weight: normal;
     font-style: normal;
 }
 
+/*
+ @font-face{
+	font-family: "GangwonEdu_OTFBoldA";
+	font-style: normal;
+	font-weight: normal;
+	font-display: auto;
+	src: url(font/summernote.eot);
+	src: url(font/summernote.eot?#iefix) format("embedded-opentype")
+	,url(font/summernote.woff2) format("woff2")
+	,url(font/summernote.woff) format("woff")
+	,url(font/summernote.ttf) format("truetype")}
+	 */
 /*===========================*/
 
 /*디자인 시작시 기본 선언*/
