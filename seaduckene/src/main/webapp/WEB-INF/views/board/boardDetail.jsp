@@ -11,7 +11,7 @@
 
 <section>
 <div class="container board-detail-container mt-4"> 
-	  <div class="row">
+	<div class="row">
       <div class="mb-3">
 	  	<div class="col col align-self-center" style="position: relative;">
         	<nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='15'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
@@ -37,19 +37,19 @@
 						class="form-control" id="title" name="boardTitle"
 						value="${board.boardTitle}" readonly>
 						
-				<div class="col d-flex flex-row justify-content-end"
+				<div class="col d-flex flex-row"
 					id="board-detail-item">
-		
-					<p>
-						<fmt:formatDate value="${board.boardRegDate}" pattern="yyyy/MM/dd" />
-					</p>
-					<p>&nbsp;&nbsp;조회수: ${board.boardViews }</p>
+					<span class="col-6 d-flex flex-row justify-content-start">
+						<span >&nbsp;작성자: ${nickName }</span>
+					</span>
+					<span class="col-6 d-flex flex-row justify-content-end">
+						<span>
+							<fmt:formatDate value="${board.boardRegDate}" pattern="yyyy/MM/dd" />
+						</span>
+						<span>&nbsp;&nbsp;조회수: ${board.boardViews }</span>
+					</span>
 				</div>
 
-				<div class="col d-flex flex-row justify-content-end"
-					id="board-detail-item">
-							
-				</div>
 				<hr>
 				<div class="mb-3" id="board-detail-content">
 					<label for="content" class="form-label"></label>
