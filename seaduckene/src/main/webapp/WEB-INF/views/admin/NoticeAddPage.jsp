@@ -24,7 +24,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap" rel="stylesheet" />
 
 	<!-- summernote 추가 -->
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css" rel="stylesheet">
+	<link href="${pageContext.request.contextPath }/resources/css/summernote/summernote-lite.css" rel="stylesheet">
+	<!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css" rel="stylesheet"> -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.js" defer></script>
 	
 	<style>
@@ -83,13 +84,10 @@
   		
   		 $('#notice-Write-button').click(function() {
 			for(var i = 0; i<jsonArray.length; i++){
-				console.log('반복문 동작!');
 				var str = jsonArray[i].url;
-				console.log(str);
 				// str의 값 : common/getImg.do?savedFileName=bc395afe-2324-438d-ae68-1a0a75d0a431.png 
 				// '='를 기준으로 자른다.
 				var result = str.split('/');
-				console.log('정제된 데이터: ' + result);
 				
 				const $input = document.createElement('input');
 				$input.setAttribute('name', 'filename');
@@ -125,30 +123,31 @@
 	  		['height', ['height']],
 	  		// 그림첨부, 링크만들기, 동영상첨부
 	  		['insert',['picture']]
-	  		// 코드보기, 확대해서보기, 도움말
-	  		,['view', ['codeview']]
+	        // 코드보기, 확대해서보기, 도움말
+	        //, ['view', ['codeview']]
 	          ],
 	        // 추가한 글꼴
 	        fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New','맑은 고딕','궁서','굴림체','굴림','돋음체','바탕체'],
 	        // 추가한 폰트사이즈
 	        fontSizes: ['8','9','10','11','12','14','16','18','20','22','24','28','30','36','50','72'],
+	        disableDragAndDrop: true,
 	        callbacks: {	//여기 부분이 이미지를 첨부하는 부분
 	  		    onImageUpload : function(files, editor, welEditable) {
 	  				for (var i = files.length - 1; i >= 0; i--) {
 	                      uploadSummernoteImageFile(files[i], this);
 	                  }
 	  			},
-	  		onPaste: function (e) {
-	  			var clipboardData = e.originalEvent.clipboardData;
-	  			if (clipboardData && clipboardData.items && clipboardData.items.length) {
-	  				var item = clipboardData.items[0];
-	  				if (item.kind === 'file' && item.type.indexOf('image/') !== -1) {
-	  					e.preventDefault();
-	  				}
-	  			}
-	  		}
-	  	  }
-	 	});
+		  		onPaste: function (e) {
+		  			var clipboardData = e.originalEvent.clipboardData;
+		  			if (clipboardData && clipboardData.items && clipboardData.items.length) {
+		  				var item = clipboardData.items[0];
+		  				if (item.kind === 'file' && item.type.indexOf('image/') !== -1) {
+		  					e.preventDefault();
+		  				}
+		  			}
+		  		}
+		  	  }
+		 	});
 	  	
 	  	function uploadSummernoteImageFile(file, editor) {
 
@@ -165,7 +164,6 @@
 				processData : false,
 				success : function(result) {
 	            	//항상 업로드된 파일의 url이 있어야 한다.
-	               console.log(result);
 	               jsonArray.push(result);
 					$(editor).summernote('insertImage', result.url);
 				}
@@ -186,15 +184,11 @@
 		 function deleteTempFile() {
 		   let deleteFiles = [];
 		 	for(var i = 0; i<jsonArray.length; i++){
-		         console.log('반복문 동작!');
 		         var str = jsonArray[i].url;
-		         console.log(str);
 		         var result = str.split('/');
-		         console.log('정제된 데이터: ' + result);
 		         deleteFiles.push(result[3]);
 		   }
 		
-		   console.log(deleteFiles);
 		   
 		   $.ajax({
 		      type: 'post',

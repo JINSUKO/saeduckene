@@ -110,7 +110,7 @@ public class boardListController {
 		
 		boardService.write(boardVo);
 		int boardNo = boardService.boardNoSearch(boardVo.getBoardUserNo());
-		boardVo.setBoardContent(boardVo.getBoardContent().replaceAll("_", Integer.toString(boardNo)));
+		boardVo.setBoardContent(boardVo.getBoardContent().replaceAll("-_-_-", Integer.toString(boardNo)));
 		boardVo.setBoardNo(boardNo);
 		
 		if (summerfileNames != null) {
@@ -119,7 +119,7 @@ public class boardListController {
 			List<String> summerfileBnNames = new ArrayList<String>();
 			
 			for (String summerfileName : summerfileNames) {
-				String summerfileBnName = summerfileName.replaceAll("_", Integer.toString(boardNo));
+				String summerfileBnName = summerfileName.replaceAll("-_-_-", Integer.toString(boardNo));
 				summerfileBnNames.add(summerfileBnName);
 				
 				boardService.boardImageAdd(boardNo, summerfileBnName);
@@ -249,7 +249,7 @@ public class boardListController {
 		log.info("글 수정 요청이 들어옴!");
 
 		int boardNo = updatedBoardVo.getBoardNo();
-		updatedBoardVo.setBoardContent(updatedBoardVo.getBoardContent().replaceAll("_", Integer.toString(boardNo)));
+		updatedBoardVo.setBoardContent(updatedBoardVo.getBoardContent().replaceAll("-_-_-", Integer.toString(boardNo)));
 		
 		BoardVO previousBoardVo = boardService.getBoardDetailVo(boardNo);
 		
@@ -264,7 +264,7 @@ public class boardListController {
 			List<String> summerfileBnNames = new ArrayList<String>();
 			
 			for (String summerfileName : summerfileNames) {
-				String summerfileBnName = summerfileName.replaceAll("_", Integer.toString(boardNo));
+				String summerfileBnName = summerfileName.replaceAll("-_-_-", Integer.toString(boardNo));
 				summerfileBnNames.add(summerfileBnName);
 				
 				boardService.boardImageAdd(boardNo, summerfileBnName);
@@ -362,7 +362,7 @@ public class boardListController {
 		categoryNo = categoryNo.length() == 1 ? "0" + categoryNo : categoryNo;
 		
 		String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-		String savedFileName = uuid + "(BN_CN" + categoryNo + ")" + extension;	//저장될 파일명
+		String savedFileName = uuid + "(BN-_-_-CN" + categoryNo + ")" + extension;	//저장될 파일명
 		
 		File targetFile = new File(fileRoot + savedFileName);	
 		

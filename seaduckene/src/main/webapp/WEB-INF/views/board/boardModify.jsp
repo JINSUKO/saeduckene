@@ -40,7 +40,7 @@
 				<input type="checkbox" id="thumbnail-checkbox">
 				<label for="thumbnail-checkbox"></label>
 				<span class="file-upload">
-					<i class="note-icon-picture"></i>
+					<svg version='1.1' id='_x32_' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 512 512' xml:space='preserve' fill='#000000'><g id='SVGRepo_bgCarrier' stroke-width='0'></g><g id='SVGRepo_tracerCarrier' stroke-linecap='round' stroke-linejoin='round'></g><g id='SVGRepo_iconCarrier'> <style type='text/css'>  .st0{fill:#000000;}  </style> <g> <path class='st0' d='M99.281,399.469h320.094c6.172,0,11.844-3.422,14.719-8.875c2.844-5.469,2.438-12.078-1.063-17.141 l-69.156-100.094c-6.313-9.125-16.781-14.516-27.906-14.297s-21.406,5.969-27.375,15.359l-19.719,30.984l-54.828-79.359 c-6.313-9.172-16.797-14.531-27.922-14.328s-21.406,5.969-27.375,15.359L85.281,373.984c-3.25,5.109-3.469,11.578-0.531,16.875 C87.656,396.172,93.219,399.469,99.281,399.469z'></path> <path class='st0' d='M322.672,223.906c23.688,0,42.922-19.219,42.922-42.922c0-23.688-19.234-42.906-42.922-42.906 c-23.703,0-42.922,19.219-42.922,42.906C279.75,204.688,298.969,223.906,322.672,223.906z'></path> <path class='st0' d='M0,19.703v472.594h512v-25.313V19.703H0z M461.375,441.672H50.625V70.328h410.75V441.672z'></path> </g> </g></svg>
 					<input name="thumbnail" type="file" class="upload" id="thumbnail-pic" accept="image/*" > <br>
 				</span>
 				<button type="button" class="sbtn cyan" id="thumbnail-show" >썸네일 미리보기</button>
@@ -103,14 +103,18 @@
 	          // 줄간격
 	          ['height', ['height']],
 	          // 그림첨부, 링크만들기, 동영상첨부 ['picture','video']
-	          ['insert', ['picture']],
+	          ['insert', ['picture']]
 	          // 코드보기, 확대해서보기, 도움말
-	          ['view', ['codeview']]
+	          //, ['view', ['codeview']]
 	        ],
 	      // 추가한 글꼴
-	      fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New','맑은 고딕','궁서','굴림체','굴림','돋음체','바탕체','GangwonEdu_OTFBoldA'],
+	      fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New','맑은 고딕','궁서','굴림체','굴림','돋음체','바탕체', "GangwonEdu_OTFBoldA"],
 	      // 추가한 폰트사이즈
 	      fontSizes: ['8','9','10','11','12','14','16','18','20','22','24','28','30','36','50','72'],
+	      icons: {
+	    	  caret: `"<i`
+	      },
+	      disableDragAndDrop: true,
 	      callbacks: {
 				// onImageUpload : function(files) {
 			    onImageUpload : function(files, editor, welEditable) {
@@ -129,8 +133,9 @@
 					}
 				}
 	      }
+	      
 	    });
-	    $('#summernote').summernote('fontName', 'GangwonEdu_OTFBoldA');
+		$('#summernote').summernote('pasteHTML', `${board.boardContent}`);
 	    
 	    function uploadSummernoteImageFile(file, editor) {
 	    	
@@ -147,12 +152,10 @@
 				contentType : false,
 				processData : false,
 				success : function(result) {
-					console.log(result);
 					boardFileJsonArray.push(result);
 					$(editor).summernote('insertImage', result["url"]);
 				},
 				error : function(e) {
-				    console.log(e);
 				}
 			});
 		}
@@ -180,15 +183,11 @@
 	    function deleteTempFile() {
 		   
 	    	for(let i = 0; i<boardFileJsonArray.length; i++){
-	            console.log('반복문 동작!');
 	            let str = boardFileJsonArray[i].url;
-	            console.log(str);
 	            let result = str.split('/');
-	            console.log('정제된 데이터: ' + result);
 	            deleteFiles.push(result[3]);
 	      	}
 	    	
-	      console.log(deleteFiles);
 	      
 	      $.ajax({
 	         type: 'post',
@@ -200,7 +199,6 @@
 	 
 	   /*  
 	    $('.note-editable').click(function() {
-			console.log('기본 이벤트!');
 			
 			let boardContent = $('.note-editable').html();
 			let boardContentLength = boardContent.length;
@@ -217,7 +215,6 @@
 	     */
 	    
 		$('.boardContent-summernote').keydown(function() {
-			console.log('키 이벤트 발생');
 			
 			// textarea 값
 			let boardContent = $('.note-editable').html();
@@ -226,8 +223,6 @@
 			let boardContentLength = boardContent.length;
 			let boardContentByteLength = 0;
 			
-			console.log(boardContent, 'boardContent');
-			console.log(boardContentLength, 'boardContentLength');
 			
 			boardContentByteLength = (function(s,b,i,c) {
 				for(b=i=0;c=s.charCodeAt(i++);b+=c>>11?3:c>>7?2:1);
@@ -239,7 +234,6 @@
 				return;
 			};
 			
-			console.log('boardContentByteLength', boardContentByteLength);
 			$('.textCount').text(boardContentByteLength);
 			
 		}); // 글자 수 event 끝.
@@ -251,10 +245,6 @@
 			
 			const bno = '${ board.boardNo }';
 			const no = '${board.boardCategoryNo}';
-			console.log(bno);
-			console.log(no);
-			
-			console.log('글 등록 버튼 이벤트 발생!');
 	    	// textarea 값
 			let boardContent = $('.note-editable').html();  
 			
@@ -262,8 +252,6 @@
 			let boardContentLength = boardContent.length;
 			let boardContentByteLength = 0;
 			
-			console.log(typeof(boardContent), 'boardContentByteLength');
-			console.log(boardContentLength, 'boardContentLength');
 			
 			
 			boardContentByteLength = (function(s,b,i,c) {
@@ -285,17 +273,12 @@
 				alert('100000byte를 넘을 경우 글을 수정할 수 없습니다!');
 				return;
 			} else {
-	             console.log('boardFileJsonArray: ' + boardFileJsonArray);
-	             console.log('길이: ' + boardFileJsonArray.length);
 	             
 	             for(let i = 0; i<boardFileJsonArray.length; i++){
-	                console.log('반복문 동작!');
 	                let str = boardFileJsonArray[i].url;
-	                console.log(str);
 	                // str의 값 : /board/summernoteImage/152210d9-a713-43ff-b81c-d9f1a3de0303(BN_CN10).jpg 
 	                // '='를 기준으로 자른다.
 	                let result = str.split('/');
-	                console.log('정제된 데이터: ' + result);
 	
 	                const $input = document.createElement('input');
 	                $input.setAttribute('name', 'filename');
@@ -310,7 +293,6 @@
 				
 		}); //수정 버튼 이벤트 처리 끝.
 
-		$('#summernote').summernote('pasteHTML', `${board.boardContent}`);
 		
 	    $('#thumbnail-checkbox').click(function() {
 	    	if ($('#thumbnail-checkbox').is(":checked")) {
@@ -330,7 +312,7 @@
 				
 				$('form[name=updateForm]').submit();
 			}
-		})
+		});
 
 	  }); 
 	
