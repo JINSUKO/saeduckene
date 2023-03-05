@@ -175,7 +175,7 @@
 	</select>
 	
 	<update id="updateProduct">
-		UPDATE PRODUCT SET product_name = #{productName}, product_price_normal = #{productPriceNormal}, product_price_selling = #{productPriceSelling}
+		UPDATE product SET product_name = #{productName}, product_price_normal = #{productPriceNormal}, product_price_selling = #{productPriceSelling}
 					, product_detail = #{productDetail}, product_stock = #{productStock}, product_category_no = #{productCategoryNo}
 		WHERE product_no = #{productNo}
 	</update>
