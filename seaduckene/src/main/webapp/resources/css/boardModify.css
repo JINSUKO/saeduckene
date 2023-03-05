@@ -53,11 +53,12 @@ input[id="thumbnail-checkbox"]:checked + label::after{
 	opacity: 0.95;
 }
 
-.file-upload i {
-	font-size: 20px;
+.file-upload svg {
 	position: relative;
-	top: -11px;
+	top: -6px;
 	left: -4px;
+	width: 22px;
+	height: 22px;
 	
 }
 

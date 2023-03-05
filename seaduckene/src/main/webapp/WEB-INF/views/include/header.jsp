@@ -32,8 +32,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
 
    <!-- summernote 추가 -->
-   <link href="${pageContext.request.contextPath }/resources/css/summernote/summernote-lite.css" rel="stylesheet">
-   <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css" rel="stylesheet"> -->
+   <%-- <link href="${pageContext.request.contextPath }/resources/css/summernote/summernote-lite.css" rel="stylesheet"> --%>
+   <%-- <script src="${pageContext.request.contextPath }/resources/js/summernote/summernote.js" defer></script> --%>
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css" rel="stylesheet">
    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.js" defer></script>
    
 </head>
