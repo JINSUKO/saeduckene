@@ -222,6 +222,8 @@ public class boardListController {
 		model.addAttribute("category",boardService.getCategory(categoryNo));
 		model.addAttribute("board", boardVo);
 		
+		UserVO boardUserVo = userService.getUserVoWithNo(boardVo.getBoardUserNo());
+		model.addAttribute("nickName", boardUserVo.getUserNickname());
 		
 		return "board/boardDetail";
 	}
