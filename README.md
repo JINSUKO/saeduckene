@@ -29,3 +29,5 @@ http://sussaeduck.store/
 
 ## 🗒️ ERD
 ![ERD](https://user-images.githubusercontent.com/99123637/223102649-2ba5a71d-94f2-4216-bc33-daba47e0055f.png)
+
+##  주요 화면 구성
