@@ -3,6 +3,7 @@
 
 MANIFEST.MF
 pom.properties
+seaduckene/target/classes/
 
 ### Eclipse ###
 .metadata
