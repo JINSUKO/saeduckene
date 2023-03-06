@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.seaduckene.board.mapper.IBoardReplyMapper">
+	
+	<insert id="replyRegist">
+		INSERT INTO reply (reply_no, reply_content, reply_board_no ,reply_user_no)
+		VALUES (reply_no_seq.NEXTVAL, #{replyContent}, #{replyBoardNo}, #{replyUserNo})
+	</insert>
+	
+	<select id="getList" resultType="boardReplyList">
+		<![CDATA[	
+		SELECT * FROM
+			(
+				SELECT ROWNUM AS rn, tbl.reply_no, tbl.reply_content, tbl.reply_reg_date, tbl.reply_up_date
+						, tbl.reply_board_no, tbl.reply_user_no, tbl2.user_no, tbl2.user_nickname
+						, (SELECT COUNT(*) FROM replylike WHERE like_reply_no = tbl.reply_no AND like_state = 1) AS like_count
+				FROM (
+				        SELECT * FROM reply r
+				        WHERE r.reply_board_no = #{bno}
+				      ) tbl,
+				      (
+				        SELECT * FROM duck_user
+				      ) tbl2
+				WHERE tbl.reply_user_no = tbl2.user_no
+				ORDER BY tbl.reply_no DESC
+			)
+		WHERE rn > (#{paging.pageNum}-1) * #{paging.cpp}
+		AND rn <= #{paging.pageNum} * #{paging.cpp}
+	 	]]>
+	</select>
+  
+	<select id="getTotal" resultType="int">
+		SELECT COUNT(*)
+		FROM reply
+		WHERE reply_board_no = #{bno}
+	</select>
+  
+	<select id="pwCheck" resultType="int">
+		SELECT COUNT(*) 
+		FROM reply
+		WHERE reply_no = #{replyNo} AND reply_pw = #{replyPw}
+	</select>
+   
+	<update id="update">
+		UPDATE reply
+		SET reply_content = #{replyContent}, reply_up_date = sysdate
+		WHERE reply_no = #{replyNo}
+	</update>
+   
+	<delete id="delete">
+		DELETE FROM reply
+		WHERE reply_no = #{replyNo}
+	</delete>
+
+	
+</mapper>
+
+
+
+
+
+
+

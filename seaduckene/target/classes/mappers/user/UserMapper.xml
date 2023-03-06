@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.seaduckene.user.mapper.IUserMapper">
+	
+	<resultMap type="kr.co.seaduckene.user.command.Categories" id="categories">
+		<result property="categoryMajorTitle" column="category_major_title"/>
+		<collection property="categoryMinorList" resultMap="minorList"/>
+	</resultMap>
+	
+	<resultMap type="String" id="minorList">
+		<result property="categoryMinorTitle" column="category_minor_title"/>
+	</resultMap>
+	
+	
+	<sql id="profile_column">
+		<if test="userProfilePath != null">, user_profile_path, user_profile_folder,
+		 user_profile_file_name, user_profile_file_real_name</if>
+	</sql>
+	
+	<sql id="profile_value">
+		<if test="userProfilePath != null">, #{userProfilePath}, #{userProfileFolder},
+		 #{userProfileFileName}, #{userProfileFileRealName}</if>
+	</sql>
+	
+	<sql id="email_column">
+		<if test="userEmail != null">, user_email</if>
+	</sql>
+	
+	<sql id="email_value">
+		<if test="userEmail != null">, #{userEmail}</if>
+	</sql>
+	
+	<sql id="user_update_profile">
+		<if test="userProfilePath != null">
+		, user_profile_path = #{userProfilePath}, user_profile_folder = #{userProfileFolder} 
+		, user_profile_file_name = #{userProfileFileName}, user_profile_file_real_name = #{userProfileFileRealName}
+		 </if>
+	</sql>
+	
+	<sql id="delete_favorite_where">
+		<foreach collection="deleted_favorite_index" item="item" index="index" separator="," open="(" close=")">
+			(SELECT tbl2.favorite_no
+				  FROM (
+					  SELECT ROWNUM rn, tbl1.*
+						  FROM (
+								SELECT *
+								FROM favorite f JOIN duck_user u ON f.favorite_user_no = u.user_no
+								                JOIN category c ON f.favorite_category_no = c.category_no
+								WHERE u.user_no = #{userNo}
+								ORDER BY u.user_no, c.category_major_title, c.category_minor_title
+						  ) tbl1
+					  ) tbl2
+			  WHERE rn = #{item})
+		</foreach>
+	</sql>
+	
+	
+	<insert id="registUser">
+		INSERT INTO duck_user 
+		(user_no, user_id, user_pw, user_nickname, user_name, user_tel<include refid="profile_column" /><include refid="email_column" />)
+		VALUES (duck_user_seq.NEXTVAL, #{userId}, #{userPw}, #{userNickname},
+		 #{userName}, #{userTel}<include refid="profile_value" /><include refid="email_value" />)
+	</insert>
+	
+	<select id="getUserVo" resultType="user">
+		SELECT * FROM duck_user WHERE user_id = #{userId} AND user_pw = #{userPw}
+	</select>
+	
+	<select id="getUserVoWithNo" resultType="user">
+		SELECT * FROM duck_user WHERE user_no = #{userNo}
+	</select>
+	
+	<select id="getCategories" resultMap="categories">
+		SELECT category_major_title, category_minor_title FROM category
+		ORDER BY category_major_title, category_minor_title 
+	</select>
+	
+	<select id="getCategoryNo" resultType="int">
+		SELECT category_no FROM category WHERE category_major_title = #{categoryMajorTitle} AND category_minor_title = #{categoryMinorTitle}
+	</select>
+	
+	<select id="getUserNo" resultType="int">
+		SELECT user_no FROM duck_user WHERE user_id = #{userId}
+	</select>
+	
+	<insert id="insertFavorite">
+		INSERT INTO favorite (favorite_no, favorite_category_no, favorite_user_no) VALUES (favorite_seq.NEXTVAL, #{categoryNo}, #{userNo})
+	</insert>
+
+	<select id="getBasket" resultType="basket">
+		SELECT * FROM basket
+		WHERE basket_user_no = #{num}
+	</select>
+
+	<select id="checkId" resultType="int">
+		SELECT COUNT(*) FROM duck_user WHERE user_id = #{userId}
+	</select>
+	
+	<select id="checkNickname" resultType="int">
+		SELECT COUNT(*) FROM duck_user WHERE user_nickname = #{userNickname}
+	</select>
+	
+	<select id="getUserCategories" resultType="category">
+		SELECT *
+		FROM favorite f JOIN duck_user u ON f.favorite_user_no = u.user_no
+		                JOIN category c ON f.favorite_category_no = c.category_no
+		WHERE u.user_no = #{userNo}
+		ORDER BY u.user_no, c.category_major_title, c.category_minor_title
+	</select>
+	
+	<select id="findAccount" resultType="String">
+		SELECT user_id FROM duck_user
+		WHERE user_name = #{userName} AND user_email = #{userEmail}
+	</select>
+	
+	<select id="updatePw">
+		UPDATE duck_user SET user_pw = #{tmpPw}
+		WHERE user_id = #{userId}
+	</select>
+
+	<update id="setAutoLogin">
+		UPDATE duck_user SET user_session_id = #{userSessionId}, user_cookie_expire_date = #{userCookieExpireDate} WHERE user_no = #{userNo}
+	</update>
+	
+	<select id="getUserBySessionId" resultType="user">
+		SELECT * FROM duck_user WHERE user_session_id = #{sessionId}
+	</select>
+	
+	<update id="undoAutoLogin">
+		UPDATE duck_user SET user_session_id = null, user_cookie_expire_date = null WHERE user_no = #{userNo}
+	</update>
+	
+	<select id="checkCurrPw" resultType="int">
+		SELECT COUNT(*) FROM duck_user WHERE user_no = #{userNo} AND user_pw = #{userPw}
+	</select>
+	
+	<update id="changePw">
+		UPDATE duck_user SET user_pw = #{modiPw} WHERE user_no = #{userNo}
+	</update>
+	
+	<update id="updateUserInfo">
+		UPDATE duck_user SET user_nickname = #{userNickname}, user_name = #{userName}, user_tel = #{userTel}, 
+											user_email = #{userEmail} <include refid="user_update_profile" />
+		WHERE user_id = #{userId}
+	</update>
+	
+	<select id="getUserFavorites" resultType="favorite">
+		SELECT *
+		FROM favorite f JOIN duck_user u ON f.favorite_user_no = u.user_no
+		                JOIN category c ON f.favorite_category_no = c.category_no
+		WHERE u.user_no = #{userNo}
+		ORDER BY u.user_no, c.category_major_title, c.category_minor_title
+	</select>
+	
+	<delete id="deleteUserFavorites">
+		DELETE FROM favorite 
+		WHERE favorite_no in <include refid="delete_favorite_where" />
+	</delete>
+	
+	<update id="updateUserFavorites">
+		UPDATE favorite SET favorite_category_no = #{categoryNo} WHERE favorite_no = #{favoriteNo} AND favorite_user_no = #{userNo}
+	</update>	
+	
+	<select id="getCountUserAddress" resultType="int">
+		SELECT COUNT(*) FROM favorite WHERE favorite_user_no = #{userNo}
+	</select>
+	
+	<delete id="deleteUserAllInfoUser">
+		DELETE FROM duck_user WHERE user_no = #{userNo}
+	</delete>
+	
+	<delete id="deleteUserAllInfofavorite">
+		DELETE FROM favorite WHERE favorite_user_no = #{userNo}
+	</delete>
+	
+	<select id="checkUser" resultType="int">
+		SELECT COUNT(*) FROM duck_user
+		WHERE user_id = #{userId} AND user_email = #{userEmail}
+	</select>
+	
+</mapper>

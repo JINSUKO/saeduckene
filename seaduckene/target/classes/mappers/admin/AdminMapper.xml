@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.seaduckene.admin.mapper.IAdminMapper">
+
+	<sql id="orderSearch">
+		<if test="type == 'name'">WHERE u.user_name LIKE '%'||#{keyword}||'%'</if>
+		<if test="type == 'phone'">WHERE u.user_tel LIKE '%'||#{keyword}||'%'</if>
+		<if test="type == 'orderNum'">WHERE d.order_num LIKE '%'||#{keyword}||'%'</if>
+		<if test="type == 'orderStatus'">WHERE d.order_status LIKE '%'||#{keyword}||'%'</if>
+	</sql>
+	
+	<sql id="askSearch">
+		<if test="type == 'name'">INNER JOIN duck_user d ON a.ask_list_user_no = d.user_no WHERE d.user_name LIKE '%'||#{keyword}||'%'</if>
+		<if test="type == 'yes'"> </if>
+		<if test="type == 'no'">WHERE ask_list_reply_content IS NULL</if>
+	</sql>
+	
+	<sql id="askCategorySearch">
+		<if test="type == 'name'">INNER JOIN duck_user d ON a.ask_board_user_no = d.user_no WHERE d.user_name LIKE '%'||#{keyword}||'%'</if>
+		<if test="type == 'yes'"> </if>
+		<if test="type == 'no'">WHERE ask_board_reply_content IS NULL</if>
+	</sql>
+	
+	<sql id="productSearch">
+		<if test="type == 'productNo'">WHERE product_no LIKE '%'||#{keyword}||'%'</if>
+		<if test="type == 'productName'">WHERE product_name LIKE '%'||#{keyword}||'%'</if>
+	</sql>
+	
+	<resultMap type="askCategoryBoard" id="askCategoryBoardCLOB">
+		<result property="askBoardContent" column="ask_board_content" jdbcType="CLOB" javaType="java.lang.String" />
+	</resultMap>
+	
+	<select id="getAdminVo" resultType="admin">
+		SELECT * FROM admin_login WHERE admin_id = #{adminId} AND admin_pw = #{adminPw}
+	</select>
+	
+	<insert id="write">
+		INSERT INTO notice (notice_no, notice_title, notice_content) 
+		VALUES (notice_no_seq.NEXTVAL, #{noticeTitle}, #{noticeContent})
+	</insert>
+	
+	<select id="usersSearch" resultType="adminSearch">
+		SELECT u.user_id, u.user_name, u.user_tel, u.user_email, 
+		       d.order_num, d.order_quantity, d.order_price, d.order_status,
+		       d.order_recipient_name, d.order_recipient_tel,
+		       d.order_address_zip_num, d.order_address_basic,
+		       d.order_address_detail, d.order_payment_method,
+		       d.order_return_bank, d.order_return_account,
+		       d.order_reg_date,d.order_invoice_no
+		FROM duck_user u
+		INNER JOIN duck_order d
+		ON u.user_no = d.order_user_no
+		<include refid="orderSearch" />
+		ORDER BY d.order_reg_date DESC
+	</select>
+
+	<update id="insertInvoice">
+		UPDATE duck_order SET order_invoice_no = #{invoiceNum},order_status = '배송중'
+		WHERE order_num = #{orderNum}
+	</update>
+	
+		<update id="cancleOrder">
+		UPDATE duck_order SET order_status = '취소완료'
+		WHERE order_num = #{orderNum}
+	</update>
+	
+	<update id="refund">
+		UPDATE duck_order SET order_status = '반품완료'
+		WHERE order_num = #{orderNum}
+	</update>
+	
+	<select id="getProductList" resultType="prodcut">
+		SELECT * FROM product
+		<include refid="productSearch" />
+	</select>
+	
+	<insert id="setAsk">
+		INSERT INTO ask_list (ask_list_no, ask_list_user_no, ask_list_select_no, ask_list_content)
+		VALUES (ask_list_seq.NEXTVAL, #{askListUserNo}, #{askListSelectNo}, #{askListContent})
+	</insert>
+	
+	<select id="getAskLisk" resultType="askList">
+		SELECT * FROM ask_list 
+		WHERE ask_list_user_no = #{userNo} 
+		ORDER BY ask_list_no DESC
+	</select>
+	
+	<select id="getAdminAskLisk" resultType="askList">
+		SELECT * FROM ask_list
+		ORDER BY ask_list_no DESC
+	</select>
+	
+	<select id="getAskSearchList" resultType="askList">
+		SELECT a.ask_list_no, a.ask_list_user_no, a.ask_list_content, a.ask_list_reg_date, 
+			   a.ask_list_up_date, a.ask_list_reply_content, a.ask_list_select_no, (SELECT user_name FROM duck_user WHERE a.ask_list_user_no = user_no) AS ask_list_user_name
+		FROM ask_list a
+		<include refid="askSearch" />
+		ORDER BY ask_list_no DESC
+	</select>
+	
+	<update id="setAskReply">
+		UPDATE ask_list SET ask_list_reply_content = #{reply} WHERE ask_list_no = #{askNo}
+	</update>
+
+	<insert id="insertCategoryBoard">
+		INSERT INTO ask_category_board
+		VALUES (ask_category_board_seq.NEXTVAL, #{askBoardMajorCategory}, #{askBoardMinorCategory}, #{askBoardTitle}
+		, #{askBoardContent}, default, null , #{askBoardReplyContent}, #{askBoardUserNo})
+	</insert>
+	
+	<select id="getUserAskCategoryBoardList" resultType="askCategoryBoard">
+		SELECT * FROM ask_category_board
+		WHERE ask_board_user_no = #{userNo} 
+		ORDER BY ask_board_no DESC
+	</select>
+	
+	<select id="getAskCategoryBoard" resultMap="askCategoryBoardCLOB">
+		SELECT * FROM ask_category_board
+		WHERE ask_board_no = #{askBoardNo}
+	</select>
+	
+	<select id="getAllAskCategoryBoardList" resultType="askCategoryBoard">
+		SELECT a.*, (SELECT user_name FROM duck_user WHERE user_no = a.ask_board_user_no) as ask_board_user_name
+		FROM ask_category_board a
+		<include refid="askCategorySearch" />
+		ORDER BY a.ask_board_no DESC
+	</select>
+	
+	<update id="setAskCategoryReply">
+		UPDATE ask_category_board SET ask_board_reply_content = #{reply}, ask_board_update_date = sysdate WHERE ask_board_no = #{askNo}
+		ORDER BY ask_board_no DESC
+	</update>
+
+</mapper>
