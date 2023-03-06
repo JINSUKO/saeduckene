@@ -18,6 +18,7 @@ local.properties
 .recommenders
 Servers/
 pom.properties
+*.class
 
 # External tool builders
 .externalToolBuilders/
