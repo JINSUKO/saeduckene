@@ -22,13 +22,15 @@ http://sussaeduck.store/
    * <img src="https://img.shields.io/badge/Bootstrap-7952B3?style=flat-square&logo=Bootstrap&logoColor=black">
 
 * Back   
-   * <img src="https://img.shields.io/badge/Java-344CB7?style=flat-square&logo=Java&logoColor=white"/>   
+   * <img src="https://img.shields.io/badge/Java-E34F26?style=flat-square&logo=Java&logoColor=white"/>   
    * <img src="https://img.shields.io/badge/Spring-6DB33F?style=flat-square&logo=Spring&logoColor=white"/>   
-   * <img src="https://img.shields.io/badge/-Jsp-344CB7?style=flat-square&logo=MyBatis&logoColor=white"/>   
+   * <img src="https://img.shields.io/badge/-Jsp-E34F26?style=flat-square&logo=MyBatis&logoColor=white"/>   
    * <img src="https://img.shields.io/badge/Oracle-F80000?style=flat-square&logo=Oracle&logoColor=white"/>(개발)   
    * <img src="https://img.shields.io/badge/MariaDB-003545?style=flat-square&logo=MariaDB&logoColor=white"/>(배포)   
 
 ## 🗒️ ERD
-![ERD](https://user-images.githubusercontent.com/99123637/223102649-2ba5a71d-94f2-4216-bc33-daba47e0055f.png)
+<p align="center"><img src="https://user-images.githubusercontent.com/99123637/223102649-2ba5a71d-94f2-4216-bc33-daba47e0055f.png" width="70%" height="70%" /></p>   
 
-##  주요 화면 구성
+## 📑 주요 화면 구성   
+<p align="center"><img src="https://user-images.githubusercontent.com/99123637/223145101-c2671d09-826a-4e6a-8caf-1f71dcb8fa86.png" width="50%" height="50%" />&nbsp;&nbsp;&nbsp;&nbsp;<img src="" width="50%" height="50%" /></p>   
+<p align="center"><img src="" width="50%" height="50%" /><img src="" width="50%" height="50%" /></p>   
