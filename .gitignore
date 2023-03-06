@@ -19,6 +19,7 @@ local.properties
 Servers/
 pom.properties
 *.class
+/target/classes/
 
 # External tool builders
 .externalToolBuilders/
