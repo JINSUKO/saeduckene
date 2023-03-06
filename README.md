@@ -32,12 +32,12 @@ http://sussaeduck.store/
 <p align="center"><img src="https://user-images.githubusercontent.com/99123637/223102649-2ba5a71d-94f2-4216-bc33-daba47e0055f.png" width="70%" height="70%" /></p>   
 
 ## 📑 주요 화면 구성   
-<p align="center"><img src="https://user-images.githubusercontent.com/99123637/223145101-c2671d09-826a-4e6a-8caf-1f71dcb8fa86.png" width="40%" height="270px"/>&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://user-images.githubusercontent.com/99123637/223150143-7024dd20-84eb-4c28-9565-ebfd0a8a4b63.png" width="40%" height="270px"/></p>   
-<p align="center"><img src="https://user-images.githubusercontent.com/99123637/223151072-aab1814e-2e33-477b-bbc5-a7e1b4e6eeab.png" width="40%" height="270px"/>&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://user-images.githubusercontent.com/99123637/223151181-dff631e2-8e6f-42fe-973e-973acd7086ae.png" width="40%" height="270px"/></p>   
-<p align="center"><img src="https://user-images.githubusercontent.com/99123637/223152536-5e73dac7-c09e-491a-9178-5219340742b4.png" width="40%" height="270px"/>&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://user-images.githubusercontent.com/99123637/223151330-e83b92ab-8780-4a27-b773-1470bb0c53cd.png" width="40%" height="270px"/></p>   
-<p align="center"><img src="https://user-images.githubusercontent.com/99123637/223151737-e5651eaf-eabb-462f-abdf-600625f7c09c.png" width="40%" height="270px"/>&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://user-images.githubusercontent.com/99123637/223151794-a50204ee-3be3-42a7-9a50-cd1c9b72767e.png" width="40%" height="270px"/></p>   
-<p align="center"><img src="https://user-images.githubusercontent.com/99123637/223152640-596834b8-b45a-40e5-a0a7-b4c113f3f34f.png" width="40%" height="270px"/>&nbsp;&nbsp;&nbsp;&nbsp;<img src="" width="40%" height="270px"/></p>   
-<p align="center"><img src="" width="40%" height="270px"/>&nbsp;&nbsp;&nbsp;&nbsp;<img src="" width="40%" height="270px"/></p> 
+<p align="center"><img src="https://user-images.githubusercontent.com/99123637/223145101-c2671d09-826a-4e6a-8caf-1f71dcb8fa86.png" width="40%" height="290px"/>&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://user-images.githubusercontent.com/99123637/223150143-7024dd20-84eb-4c28-9565-ebfd0a8a4b63.png" width="40%" height="290px"/></p>   
+<p align="center"><img src="https://user-images.githubusercontent.com/99123637/223151072-aab1814e-2e33-477b-bbc5-a7e1b4e6eeab.png" width="40%" height="290px"/>&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://user-images.githubusercontent.com/99123637/223151181-dff631e2-8e6f-42fe-973e-973acd7086ae.png" width="40%" height="290px"/></p>   
+<p align="center"><img src="https://user-images.githubusercontent.com/99123637/223152536-5e73dac7-c09e-491a-9178-5219340742b4.png" width="40%" height="290px"/>&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://user-images.githubusercontent.com/99123637/223151330-e83b92ab-8780-4a27-b773-1470bb0c53cd.png" width="40%" height="290px"/></p>   
+<p align="center"><img src="https://user-images.githubusercontent.com/99123637/223151737-e5651eaf-eabb-462f-abdf-600625f7c09c.png" width="40%" height="290px"/>&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://user-images.githubusercontent.com/99123637/223151794-a50204ee-3be3-42a7-9a50-cd1c9b72767e.png" width="40%" height="290px"/></p>   
+<p align="center"><img src="https://user-images.githubusercontent.com/99123637/223152640-596834b8-b45a-40e5-a0a7-b4c113f3f34f.png" width="40%" height="290px"/>&nbsp;&nbsp;&nbsp;&nbsp;<img src="" width="40%" height="290px"/></p>   
+<p align="center"><img src="" width="40%" height="290px"/>&nbsp;&nbsp;&nbsp;&nbsp;<img src="" width="40%" height="290px"/></p> 
 
 
 
