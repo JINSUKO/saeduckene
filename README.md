@@ -28,8 +28,9 @@ http://sussaeduck.store/
    * <img src="https://img.shields.io/badge/Oracle-F80000?style=flat-square&logo=Oracle&logoColor=white"/>(개발)   
    * <img src="https://img.shields.io/badge/MariaDB-003545?style=flat-square&logo=MariaDB&logoColor=white"/>(배포)   
 ## 구현 기능   
-1. 유저(요청 url:/uesr/**)
-2. 게시글(요청 url:/board/**)
+1. 유저(요청 url:/uesr/*)
+2. 게시글(요청 url:/board/*)
+3. 
 
 ## 🗒️ ERD
 <p align="center"><img src="https://user-images.githubusercontent.com/99123637/223102649-2ba5a71d-94f2-4216-bc33-daba47e0055f.png" width="70%" height="70%" /></p>   
