@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.seaduckene.board.mapper.IBoardReplyLikeMapper">
+	
+	<select id="searchLike" resultType="replyLike">
+		SELECT * FROM replyLike
+		WHERE like_reply_no = #{likeReplyNo}
+		AND like_user_no = #{likeUserNo}
+	</select>
+	
+	<insert id="createLike">
+		INSERT INTO replyLike
+		(like_no,like_reply_no,like_user_no,like_state)
+		VALUES
+		(reply_like_no_seq.NEXTVAL,#{likeReplyNo},#{likeUserNo},1)
+	</insert>
+	
+	<update id="deleteLike">
+		UPDATE replyLike SET like_state=0 WHERE like_no=#{no}
+	</update>
+	
+	<update id="makeLike">
+		UPDATE replyLike SET like_state=1 WHERE like_no=#{no}
+	</update>
+	
+	<select id="listLike" resultType="replyLike">
+		SELECT * FROM replyLike
+		WHERE like_user_no = #{userNo}
+	</select>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
