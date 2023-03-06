@@ -14,18 +14,19 @@ http://sussaeduck.store/
 
 ## 🛠️ 사용 기술   
 * Front   
-   * HTML   
-   * CSS   
-   * JavaScript   
-   * Jsp   
-   * jQeury   
+   * <img src="https://img.shields.io/badge/HTML-E34F26?style=flat-square&logo=html5&logoColor=black">   
+   * <img src="https://img.shields.io/badge/CSS-1572B6?style=flat-square&logo=css3&logoColor=black">   
+   * <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=JavaScript&logoColor=black">   
+   * <img src="https://img.shields.io/badge/-Jsp-344CB7?style=flat-square&logo=Java&logoColor=black"/>   
+   * <img src="https://img.shields.io/badge/jQuery-0769AD?style=flat-square&logo=jQuery&logoColor=black">  
+   * <img src="https://img.shields.io/badge/Bootstrap-7952B3?style=flat-square&logo=Bootstrap&logoColor=black">
 
 * Back   
-   * Java   
-   * Spring   
-   * MyBatis   
-   * OracleDB(개발)   
-   * MariaDB(배포)   
+   * <img src="https://img.shields.io/badge/Java-344CB7?style=flat-square&logo=Java&logoColor=white"/>   
+   * <img src="https://img.shields.io/badge/Spring-6DB33F?style=flat-square&logo=Spring&logoColor=white"/>   
+   * <img src="https://img.shields.io/badge/-Jsp-344CB7?style=flat-square&logo=MyBatis&logoColor=white"/>   
+   * <img src="https://img.shields.io/badge/Oracle-F80000?style=flat-square&logo=Oracle&logoColor=white"/>(개발)   
+   * <img src="https://img.shields.io/badge/MariaDB-003545?style=flat-square&logo=MariaDB&logoColor=white"/>(배포)   
 
 ## 🗒️ ERD
 ![ERD](https://user-images.githubusercontent.com/99123637/223102649-2ba5a71d-94f2-4216-bc33-daba47e0055f.png)
