@@ -32,6 +32,6 @@ http://sussaeduck.store/
 <p align="center"><img src="https://user-images.githubusercontent.com/99123637/223102649-2ba5a71d-94f2-4216-bc33-daba47e0055f.png" width="70%" height="70%" /></p>   
 
 ## 📑 주요 화면 구성   
-<p align="center"><img src="https://user-images.githubusercontent.com/99123637/223145101-c2671d09-826a-4e6a-8caf-1f71dcb8fa86.png" width="50%" height="50%" />&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://user-images.githubusercontent.com/99123637/223150143-7024dd20-84eb-4c28-9565-ebfd0a8a4b63.png" width="50%" height="50%" /></p>   
+<p align="center"><img src="https://user-images.githubusercontent.com/99123637/223145101-c2671d09-826a-4e6a-8caf-1f71dcb8fa86.png" width="30%" height="30%" />&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://user-images.githubusercontent.com/99123637/223150143-7024dd20-84eb-4c28-9565-ebfd0a8a4b63.png" width="30%" height="30%" /></p>   
 
 <p align="center"><img src="" width="50%" height="50%" /><img src="" width="50%" height="50%" /></p>   
