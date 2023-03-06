@@ -24,7 +24,7 @@ http://sussaeduck.store/
 * Back   
    * <img src="https://img.shields.io/badge/Java-E34F26?style=flat-square&logo=Java&logoColor=white"/>   
    * <img src="https://img.shields.io/badge/Spring-6DB33F?style=flat-square&logo=Spring&logoColor=white"/>   
-   * <img src="https://img.shields.io/badge/-Jsp-E34F26?style=flat-square&logo=MyBatis&logoColor=white"/>   
+   * <img src="https://img.shields.io/badge/MyBatis-E34F26?style=flat-square&logo=MyBatis&logoColor=white"/>   
    * <img src="https://img.shields.io/badge/Oracle-F80000?style=flat-square&logo=Oracle&logoColor=white"/>(개발)   
    * <img src="https://img.shields.io/badge/MariaDB-003545?style=flat-square&logo=MariaDB&logoColor=white"/>(배포)   
 
