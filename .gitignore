@@ -3,6 +3,7 @@
 
 MANIFEST.MF
 pom.properties
+seaduckene/target/classes/
 
 ### Eclipse ###
 .metadata
@@ -19,7 +20,6 @@ local.properties
 Servers/
 pom.properties
 *.class
-/target/classes/
 
 # External tool builders
 .externalToolBuilders/
