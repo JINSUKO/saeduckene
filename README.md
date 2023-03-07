@@ -36,10 +36,10 @@ http://sussaeduck.store/
 2. 게시글(요청 url:/board/**)
    * 글 작성 및 글 수정 - 기본 html form 태그와 Text Editor 중 SummerNote API 사용.
    * 게시글 리스트 - board 테이블과 category 테이블 등 Join 하여 데이터 전송.
-   * 글 상세 - 게시글은 board 테이블과 user 테이블 Join, 댓글은 작성 시 비동기 처리로 데이터 요청.
+   * 글 상세 - 게시글은 board 테이블과 user 테이블 Join, 댓글은 작성 시 비동기 처리로 데이터 요청.   
 3. 상품(요청 url:/product/**)
    * 상품 주문 및 결제 - 무통장 결제는 기본 html form 태그로 처리, 카드 결제는 Toss Payments API 사용.
-   * 장바구니 - 기본 html form 태그로 처리.
+   * 장바구니 - 기본 html form 태그로 처리.   
 4. 관리자 전용(요청 url:/admin/**)
    * 상품 등록 및 수정 - 기본 html form 태그로 처리.
    * 로그인 및 로그아웃 - 세션으로 저장하여 구현.
