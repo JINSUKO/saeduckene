@@ -17,7 +17,7 @@ http://sussaeduck.store/
    * <img src="https://img.shields.io/badge/HTML-E34F26?style=flat-square&logo=html5&logoColor=black">   
    * <img src="https://img.shields.io/badge/CSS-1572B6?style=flat-square&logo=css3&logoColor=black">   
    * <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=JavaScript&logoColor=black">   
-   * <img src="https://img.shields.io/badge/-Jsp-344CB7?style=flat-square&logo=Java&logoColor=black"/>   
+   * <img src="https://img.shields.io/badge/-Jsp-E34F26?style=flat-square&logo=Java&logoColor=black"/>   
    * <img src="https://img.shields.io/badge/jQuery-0769AD?style=flat-square&logo=jQuery&logoColor=black">  
    * <img src="https://img.shields.io/badge/Bootstrap-7952B3?style=flat-square&logo=Bootstrap&logoColor=black">
 
