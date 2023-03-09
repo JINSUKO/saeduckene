@@ -31,6 +31,9 @@
 		        <div class="group text-center">
 		          <input type="button" class="button sbtn cyan rounded" value="로그인" id="user-login-submit">
 		        </div>
+		        <div class="group hr text-center">
+		          <a href="${KktUrl}"><img src="${pageContext.request.contextPath}/resources/img/kakao_login_medium_narrow.png" /></a>
+		        </div>
 		        <div class="hr"></div>
 		        <div class="foot-lnk">
 		          <a href="<c:url value='/user/userJoin'/>">회원가입</a> <br>

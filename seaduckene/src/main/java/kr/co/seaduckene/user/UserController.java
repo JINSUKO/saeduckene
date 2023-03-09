@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +45,7 @@ import kr.co.seaduckene.admin.service.IAdminService;
 import kr.co.seaduckene.board.service.IBoardService;
 import kr.co.seaduckene.common.AddressVO;
 import kr.co.seaduckene.common.CategoryVO;
+import kr.co.seaduckene.product.command.KakaoLoginService;
 import kr.co.seaduckene.product.command.ProductBasketVO;
 import kr.co.seaduckene.product.command.ProductOrderVO;
 import kr.co.seaduckene.product.command.ProductVO;
@@ -74,9 +76,27 @@ public class UserController {
 	@Autowired
 	private IAdminService adminService;
 	
+	@Autowired
+	private KakaoLoginService kktLoginService;
 
 	@GetMapping("/userLogin")
-	public void userLogin() {}
+	public void userLogin(Model model) {
+		log.info("login get 요청");
+		model.addAttribute("KktUrl", kktLoginService.getKakaoAuthUrl());
+	}
+	
+	
+	@GetMapping("/userKakaoLogin")
+	public void userKaKaoLogin(String code, String state, String error, String error_description) {
+		log.info("kakaoLogin redirect uri 요청");
+		log.info(error);
+		log.info(error_description);
+		
+		if (error == null && state.equals(kktLoginService.getState())) {
+			kktLoginService.getKakaoAuthToken(code);
+		}
+		
+	}
 	
 	@PostMapping("/userLoginAuth")
 	public ModelAndView userLogin(UserVO userVO, ModelAndView modelAndView, int autoLoginCheck) {
@@ -681,5 +701,6 @@ public class UserController {
 		
 		return "/user/userAskCategoryBoardDetail";
 	}
+
 
 }
