@@ -30,8 +30,8 @@ http://sussaeduck.store/
 ## 구현 기능   
 1. 유저 (요청 url: /user/**)
    * 로그인, 로그아웃 및 자동 로그인 - 세션과 쿠키로 저장하여 구현.
-   * 이메일 인증 및 비밀번호 찾기 - Spring Framework에서 제공하는 Spring Context Support의 JavaMailSender와 MimeMessageHelper 라이브러리 사용.
-   * 회원가입, 회원정보 수정 및 아이디 찾기 - 기본 html form 태그로 처리, 카카오 주소 API로 사용.
+   * 이메일 인증 및 비밀번호 찾기 - Spring Framework에서 제공하는 Spring Context Support 의 JavaMailSender와 MimeMessageHelper 클래스 사용.
+   * 회원가입, 회원정보 수정 및 아이디 찾기 - 기본 html form 태그로 처리, 카카오 주소 API 사용.
    * 닉네임과 아이디 중복확인 - ajax로 비동기 처리하여 db 접근.   
 2. 게시글 (요청 url: /board/**)
    * 글 작성 및 글 수정 - 기본 html form 태그와 Text Editor 중 SummerNote 라이브러리 사용.
