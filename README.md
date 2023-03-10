@@ -30,11 +30,11 @@ http://sussaeduck.store/
 ## 구현 기능   
 1. 유저 (요청 url: /user/**)
    * 로그인, 로그아웃 및 자동 로그인 - 세션과 쿠키로 저장하여 구현.
-   * 이메일 인증 및 비밀번호 찾기 - Spring Framework에서 제공하는 Spring Context Support의 JavaMailSender와 MimeMessageHelper API 사용.
+   * 이메일 인증 및 비밀번호 찾기 - Spring Framework에서 제공하는 Spring Context Support의 JavaMailSender와 MimeMessageHelper 라이브러리 사용.
    * 회원가입, 회원정보 수정 및 아이디 찾기 - 기본 html form 태그로 처리, 카카오 주소 API로 사용.
    * 닉네임과 아이디 중복확인 - ajax로 비동기 처리하여 db 접근.   
 2. 게시글 (요청 url: /board/**)
-   * 글 작성 및 글 수정 - 기본 html form 태그와 Text Editor 중 SummerNote API 사용.
+   * 글 작성 및 글 수정 - 기본 html form 태그와 Text Editor 중 SummerNote 라이브러리 사용.
    * 게시글 리스트 - board 테이블과 category 테이블 등 Join 하여 데이터 전송.
    * 글 상세 - 게시글은 board 테이블과 user 테이블 Join, 댓글은 작성 시 비동기 처리로 데이터 요청.   
 3. 상품 (요청 url: /product/**)
@@ -45,7 +45,7 @@ http://sussaeduck.store/
    * 로그인 및 로그아웃 - 세션으로 저장하여 구현.
    * 주문 정보 검색 및 상품 정보 검색 - DB 테이블 Join하여 데이터 전송.
    * 게시판 문의 및 일반 문의 - 기본 html form 태그로 처리.
-   * 공지사항 등록 - 기본 html form 태그와 Text Editor 중 SummerNote API 사용.
+   * 공지사항 등록 - 기본 html form 태그와 Text Editor 중 SummerNote 라이브러리 사용.
 
 ## 🗒️ ERD
 <p align="center"><img src="https://user-images.githubusercontent.com/99123637/223102649-2ba5a71d-94f2-4216-bc33-daba47e0055f.png" width="70%" height="70%" /></p>   
