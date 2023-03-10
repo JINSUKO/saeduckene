@@ -2,6 +2,7 @@ package kr.co.seaduckene.user;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -93,6 +94,7 @@ public class UserController {
 		log.info(error_description);
 		
 		if (error == null && state.equals(kktLoginService.getState())) {
+			
 			kktLoginService.getKakaoAuthToken(code);
 		}
 		
