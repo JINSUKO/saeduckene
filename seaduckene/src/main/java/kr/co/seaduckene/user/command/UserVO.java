@@ -3,6 +3,7 @@ package kr.co.seaduckene.user.command;
 import java.sql.Timestamp;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -33,11 +34,9 @@ CREATE SEQUENCE duck_user_seq
     NOCYCLE;
 */
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class UserVO {
 	
 	private int userNo;
@@ -53,5 +52,8 @@ public class UserVO {
 	private String userProfileFolder;
 	private String userProfileFileName;
 	private String userProfileFileRealName;
+	
+	private String userKakaoId;
+	private String userKakaoAccessToken;
 
 }

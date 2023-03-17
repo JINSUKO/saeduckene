@@ -14,8 +14,20 @@ public interface IUserMapper {
 	// 유저 생성
 	void registUser(UserVO userVO);
 	
+	// 카카오 계정 정보 저장
+	void registKKLAcc(UserVO userVO);
+	
+	// 로그아웃 후 다시 카카오 계정 정보 업데이트
+	void updateKKLAccToken(UserVO userVO);
+	
 	// 유저 정보 가져오기
 	UserVO getUserVo(UserVO userVO);
+	
+	// 이미 생성한 카카오계정인지 확인
+	int checkKKL(String KKLId);
+	
+	// 카카오 계정으로 유저 정보 가져오기
+	UserVO getUserVoWthKKLId(String KKLId);
 	
 	// userNo로 유저 정보 가져오기 
 	UserVO getUserVoWithNo(int userNo);

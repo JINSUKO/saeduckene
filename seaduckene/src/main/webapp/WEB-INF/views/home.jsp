@@ -89,4 +89,9 @@
 	} else if ('${msg}' === 'askCategoryBoard') {
 		alert('게시글 문의가 정상적으로 요청되었습니다.');
 	}
+	
+	if ('${kakaoLogin}' === 'kakaoLogin') {
+		alert('카카오 로그인으로 로그인하셨습니다.\n원활한 서비스 이용을 위하여 개인정보를 변경해주세요.');		
+	}
+	
 </script>

@@ -103,24 +103,34 @@
 
             <ul class="nav login-box">
             <c:choose>
-            <c:when test="${admin!=null }">
-            	<li class="nav-item admin_logout"><a href="<c:url value='/admin/adminLogout' />"
-                  class="nav-link link-dark px-2">관리자접속중</a></li>
-               <li class="nav-item"><a href="<c:url value='/admin/adminMain' />"
-                  class="nav-link link-dark px-2">관리자메인</a></li>
-            </c:when>
-            <c:when test="${login == null}">
-               <li class="nav-item"><a href="<c:url value='/user/userLogin' />"
-                  class="nav-link link-dark px-2">Login</a></li>
-               <li class="nav-item"><a href="<c:url value='/user/userJoin' />"
-                  class="nav-link link-dark px-2">Sign up</a></li>
-            </c:when>
-         <c:otherwise>
-               <li class="nav-item"><a href="<c:url value='/user/userLogout' />"
-                  class="nav-link link-dark px-2">Logout</a></li>
-               <li class="nav-item"><a href="<c:url value='/user/userMyPage/1' />"
-                  class="nav-link link-dark px-2">My Page</a></li>
-         </c:otherwise>            
+	            <c:when test="${admin!=null }">
+	            	<li class="nav-item admin_logout"><a href="<c:url value='/admin/adminLogout' />"
+	                  class="nav-link link-dark px-2">관리자접속중</a></li>
+	               <li class="nav-item"><a href="<c:url value='/admin/adminMain' />"
+	                  class="nav-link link-dark px-2">관리자메인</a></li>
+	            </c:when>
+	            <c:when test="${login == null}">
+	               <li class="nav-item"><a href="<c:url value='/user/userLogin' />"
+	                  class="nav-link link-dark px-2">Login</a></li>
+	               <li class="nav-item"><a href="<c:url value='/user/userJoin' />"
+	                  class="nav-link link-dark px-2">Sign up</a></li>
+	            </c:when>
+	         	<c:otherwise>
+	         		<c:choose>
+	         			<c:when test="${kakao != null}">
+			               <li class="nav-item"><a href="${KakaoLogout}" class="nav-link link-dark px-2">
+		            		<img width="15px" height="15px" alt="카카오 로고" src="<c:url value='/resources/img/kakaotalk_sharing_btn_small_ov.png' />" />
+			               	Logout
+			               </a></li>
+	         			</c:when>
+	         			<c:otherwise>
+			               <li class="nav-item"><a href="<c:url value='/user/userLogout' />"
+			               	 class="nav-link link-dark px-2">Logout</a></li>
+	         			</c:otherwise>
+	         		</c:choose>
+	               <li class="nav-item"><a href="<c:url value='/user/userMyPage/1' />"
+	                  class="nav-link link-dark px-2">My Page</a></li>
+	         	</c:otherwise>            
             </c:choose>
             </ul>
          </div>
