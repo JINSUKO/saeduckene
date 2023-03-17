@@ -1,8 +1,10 @@
 package kr.co.seaduckene.user;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -12,14 +14,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.WebUtils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -46,13 +48,13 @@ import kr.co.seaduckene.admin.service.IAdminService;
 import kr.co.seaduckene.board.service.IBoardService;
 import kr.co.seaduckene.common.AddressVO;
 import kr.co.seaduckene.common.CategoryVO;
-import kr.co.seaduckene.product.command.KakaoLoginService;
 import kr.co.seaduckene.product.command.ProductBasketVO;
 import kr.co.seaduckene.product.command.ProductOrderVO;
 import kr.co.seaduckene.product.command.ProductVO;
 import kr.co.seaduckene.product.service.IProductService;
 import kr.co.seaduckene.user.command.UserVO;
 import kr.co.seaduckene.user.service.IUserService;
+import kr.co.seaduckene.user.service.KakaoLoginService;
 import kr.co.seaduckene.util.AskCategoryBoardVO;
 import kr.co.seaduckene.util.CertificationMailService;
 import lombok.extern.log4j.Log4j;
@@ -79,6 +81,7 @@ public class UserController {
 	
 	@Autowired
 	private KakaoLoginService kktLoginService;
+	
 
 	@GetMapping("/userLogin")
 	public void userLogin(Model model) {
@@ -88,26 +91,141 @@ public class UserController {
 	
 	
 	@GetMapping("/userKakaoLogin")
-	public void userKaKaoLogin(String code, String state, String error, String error_description) {
+	public ModelAndView userKaKaoLogin(String code, String state, String error, String error_description, ModelAndView modelAndView, RedirectAttributes ra) {
 		log.info("kakaoLogin redirect uri 요청");
-		log.info(error);
-		log.info(error_description);
+		log.info("error: " + error);
+		log.info("error_description: " + error_description);
 		
-		if (error == null && state.equals(kktLoginService.getState())) {
+		if (code == null && error == null) {
+			modelAndView.setViewName("redirect:/user/userLoginAuth");
 			
-			kktLoginService.getKakaoAuthToken(code);
+			return modelAndView;
 		}
 		
+		// 카카오 로그인 최초 시도 - 카카오계정 정보를 서비스DB에 저장함.
+		String kakaoAccessToken = null;
+		if (error == null && state.equals(kktLoginService.getState())) {
+			
+			kakaoAccessToken = kktLoginService.getKakaoAuthToken(code);
+			
+			Map<String, String> kakaoInfosMap = kktLoginService.getKakaoUserInfos(kakaoAccessToken);
+			
+			String KKLId = kakaoInfosMap.get("KKLId");
+			
+			UserVO userVo = new UserVO();
+			userVo.setUserId(kakaoInfosMap.get("userId"));
+			userVo.setUserPw(kakaoInfosMap.get("userPw"));
+			userVo.setUserNickname(kakaoInfosMap.get("userNickname"));
+			userVo.setUserName(kakaoInfosMap.get("userName"));
+			userVo.setUserTel(kakaoInfosMap.get("userTel"));
+			
+			// false == 계정이 없음 -> 계정, 카카오계정 등록 후 userVo 받음
+			if (!userService.checkKKL(KKLId)) {
+				userService.registUser(userVo);
+				
+				// userNo 있는 useVo 받음.
+				userVo = userService.getUserVo(userVo);
+				userVo.setUserKakaoId(KKLId);
+				userVo.setUserKakaoAccessToken(kakaoAccessToken);
+				
+				String[] majorTitle = {"미디어"};
+				String[] minorTitle = {"드라마"};
+				
+				userService.addUserFavorites(majorTitle, minorTitle, userVo.getUserNo());
+				
+				userService.registKKLAcc(userVo);
+				
+				// 카카오 url 이미지에서 파일 받아오고 로컬에 저장.
+				// 이미지 저장 데이터 준비
+				String KKLProfilePath = kakaoInfosMap.get("userProfilePath");
+				String KKLProfileFolder = kakaoInfosMap.get("userProfileFolder");
+				String KKLProfileImageName = kakaoInfosMap.get("userProfileFileName");
+				URL kakaoImageurl = null;
+				try {
+					kakaoImageurl = new URL(KKLProfilePath + KKLProfileFolder + "/" + KKLProfileImageName);
+					log.info("kakaoImageurl: " + kakaoImageurl);
+				} catch (MalformedURLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				SimpleDateFormat simple = new SimpleDateFormat("yyyyMMdd");
+				String today = simple.format(new Date());
+				
+				BufferedImage kakaoImage = null;
+				try {
+					kakaoImage = ImageIO.read(kakaoImageurl);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				KKLProfilePath = "c:/imgduck/user/";
+				KKLProfileFolder = today;
+				
+				String formatName = KKLProfileImageName.substring(KKLProfileImageName.lastIndexOf(".") + 1);
+				
+				String uploadFolder = KKLProfilePath + today;
+				
+				File saveFile = new File(uploadFolder + "/" + KKLProfileImageName);
+				
+				File folder = new File(uploadFolder);
+				if(!folder.exists()) {
+					folder.mkdirs();
+				}
+				
+				try {
+					log.info("kakaoImage: " + kakaoImage);
+					log.info("formatName: " + formatName);
+					log.info("saveFile: " + saveFile);
+					ImageIO.write(kakaoImage, formatName, saveFile);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				
+				userVo.setUserProfilePath(KKLProfilePath);
+				userVo.setUserProfileFolder(KKLProfileFolder);
+				userVo.setUserProfileFileName(KKLProfileImageName);
+				
+				userService.updateUserInfo(userVo);
+				
+			// true == 계정이 있음 -> 카카오계정으로 userVo 받음
+			} else {
+				userVo = userService.getUserVoWthKKLId(KKLId);
+				userVo.setUserKakaoAccessToken(kakaoAccessToken);
+				
+				userService.updateKKLAccToken(userVo);
+			}
+			
+			
+			log.info("Kakao Login userVo: " + userVo);
+			
+			modelAndView.addObject("userId", userVo.getUserId());
+			modelAndView.addObject("userPw", userVo.getUserPw());
+			
+			return modelAndView;
+		}
+		
+		ra.addFlashAttribute("msg", "kakaoFail");
+		modelAndView.setViewName("redirect:/user/userLogin");
+		
+		return modelAndView;
 	}
 	
+	@GetMapping("/userLoginAuth")
+	public void userLoginAuth() {}
+	
 	@PostMapping("/userLoginAuth")
-	public ModelAndView userLogin(UserVO userVO, ModelAndView modelAndView, int autoLoginCheck) {
+	public ModelAndView userLogin(UserVO userVO, ModelAndView modelAndView, int autoLoginCheck, String kakaoLogin) {
 		log.info(userVO);
 		
 		// 비밀번호 암호화는 나중에 구현할 것.
 		
 		modelAndView.addObject("userVo", userService.getUserVo(userVO));
 		modelAndView.addObject("autoLoginCheck", autoLoginCheck);
+		modelAndView.addObject("kakaoLogin", kakaoLogin);
 		
 		return modelAndView;
 	}
@@ -142,7 +260,13 @@ public class UserController {
 		}
 		
 		if (session.getAttribute("login") != null) {
+			
+//			int userNo = ((UserVO) session.getAttribute("login")).getUserNo();
+			
+//			kktLoginService.doKakaoLogout(userService.getUserVoWithNo(userNo));
+			
 			session.removeAttribute("login");
+			session.removeAttribute("kakao");
 		}
 		modelAndView.setViewName("redirect:/user/userLogin");
 		
@@ -652,6 +776,8 @@ public class UserController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		log.info("getProfile: " + result);
 		return result;
 	}
 	

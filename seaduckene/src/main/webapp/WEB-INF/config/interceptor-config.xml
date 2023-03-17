@@ -16,6 +16,7 @@
 	<bean id="adminLoginSuccessHandler" class="kr.co.seaduckene.util.interceptor.AdminLoginSuccessHandler" />
 	<bean id="adminLoginAccessHandler" class="kr.co.seaduckene.util.interceptor.AdminLoginAccessHandler" />
 	<bean id="CategoryHandler" class="kr.co.seaduckene.util.interceptor.CategoryHandler" />
+	<bean id="userGetMappingBlockHandler" class="kr.co.seaduckene.util.interceptor.UserGetMappingBlockHandler" />
 	
 	<mvc:interceptors>
 
@@ -46,6 +47,7 @@
 		
 		<mvc:interceptor>
 			<mvc:mapping path="/user/userLogin" />
+			<mvc:mapping path="/user/userKakaoLogin" />
 			<ref bean="userLoginVerifHandler" />
 		</mvc:interceptor>
 		
@@ -58,6 +60,7 @@
 			<mvc:mapping path="/board/notice" />
 			<mvc:mapping path="/user/userLogin" />
 			<mvc:mapping path="/user/userJoin" />
+			<mvc:mapping path="/user/userKakaoJoin" />
 			<mvc:mapping path="/user/userJoinSuccess" />
 			<mvc:mapping path="/user/userMyPage/**" />
 			<mvc:mapping path="/product/productDetail" />
@@ -80,6 +83,7 @@
 			<mvc:mapping path="/board/notice" />
 			<mvc:mapping path="/user/userLogin" />
 			<mvc:mapping path="/user/userJoin" />
+			<mvc:mapping path="/user/userKakaoJoin" />
 			<mvc:mapping path="/user/userJoinSuccess" />
 			<mvc:mapping path="/user/userMyPage/**" />
 			<mvc:mapping path="/product/productDetail" />
@@ -102,6 +106,10 @@
 			<mvc:mapping path="/product/createProduct" />
 			<mvc:mapping path="/admin/**" />
 			<ref bean="adminLoginAccessHandler" />
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/user/userLoginAuth" />
+			<ref bean="userGetMappingBlockHandler" />
 		</mvc:interceptor>
 		
 	</mvc:interceptors>

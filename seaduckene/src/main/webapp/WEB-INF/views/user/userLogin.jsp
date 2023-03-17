@@ -53,7 +53,11 @@
 <script>
 
 	if ('${msg}' === 'loginFail') {
-		alert('로그인 아이디 또는 비밀번호가 틀렸습니다.\n다시 입력하세요.');		
+		alert('로그인 아이디 또는 비밀번호가 틀렸습니다.\n다시 입력하세요.');
+	} else if('${msg}' === 'kakaoFail') {
+		alert('카카오로그인 중에 문제가 발생했습니다.\n다시 입력하거나, 카카오측에 문의하세요.');
+	} else if('${msg}' === 'wrongKakaoAccess') {
+		alert('카카오아이디로 일반 로그인하실 수 없습니다.\n카카오 로그인으로 접근해주세요.');
 	}
 	
 	$(function() {

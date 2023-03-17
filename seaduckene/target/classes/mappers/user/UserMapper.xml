@@ -65,12 +65,36 @@
 		 #{userName}, #{userTel}<include refid="profile_value" /><include refid="email_value" />)
 	</insert>
 	
+	<insert id="registKKLAcc">
+		INSERT INTO duck_user_kakao
+		VALUES (duck_user_kakao_seq.NEXTVAL, #{userKakaoId}, #{userKakaoAccessToken}, #{userNo})
+	</insert>
+	
+	<update id="updateKKLAccToken">
+		UPDATE duck_user_kakao SET user_kakao_access_token = #{userKakaoAccessToken}
+		WHERE user_kakao_user_no = #{userNo}
+	</update>
+	
+	<select id="checkKKL" resultType="int">
+		SELECT COUNT(*) FROM duck_user_kakao WHERE user_kakao_id = #{KKLId}
+	</select>
+		
 	<select id="getUserVo" resultType="user">
-		SELECT * FROM duck_user WHERE user_id = #{userId} AND user_pw = #{userPw}
+	    SELECT * 
+    	FROM duck_user u LEFT JOIN duck_user_kakao k ON u.user_no = k.user_kakao_user_no
+		WHERE user_id = #{userId} AND user_pw = #{userPw}
+	</select>
+	
+	<select id="getUserVoWthKKLId" resultType="user">
+	    SELECT * 
+  		FROM duck_user u LEFT JOIN duck_user_kakao k ON u.user_no = k.user_kakao_user_no
+		WHERE user_kakao_id = #{KKLId}
 	</select>
 	
 	<select id="getUserVoWithNo" resultType="user">
-		SELECT * FROM duck_user WHERE user_no = #{userNo}
+		SELECT * 
+	  	FROM duck_user u LEFT JOIN duck_user_kakao k ON u.user_no = k.user_kakao_user_no
+ 		WHERE user_no = #{userNo}
 	</select>
 	
 	<select id="getCategories" resultMap="categories">
@@ -116,10 +140,10 @@
 		WHERE user_name = #{userName} AND user_email = #{userEmail}
 	</select>
 	
-	<select id="updatePw">
+	<update id="updatePw">
 		UPDATE duck_user SET user_pw = #{tmpPw}
 		WHERE user_id = #{userId}
-	</select>
+	</update>
 
 	<update id="setAutoLogin">
 		UPDATE duck_user SET user_session_id = #{userSessionId}, user_cookie_expire_date = #{userCookieExpireDate} WHERE user_no = #{userNo}
@@ -142,8 +166,8 @@
 	</update>
 	
 	<update id="updateUserInfo">
-		UPDATE duck_user SET user_nickname = #{userNickname}, user_name = #{userName}, user_tel = #{userTel}, 
-											user_email = #{userEmail} <include refid="user_update_profile" />
+		UPDATE duck_user SET user_nickname = #{userNickname}, user_name = #{userName}, user_tel = #{userTel}
+											, user_email = #{userEmail} <include refid="user_update_profile" />
 		WHERE user_id = #{userId}
 	</update>
 	

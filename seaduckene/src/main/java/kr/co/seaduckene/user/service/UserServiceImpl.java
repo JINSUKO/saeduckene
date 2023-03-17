@@ -1,8 +1,6 @@
 package kr.co.seaduckene.user.service;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -46,8 +44,27 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	public void registUser(UserVO userVO) {
-		
 		userMapper.registUser(userVO);
+	}
+	
+	@Override
+	public void registKKLAcc(UserVO userVO) {
+		userMapper.registKKLAcc(userVO);
+	}
+	
+	@Override
+	public void updateKKLAccToken(UserVO userVO) {
+		userMapper.updateKKLAccToken(userVO);
+	}
+	
+	@Override
+	public boolean checkKKL(String KKLId) {
+		return userMapper.checkKKL(KKLId) == 0 ? false : true;
+	}
+	
+	@Override
+	public UserVO getUserVoWthKKLId(String KKLId) {
+		return userMapper.getUserVoWthKKLId(KKLId);
 	}
 	
 	@Override

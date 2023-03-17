@@ -10,6 +10,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import kr.co.seaduckene.common.CategoryVO;
 import kr.co.seaduckene.product.service.IProductService;
+import kr.co.seaduckene.user.service.KakaoLoginService;
 import lombok.extern.log4j.Log4j;
 
 @Log4j
@@ -17,6 +18,9 @@ public class CategoryHandler implements HandlerInterceptor {
 	
 	@Autowired
 	private IProductService productService;
+	
+	@Autowired
+	private KakaoLoginService KKLService;
 	
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
@@ -31,6 +35,8 @@ public class CategoryHandler implements HandlerInterceptor {
 		List<CategoryVO> categoryList = productService.getCategory();
 		//model.addAttribute("categoryList" , categoryList);
 		request.setAttribute("ctListHeader" , categoryList);
+		
+		request.setAttribute("KakaoLogout", KKLService.getKakaoLogoutUrl());
 		
 		return true;
 	}

@@ -33,34 +33,54 @@ public class UserLoginSuccessHandler implements HandlerInterceptor {
 		
 		UserVO user = (UserVO) modelAndView.getModel().get("userVo");
 		log.info(user);
-
+		
+		String kakaoLogin = (String) modelAndView.getModel().get("kakaoLogin");
+		log.info("kakaoLogin: " + kakaoLogin);
+		
 		if (user == null) {
 			FlashMap fm = new FlashMap();
 			fm.put("msg", "loginFail");
 			FlashMapManager fmm = RequestContextUtils.getFlashMapManager(request);
 			fmm.saveOutputFlashMap(fm, request, response);
 			modelAndView.setViewName("redirect:/user/userLogin");
+			
+			// return이 없어도 함수 끝으로 가서 종료되므로 페이지가 이동된다.
+			return;
 
 		} else {
+			
+			// 카카오로그인 계정이 일반 로그인으로 로그인 시도할 때 막음.
+			if(kakaoLogin == null && user.getUserKakaoId() != null) {
+				FlashMap fm = new FlashMap();
+				fm.put("msg", "wrongKakaoAccess");
+				FlashMapManager fmm = RequestContextUtils.getFlashMapManager(request);
+				fmm.saveOutputFlashMap(fm, request, response);
+				
+				modelAndView.setViewName("redirect:/user/userLogin");	
+				
+				// return이 없으면 코드가 계속 진행해서 로그인이 된다.
+				return;
+			}
+			
 			log.info("로그인 성공!"); 
 			
 			if ((int) modelAndView.getModel().get("autoLoginCheck") == 1) {				
-					long expiredTime = 60 * 60 * 3;
-					
-					String loginSessionId = request.getSession().getId();
-					
-					Cookie autoLoginCookie = new Cookie("autoLoginCookie", loginSessionId);
-					autoLoginCookie.setPath(request.getContextPath() + "/");
-					autoLoginCookie.setMaxAge((int)expiredTime);
-					response.addCookie(autoLoginCookie);
-					
-					long expiredDateSeconds = System.currentTimeMillis() + expiredTime * 1000;
-					Timestamp expiredDate = new Timestamp(expiredDateSeconds);
-					
-					user.setUserSessionId(loginSessionId);
-					user.setUserCookieExpireDate(expiredDate);
-					
-					userService.setAutoLogin(user);
+				long expiredTime = 60 * 60 * 3;
+				
+				String loginSessionId = request.getSession().getId();
+				
+				Cookie autoLoginCookie = new Cookie("autoLoginCookie", loginSessionId);
+				autoLoginCookie.setPath(request.getContextPath() + "/");
+				autoLoginCookie.setMaxAge((int)expiredTime);
+				response.addCookie(autoLoginCookie);
+				
+				long expiredDateSeconds = System.currentTimeMillis() + expiredTime * 1000;
+				Timestamp expiredDate = new Timestamp(expiredDateSeconds);
+				
+				user.setUserSessionId(loginSessionId);
+				user.setUserCookieExpireDate(expiredDate);
+				
+				userService.setAutoLogin(user);
 			} else {
 				userService.undoAutoLogin(user.getUserNo());
 			}
@@ -70,6 +90,13 @@ public class UserLoginSuccessHandler implements HandlerInterceptor {
 			user = userService.getUserVoWithNo(user.getUserNo());
 			session.setAttribute("login", user);
 			
+			if (kakaoLogin != null) {
+				FlashMap fm = new FlashMap();
+				fm.put("kakaoLogin", "kakaoLogin");
+				FlashMapManager fmm = RequestContextUtils.getFlashMapManager(request);
+				fmm.saveOutputFlashMap(fm, request, response);
+				session.setAttribute("kakao", kakaoLogin);
+			}
 			modelAndView.addObject("autoLoginCheck", null);
 			modelAndView.setViewName("redirect:/");
 		}
