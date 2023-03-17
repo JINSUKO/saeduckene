@@ -68,8 +68,8 @@
 	</insert>
 	
 	<insert id="registKKLAcc">
-		INSERT INTO duck_user_kakao
-		VALUES (duck_user_kakao_seq.NEXTVAL, #{userKakaoId}, #{userKakaoAccessToken}, #{userNo})
+		INSERT INTO duck_user_kakao (user_kakao_id, user_kakao_access_token, user_kakao_user_no)
+		VALUES (#{userKakaoId}, #{userKakaoAccessToken}, #{userNo})
 	</insert>
 	
 	<update id="updateKKLAccToken">
