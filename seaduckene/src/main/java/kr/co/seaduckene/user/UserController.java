@@ -160,7 +160,7 @@ public class UserController {
 					e.printStackTrace();
 				}
 				
-				KKLProfilePath = "c:/imgduck/user/";
+				KKLProfilePath = "/ejsage3217/imgduck/user/";
 				KKLProfileFolder = today;
 				
 				String formatName = KKLProfileImageName.substring(KKLProfileImageName.lastIndexOf(".") + 1);
