@@ -67,11 +67,11 @@
 	
 	<insert id="registKKLAcc">
 		INSERT INTO duck_user_kakao
-		VALUES (duck_user_kakao_seq.NEXTVAL, #{userKakaoId}, #{userKakaoAccessToken}, #{userNo})
+		VALUES (duck_user_kakao_seq.NEXTVAL, #{userKakaoId}, #{userKakaoAccessToken}, default, #{userNo})
 	</insert>
 	
 	<update id="updateKKLAccToken">
-		UPDATE duck_user_kakao SET user_kakao_access_token = #{userKakaoAccessToken}
+		UPDATE duck_user_kakao SET user_kakao_access_token = #{userKakaoAccessToken}, user_kakao_expires_in = sysdate
 		WHERE user_kakao_user_no = #{userNo}
 	</update>
 	

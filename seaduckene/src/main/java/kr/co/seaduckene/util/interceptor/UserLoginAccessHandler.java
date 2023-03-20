@@ -46,7 +46,7 @@ public class UserLoginAccessHandler implements HandlerInterceptor {
 			String contPath = request.getContextPath();
 			
 			String htmlCodes = "	<script>\r\n"
-					+ "	alert('로그인이 필요한 페이지입니다.');\r\n"
+					+ "	alert('로그인 시간이 만료되었거나, 로그인을 하지 않으셨습니다.\n로그인 후 접근해주세요.');\r\n"
 					+ "	location.href='" + contPath + "/user/userLogin';\r\n"
 					+ "</script>";
 			out.print(htmlCodes);
