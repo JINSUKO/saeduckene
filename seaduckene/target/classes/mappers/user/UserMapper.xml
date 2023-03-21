@@ -73,7 +73,7 @@
 	</insert>
 	
 	<update id="updateKKLAccToken">
-		UPDATE duck_user_kakao SET user_kakao_access_token = #{userKakaoAccessToken}, user_kakao_reg_date = sysdate
+		UPDATE duck_user_kakao SET user_kakao_access_token = #{userKakaoAccessToken}, user_kakao_reg_date = CURRENT_TIMESTAMP()
 		WHERE user_kakao_user_no = #{userNo}
 	</update>
 	
@@ -82,12 +82,12 @@
 	</select>
 	
 	<insert id="registNVLAcc">
-		INSERT INTO duck_user_naver
-		VALUES (duck_user_naver_seq.NEXTVAL, #{userNaverId}, #{userNaverAccessToken}, default, #{userNo})
+		INSERT INTO duck_user_naver (user_naver_id, user_naver_access_token, user_naver_user_no)
+		VALUES (#{userNaverId}, #{userNaverAccessToken}, default, #{userNo})
 	</insert>
 	
 	<update id="updateNVLAccToken">
-		UPDATE duck_user_naver SET user_naver_access_token = #{userNaverAccessToken}, user_naver_reg_date = sysdate
+		UPDATE duck_user_naver SET user_naver_access_token = #{userNaverAccessToken}, user_naver_reg_date = CURRENT_TIMESTAMP()
 		WHERE user_naver_user_no = #{userNo}
 	</update>
 		
