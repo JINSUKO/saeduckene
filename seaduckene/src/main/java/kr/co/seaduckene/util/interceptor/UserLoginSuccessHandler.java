@@ -62,6 +62,18 @@ public class UserLoginSuccessHandler implements HandlerInterceptor {
 				
 				// return이 없으면 코드가 계속 진행해서 로그인이 된다.
 				return;
+				
+				// 카카오로그인 계정이 일반 로그인으로 로그인 시도할 때 막음.
+			} else if(naverLogin == null && user.getUserNaverId() != null) {
+				FlashMap fm = new FlashMap();
+				fm.put("msg", "wrongNaverAccess");
+				FlashMapManager fmm = RequestContextUtils.getFlashMapManager(request);
+				fmm.saveOutputFlashMap(fm, request, response);
+				
+				modelAndView.setViewName("redirect:/user/userLogin");	
+				
+				// return이 없으면 코드가 계속 진행해서 로그인이 된다.
+				return;
 			}
 			
 			log.info("로그인 성공!"); 
