@@ -312,7 +312,7 @@ public class UserController {
 					e.printStackTrace();
 				}
 				
-				NLProfilePath = "c:/imgduck/user/";
+				NLProfilePath = "/ejsage3217/imgduck/user/";
 				NLProfileFolder = today;
 				
 				String formatName = NLProfileImageName.substring(NLProfileImageName.lastIndexOf(".") + 1);
