@@ -58,8 +58,11 @@ public class CategoryHandler implements HandlerInterceptor {
 			
 			long currenTimeMillis = System.currentTimeMillis();
 			
-			boolean expriedKakaoToken  = (currenTimeMillis - loginTokenRegDate) >= 21599;
+			boolean expriedKakaoToken  = (currenTimeMillis - loginTokenRegDate) >= 21599000;
 			log.info("expriedKakaoToken: " + expriedKakaoToken);
+			
+			session.setAttribute("currenTimeMillis", currenTimeMillis);
+			session.setAttribute("loginTokenRegDate", loginTokenRegDate);
 			
 			if (expriedKakaoToken) {
 				session.removeAttribute("kakao");
@@ -76,7 +79,7 @@ public class CategoryHandler implements HandlerInterceptor {
 			
 			long currenTimeMillis = System.currentTimeMillis();
 			
-			boolean expriedKakaoToken  = (currenTimeMillis - loginTokenRegDate) >= 3600;
+			boolean expriedKakaoToken  = (currenTimeMillis - loginTokenRegDate) >= 3600000;
 			log.info("expriedKakaoToken: " + expriedKakaoToken);
 			
 			if (expriedKakaoToken) {

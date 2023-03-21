@@ -91,7 +91,6 @@ public class UserLoginSuccessHandler implements HandlerInterceptor {
 			HttpSession session = request.getSession();
 			user = userService.getUserVoWithNo(user.getUserNo());
 			session.setAttribute("login", user);
-			session.setMaxInactiveInterval(10*60);
 			
 			if (kakaoLogin != null) {
 				FlashMap fm = new FlashMap();
@@ -99,14 +98,12 @@ public class UserLoginSuccessHandler implements HandlerInterceptor {
 				FlashMapManager fmm = RequestContextUtils.getFlashMapManager(request);
 				fmm.saveOutputFlashMap(fm, request, response);
 				session.setAttribute("kakao", "카카오");
-				session.setMaxInactiveInterval(21599);
 			} else if(naverLogin != null) {
 				FlashMap fm = new FlashMap();
 				fm.put("naverLogin", "naverLogin");
 				FlashMapManager fmm = RequestContextUtils.getFlashMapManager(request);
 				fmm.saveOutputFlashMap(fm, request, response);
 				session.setAttribute("naver", "네이버");
-				session.setMaxInactiveInterval(3600);
 			}
 			modelAndView.addObject("autoLoginCheck", null);
 			modelAndView.setViewName("redirect:/");
