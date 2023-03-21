@@ -65,13 +65,26 @@ public class CategoryHandler implements HandlerInterceptor {
 				session.removeAttribute("kakao");
 				session.removeAttribute("login");
 			}
-		
 			
-		} else {
-
+		} else if(session.getAttribute("naver") != null) {
+			
+			int userNo = (Integer) ((UserVO) session.getAttribute("login")).getUserNo();
+			
+			UserVO userVo = userService.getUserVoWithNo(userNo);
+			
+			long loginTokenRegDate = userVo.getUserNaverRegDate().getTime();
+			
+			long currenTimeMillis = System.currentTimeMillis();
+			
+			boolean expriedKakaoToken  = (currenTimeMillis - loginTokenRegDate) >= 3600;
+			log.info("expriedKakaoToken: " + expriedKakaoToken);
+			
+			if (expriedKakaoToken) {
+				session.removeAttribute("naver");
+				session.removeAttribute("login");
+			}
+			
 		}
-		
-		
 		
 		return true;
 	}
