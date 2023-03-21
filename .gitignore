@@ -4,6 +4,7 @@
 MANIFEST.MF
 pom.properties
 seaduckene/target/classes/
+**/target/classes/
 
 ### Eclipse ###
 .metadata
