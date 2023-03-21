@@ -71,29 +71,51 @@
 	</insert>
 	
 	<update id="updateKKLAccToken">
-		UPDATE duck_user_kakao SET user_kakao_access_token = #{userKakaoAccessToken}, user_kakao_expires_in = sysdate
+		UPDATE duck_user_kakao SET user_kakao_access_token = #{userKakaoAccessToken}, user_kakao_reg_date = sysdate
 		WHERE user_kakao_user_no = #{userNo}
 	</update>
 	
 	<select id="checkKKL" resultType="int">
 		SELECT COUNT(*) FROM duck_user_kakao WHERE user_kakao_id = #{KKLId}
 	</select>
+	
+	<insert id="registNVLAcc">
+		INSERT INTO duck_user_naver
+		VALUES (duck_user_naver_seq.NEXTVAL, #{userNaverId}, #{userNaverAccessToken}, default, #{userNo})
+	</insert>
+	
+	<update id="updateNVLAccToken">
+		UPDATE duck_user_naver SET user_naver_access_token = #{userNaverAccessToken}, user_naver_reg_date = sysdate
+		WHERE user_naver_user_no = #{userNo}
+	</update>
 		
+	<select id="checkNL" resultType="int">
+		SELECT COUNT(*) FROM duck_user_naver WHERE user_naver_id = #{NVLId}
+	</select>
+	
 	<select id="getUserVo" resultType="user">
 	    SELECT * 
     	FROM duck_user u LEFT JOIN duck_user_kakao k ON u.user_no = k.user_kakao_user_no
+    					 LEFT JOIN duck_user_naver n ON u.user_no = n.user_naver_user_no
 		WHERE user_id = #{userId} AND user_pw = #{userPw}
 	</select>
 	
-	<select id="getUserVoWthKKLId" resultType="user">
+	<select id="getUserVoWithKKLId" resultType="user">
 	    SELECT * 
   		FROM duck_user u LEFT JOIN duck_user_kakao k ON u.user_no = k.user_kakao_user_no
 		WHERE user_kakao_id = #{KKLId}
 	</select>
 	
+	<select id="getUserVoWithNVLId" resultType="user">
+	    SELECT * 
+  		FROM duck_user u LEFT JOIN duck_user_naver n ON u.user_no = n.user_naver_user_no
+		WHERE user_naver_id = #{NVLId}
+	</select>
+	
 	<select id="getUserVoWithNo" resultType="user">
 		SELECT * 
 	  	FROM duck_user u LEFT JOIN duck_user_kakao k ON u.user_no = k.user_kakao_user_no
+    					 LEFT JOIN duck_user_naver n ON u.user_no = n.user_naver_user_no
  		WHERE user_no = #{userNo}
 	</select>
 	
@@ -150,7 +172,10 @@
 	</update>
 	
 	<select id="getUserBySessionId" resultType="user">
-		SELECT * FROM duck_user WHERE user_session_id = #{sessionId}
+		SELECT * 
+	  	FROM duck_user u LEFT JOIN duck_user_kakao k ON u.user_no = k.user_kakao_user_no
+    					 LEFT JOIN duck_user_naver n ON u.user_no = n.user_naver_user_no
+		WHERE user_session_id = #{sessionId}
 	</select>
 	
 	<update id="undoAutoLogin">

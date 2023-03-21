@@ -63,8 +63,28 @@ public class UserServiceImpl implements IUserService {
 	}
 	
 	@Override
-	public UserVO getUserVoWthKKLId(String KKLId) {
-		return userMapper.getUserVoWthKKLId(KKLId);
+	public void registNVLAcc(UserVO userVO) {
+		userMapper.registNVLAcc(userVO);
+	}
+	
+	@Override
+	public void updateNVLAccToken(UserVO userVO) {
+		userMapper.updateNVLAccToken(userVO);
+	}
+	
+	@Override
+	public boolean checkNL(String NVLId) {
+		return userMapper.checkNL(NVLId) == 0 ? false : true;
+	}
+	
+	@Override
+	public UserVO getUserVoWithKKLId(String KKLId) {
+		return userMapper.getUserVoWithKKLId(KKLId);
+	}
+	
+	@Override
+	public UserVO getUserVoWithNVLId(String NVLId) {
+		return userMapper.getUserVoWithNVLId(NVLId);
 	}
 	
 	@Override

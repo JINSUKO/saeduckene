@@ -36,6 +36,8 @@ public class UserLoginSuccessHandler implements HandlerInterceptor {
 		
 		String kakaoLogin = (String) modelAndView.getModel().get("kakaoLogin");
 		log.info("kakaoLogin: " + kakaoLogin);
+		String naverLogin = (String) modelAndView.getModel().get("naverLogin");
+		log.info("naverLogin: " + naverLogin);
 		
 		if (user == null) {
 			FlashMap fm = new FlashMap();
@@ -95,7 +97,13 @@ public class UserLoginSuccessHandler implements HandlerInterceptor {
 				fm.put("kakaoLogin", "kakaoLogin");
 				FlashMapManager fmm = RequestContextUtils.getFlashMapManager(request);
 				fmm.saveOutputFlashMap(fm, request, response);
-				session.setAttribute("kakao", kakaoLogin);
+				session.setAttribute("kakao", "카카오");
+			} else if(naverLogin != null) {
+				FlashMap fm = new FlashMap();
+				fm.put("naverLogin", "naverLogin");
+				FlashMapManager fmm = RequestContextUtils.getFlashMapManager(request);
+				fmm.saveOutputFlashMap(fm, request, response);
+				session.setAttribute("naver", "네이버");
 			}
 			modelAndView.addObject("autoLoginCheck", null);
 			modelAndView.setViewName("redirect:/");

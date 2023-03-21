@@ -110,11 +110,19 @@
 									<input name="profilePic" type="file" class="upload" id="user-profile-pic" accept="image/*" > <br>
 								</div>
 							</div>
-			            	<c:if test="${kakao != null}">
-			            		<span style="color:red;">*카카오로그인으로 이용 시 생성되는 초기 설정은 반드시 변경해주세요.</span> <br>
-			            		<span style="color:red;">*초기 비밀번호는 [PW+아이디]입니다.</span> <br>
-			            		<br>
-			            	</c:if>
+							<c:choose>
+								<c:when test="${kakao != null}">
+				            		<span style="color:red;">*카카오로그인으로 이용 시 생성되는 초기 설정은 반드시 변경해주세요.</span> <br>
+				            		<span style="color:red;">*초기 비밀번호는 [PW+아이디]입니다.</span> <br>
+				            		<br>
+								</c:when>
+								<c:when test="${naver != null}">
+				            		<span style="color:red;">*네이버로그인으로 이용 시 생성되는 초기 설정은 반드시 변경해주세요.</span> <br>
+				            		<span style="color:red;">*초기 비밀번호는 [PW+아이디]입니다.</span> <br>
+				            		<br>
+								</c:when>
+								<c:otherwise></c:otherwise>
+							</c:choose>
 							<span>기본 정보</span> <br> <br>
 							<p>아이디</p>
 							<div class="input-group inputArea">

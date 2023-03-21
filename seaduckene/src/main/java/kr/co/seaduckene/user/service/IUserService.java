@@ -25,14 +25,26 @@ public interface IUserService {
 	// 로그아웃 후 다시 카카오 계정 정보 업데이트
 	void updateKKLAccToken(UserVO userVO);
 	
+	// 네이버 계정 정보 저장
+	void registNVLAcc(UserVO userVO);
+	
+	// 로그아웃 후 다시 네이버 계정 정보 업데이트
+	void updateNVLAccToken(UserVO userVO);
+	
 	// 유저 정보 가져오기
 	UserVO getUserVo(UserVO userVO);
 	
 	// 이미 생성한 카카오계정인지 확인
 	boolean checkKKL(String KKLId);
 	
+	// 이미 생성한 네이버계정인지 확인
+	boolean checkNL(String NVLId);
+	
 	// 카카오 계정으로 유저 정보 가져오기
-	UserVO getUserVoWthKKLId(String KKLId);
+	UserVO getUserVoWithKKLId(String KKLId);
+	
+	// 네이버 계정으로 유저 정보 가져오기
+	UserVO getUserVoWithNVLId(String NVLId);
 	
 	// userNo로 유저 정보 가져오기 
 	UserVO getUserVoWithNo(int userNo);
