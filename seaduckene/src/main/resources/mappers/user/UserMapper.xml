@@ -83,7 +83,7 @@
 	
 	<insert id="registNVLAcc">
 		INSERT INTO duck_user_naver (user_naver_id, user_naver_access_token, user_naver_user_no)
-		VALUES (#{userNaverId}, #{userNaverAccessToken}, default, #{userNo})
+		VALUES (#{userNaverId}, #{userNaverAccessToken}, #{userNo})
 	</insert>
 	
 	<update id="updateNVLAccToken">
