@@ -55,5 +55,11 @@ public class UserVO {
 	
 	private String userKakaoId;
 	private String userKakaoAccessToken;
+	private Timestamp userKakaoRegDate;
 
+	private String userNaverId;
+	private String userNaverAccessToken;
+	private Timestamp userNaverRegDate;
+	
+	
 }

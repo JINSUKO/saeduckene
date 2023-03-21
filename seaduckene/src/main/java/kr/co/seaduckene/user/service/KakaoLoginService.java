@@ -21,6 +21,7 @@ import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 
 import kr.co.seaduckene.user.command.UserVO;
@@ -29,38 +30,30 @@ import lombok.extern.log4j.Log4j;
 
 @Component
 @Log4j
-@PropertySource("classpath:kakaoLogin.properties")
-@Data
+@PropertySource("classpath:LoginAPI.properties")
 public class KakaoLoginService {
 
-	@Value("${REST_API_KEY}")
+	@Value("${kakao.REST_API_KEY}")
 	private String restApiKey;
-	@Value("${REDIRECT_LOGIN_URI}")
+	@Value("${kakao.REDIRECT_LOGIN_URI}")
 	private String redirectLoginUri;
-	@Value("${REDIRECT_LOGOUT_URI}")
+	@Value("${kakao.REDIRECT_LOGOUT_URI}")
 	private String redirectLogoutUri;
-	@Value("${CLIENT_SECRET}")
+	@Value("${kakao.CLIENT_SECRET}")
 	private String clientSecret;
-	
-	private String state;
 	
 	private static int KAKAO_INCREMENT = 0;
 	
 	@Autowired
 	private IUserService userService;
 	
-	private static enum HttpMethod {
-		GET,
-		POST
-	}
-	
 	// kakao login get mapping button
-	public String getKakaoAuthUrl() {
+	public Map<String, String> getKakaoAuthUrl() {
 		
 		StringBuilder sb = new StringBuilder();
 		String url;
 		
-		state = UUID.randomUUID().toString();
+		String state = UUID.randomUUID().toString();
 		
 		sb.append("https://kauth.kakao.com/oauth/authorize?")
 		  .append("response_type=code")
@@ -72,21 +65,24 @@ public class KakaoLoginService {
 		  .append(state);
 		
 		url = sb.toString();
-		
 		log.info(url);
-		return url;
+		
+		Map<String, String> tokenMap = new HashMap<String, String>();
+		tokenMap.put("url", url);
+		tokenMap.put("state", state);
+		
+		return tokenMap;
 	}
 	
 	/**
 	 * code 받아서 카카오 로그인 토큰 얻기
 	 * @param code
-	 * @return
+	 * @return String
 	 */
 	public String getKakaoAuthToken(String code) {
 		
 		log.info(code);
 		
-		// start of request POST 
 		
 		URL loginTokenUrl = null;
 		try {
@@ -107,9 +103,9 @@ public class KakaoLoginService {
 		} 
 		log.info(conn);
 		BufferedWriter bw = null;
-		String strLine = null;
 		StringBuilder sbOutput = new StringBuilder();
 		
+		// start of request POST 
 		if (conn != null) {
 			
 			try {
@@ -153,6 +149,7 @@ public class KakaoLoginService {
 		// end of request POST 
 		
 		StringBuilder sbInput = new StringBuilder();
+		String strLine = null;
 		BufferedReader br = null;
 		// start of response POST
 		try {
@@ -208,7 +205,7 @@ public class KakaoLoginService {
 	/**
 	 * 카카오 로그인 토큰받아서 계정 정보 얻기
 	 * @param accessToken
-	 * @return
+	 * @return Map<String, String>
 	 */
 	public Map<String, String> getKakaoUserInfos(String accessToken) {
 		
@@ -323,7 +320,7 @@ public class KakaoLoginService {
 	}
 	
 	/**
-	 * 카카오 로그아웃 
+	 * 카카오 로그아웃 - 안씀
 	 * @param UserVO
 	 * @return
 	 */

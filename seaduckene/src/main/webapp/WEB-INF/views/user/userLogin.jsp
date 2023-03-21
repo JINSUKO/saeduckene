@@ -31,11 +31,13 @@
 		        <div class="group text-center">
 		          <input type="button" class="button sbtn cyan rounded" value="로그인" id="user-login-submit">
 		        </div>
-		        <div class="group hr text-center">
-		          <a href="${KktUrl}"><img src="${pageContext.request.contextPath}/resources/img/kakao_login_medium_narrow.png" /></a>
+		        <div class="group text-center">
+		          <a href="${KktUrl}"><img src="${pageContext.request.contextPath}/resources/img/kakao_login_medium_narrow.png" /></a> 
+		          <br>
+		          <a href="${nvUrl}"><img width="183px" height="45px" src="${pageContext.request.contextPath}/resources/img/btnG.png" /></a>
 		        </div>
-		        <div class="hr"></div>
-		        <div class="foot-lnk">
+		        <!-- <div class="hr"></div> -->
+		        <div class="group foot-lnk">
 		          <a href="<c:url value='/user/userJoin'/>">회원가입</a> <br>
 		          <a href="<c:url value='/user/userFindAccount' />">아이디 찾기</a> <br>
 		          <a href="<c:url value='/user/userFindPw' />">비밀번호 찾기</a>
@@ -56,8 +58,12 @@
 		alert('로그인 아이디 또는 비밀번호가 틀렸습니다.\n다시 입력하세요.');
 	} else if('${msg}' === 'kakaoFail') {
 		alert('카카오로그인 중에 문제가 발생했습니다.\n다시 입력하거나, 카카오측에 문의하세요.');
+	} else if('${msg}' === 'naverFail') {
+		alert('네이버로그인 중에 문제가 발생했습니다.\n다시 입력하거나, 네이버측에 문의하세요.');
 	} else if('${msg}' === 'wrongKakaoAccess') {
 		alert('카카오아이디로 일반 로그인하실 수 없습니다.\n카카오 로그인으로 접근해주세요.');
+	} else if('${msg}' === 'wrongNaverAccess') {
+		alert('네이버아이디로 일반 로그인하실 수 없습니다.\네이버 로그인으로 접근해주세요.');
 	}
 	
 	$(function() {

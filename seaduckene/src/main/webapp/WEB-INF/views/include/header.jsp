@@ -123,6 +123,12 @@
 			               	Logout
 			               </a></li>
 	         			</c:when>
+	         			<c:when test="${naver != null}">
+			               <li class="nav-item"><a href="<c:url value='/user/userLogout' />" class="nav-link link-dark px-2">
+		            		<img width="16px" height="16px" alt="네이버 로고" src="<c:url value='/resources/img/btnG_square.png' />" />
+			               	Logout
+			               </a></li>
+	         			</c:when>
 	         			<c:otherwise>
 			               <li class="nav-item"><a href="<c:url value='/user/userLogout' />"
 			               	 class="nav-link link-dark px-2">Logout</a></li>

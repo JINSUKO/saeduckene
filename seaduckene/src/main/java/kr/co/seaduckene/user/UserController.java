@@ -35,8 +35,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.FlashMap;
+import org.springframework.web.servlet.FlashMapManager;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.support.RequestContextUtils;
 import org.springframework.web.util.WebUtils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -55,6 +58,7 @@ import kr.co.seaduckene.product.service.IProductService;
 import kr.co.seaduckene.user.command.UserVO;
 import kr.co.seaduckene.user.service.IUserService;
 import kr.co.seaduckene.user.service.KakaoLoginService;
+import kr.co.seaduckene.user.service.NaverLoginService;
 import kr.co.seaduckene.util.AskCategoryBoardVO;
 import kr.co.seaduckene.util.CertificationMailService;
 import lombok.extern.log4j.Log4j;
@@ -82,20 +86,34 @@ public class UserController {
 	@Autowired
 	private KakaoLoginService kktLoginService;
 	
+	@Autowired
+	private NaverLoginService nvLoginService;
+	
 
 	@GetMapping("/userLogin")
-	public void userLogin(Model model) {
+	public void userLogin(Model model, HttpSession session) {
 		log.info("login get 요청");
-		model.addAttribute("KktUrl", kktLoginService.getKakaoAuthUrl());
+		
+		Map<String, String> kakaoTokenMap = kktLoginService.getKakaoAuthUrl();
+		model.addAttribute("KktUrl", kakaoTokenMap.get("url"));
+		
+		Map<String, String> naverTokenMap = nvLoginService.getNaverAuthUrl();
+		model.addAttribute("nvUrl", naverTokenMap.get("url"));
+		
+		session.setAttribute("kakaoState", kakaoTokenMap.get("state"));
+		session.setAttribute("naverState", naverTokenMap.get("state"));
+		
 	}
 	
 	
 	@GetMapping("/userKakaoLogin")
-	public ModelAndView userKaKaoLogin(String code, String state, String error, String error_description, ModelAndView modelAndView, RedirectAttributes ra) {
+	public ModelAndView userKaKaoLogin(String code, String state, String error, String error_description
+									, ModelAndView modelAndView, HttpServletRequest request, HttpServletResponse response) {
 		log.info("kakaoLogin redirect uri 요청");
 		log.info("error: " + error);
 		log.info("error_description: " + error_description);
 		
+		// url로 직접 접근 막기.
 		if (code == null && error == null) {
 			modelAndView.setViewName("redirect:/user/userLoginAuth");
 			
@@ -104,7 +122,7 @@ public class UserController {
 		
 		// 카카오 로그인 최초 시도 - 카카오계정 정보를 서비스DB에 저장함.
 		String kakaoAccessToken = null;
-		if (error == null && state.equals(kktLoginService.getState())) {
+		if (error == null && state.equals(request.getSession().getAttribute("kakaoState"))) {
 			
 			kakaoAccessToken = kktLoginService.getKakaoAuthToken(code);
 			
@@ -128,12 +146,13 @@ public class UserController {
 				userVo.setUserKakaoId(KKLId);
 				userVo.setUserKakaoAccessToken(kakaoAccessToken);
 				
+				userService.registKKLAcc(userVo);
+				
 				String[] majorTitle = {"미디어"};
 				String[] minorTitle = {"드라마"};
 				
 				userService.addUserFavorites(majorTitle, minorTitle, userVo.getUserNo());
 				
-				userService.registKKLAcc(userVo);
 				
 				// 카카오 url 이미지에서 파일 받아오고 로컬에 저장.
 				// 이미지 저장 데이터 준비
@@ -193,7 +212,7 @@ public class UserController {
 				
 			// true == 계정이 있음 -> 카카오계정으로 userVo 받음
 			} else {
-				userVo = userService.getUserVoWthKKLId(KKLId);
+				userVo = userService.getUserVoWithKKLId(KKLId);
 				userVo.setUserKakaoAccessToken(kakaoAccessToken);
 				
 				userService.updateKKLAccToken(userVo);
@@ -208,7 +227,144 @@ public class UserController {
 			return modelAndView;
 		}
 		
-		ra.addFlashAttribute("msg", "kakaoFail");
+		FlashMap fm = new FlashMap();
+		fm.put("msg", "kakaoFail");
+		FlashMapManager fmm = RequestContextUtils.getFlashMapManager(request);
+		fmm.saveOutputFlashMap(fm, request, response);
+		modelAndView.setViewName("redirect:/user/userLogin");
+		
+		return modelAndView;
+	}
+	
+	@GetMapping("/userNaverLogin")
+	public ModelAndView userNaverLogin(String code, String state, String error, String error_description
+									, ModelAndView modelAndView, HttpServletRequest request, HttpServletResponse response) {
+		log.info("naverLogin redirect uri 요청");
+		log.info("error: " + error);
+		log.info("error_description: " + error_description);
+		
+		// url로 직접 접근 막기.
+		if (code == null && error == null) {
+			modelAndView.setViewName("redirect:/user/userLoginAuth");
+			
+			return modelAndView;
+		}
+		
+		String naverAccessToken = null;
+		
+		// 네이버 로그인 시도 성공 시 회원 정보 얻는 코드 실행
+		if (code != null && state.equals(request.getSession().getAttribute("naverState"))) {
+			Map<String, Object> naverTokens = nvLoginService.getNaverAuthToken(code, state);
+			
+			naverAccessToken = (String) naverTokens.get("access_token");
+			
+			Map<String, String> naverInfosMap = nvLoginService.getNaverUserInfos(naverAccessToken, (String) naverTokens.get("token_type"));
+			
+			UserVO userVo = new UserVO();
+			String NVLId = naverInfosMap.get("NVLId");
+			
+			// false == 계정이 없음 -> 계정, 네이버계정 등록 후 userVo 받음
+			if (!userService.checkNL(NVLId)) {
+				userVo.setUserId(naverInfosMap.get("userId"));
+				userVo.setUserPw(naverInfosMap.get("userPw"));
+				userVo.setUserNickname(naverInfosMap.get("userNickname"));
+				userVo.setUserName(naverInfosMap.get("userName"));
+				userVo.setUserTel(naverInfosMap.get("userTel"));
+				userVo.setUserEmail(naverInfosMap.get("userEmail"));
+				
+				userService.registUser(userVo);
+				
+				// userNo 있는 useVo 받음.
+				userVo = userService.getUserVo(userVo);
+				userVo.setUserNaverId(NVLId);
+				userVo.setUserNaverAccessToken(naverAccessToken);
+
+				userService.registNVLAcc(userVo);
+				
+				String[] majorTitle = {"미디어"};
+				String[] minorTitle = {"드라마"};
+				
+				userService.addUserFavorites(majorTitle, minorTitle, userVo.getUserNo());
+				
+				
+				// 네이버 url 이미지에서 파일 받아오고 로컬에 저장.
+				// 이미지 저장 데이터 준비
+				String NLProfilePath = naverInfosMap.get("userProfilePath");
+				String NLProfileFolder = naverInfosMap.get("userProfileFolder");
+				String NLProfileImageName = naverInfosMap.get("userProfileFileName");
+				URL naverImageurl = null;
+				try {
+					naverImageurl = new URL(NLProfilePath + NLProfileFolder + "/" + NLProfileImageName);
+					log.info("naverImageurl: " + naverImageurl);
+				} catch (MalformedURLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				SimpleDateFormat simple = new SimpleDateFormat("yyyyMMdd");
+				String today = simple.format(new Date());
+				
+				BufferedImage naverImage = null;
+				try {
+					naverImage = ImageIO.read(naverImageurl);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				NLProfilePath = "c:/imgduck/user/";
+				NLProfileFolder = today;
+				
+				String formatName = NLProfileImageName.substring(NLProfileImageName.lastIndexOf(".") + 1);
+				
+				String uploadFolder = NLProfilePath + today;
+				
+				File saveFile = new File(uploadFolder + "/" + NLProfileImageName);
+				
+				File folder = new File(uploadFolder);
+				if(!folder.exists()) {
+					folder.mkdirs();
+				}
+				
+				try {
+					log.info("naverImage: " + naverImage);
+					log.info("formatName: " + formatName);
+					log.info("saveFile: " + saveFile);
+					ImageIO.write(naverImage, formatName, saveFile);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				
+				userVo.setUserProfilePath(NLProfilePath);
+				userVo.setUserProfileFolder(NLProfileFolder);
+				userVo.setUserProfileFileName(NLProfileImageName);
+				
+				userService.updateUserInfo(userVo);
+				
+			// true == 계정이 있음 -> 네이버계정으로 userVo 받음
+			} else {
+				userVo = userService.getUserVoWithNVLId(NVLId);
+				userVo.setUserNaverAccessToken(naverAccessToken);
+				
+				userService.updateNVLAccToken(userVo);
+			}
+			
+
+			log.info("Naver Login userVo: " + userVo);
+			
+			modelAndView.addObject("userId", userVo.getUserId());
+			modelAndView.addObject("userPw", userVo.getUserPw());
+			
+			return modelAndView;
+		}
+		
+		// 네이버 로그인 실패 시 진행
+		FlashMap fm = new FlashMap();
+		fm.put("msg", "naverFail");
+		FlashMapManager fmm = RequestContextUtils.getFlashMapManager(request);
+		fmm.saveOutputFlashMap(fm, request, response);
 		modelAndView.setViewName("redirect:/user/userLogin");
 		
 		return modelAndView;
@@ -218,7 +374,8 @@ public class UserController {
 	public void userLoginAuth() {}
 	
 	@PostMapping("/userLoginAuth")
-	public ModelAndView userLogin(UserVO userVO, ModelAndView modelAndView, int autoLoginCheck, String kakaoLogin) {
+	public ModelAndView userLogin(UserVO userVO, ModelAndView modelAndView, int autoLoginCheck
+							, String kakaoLogin, String naverLogin) {
 		log.info(userVO);
 		
 		// 비밀번호 암호화는 나중에 구현할 것.
@@ -226,6 +383,7 @@ public class UserController {
 		modelAndView.addObject("userVo", userService.getUserVo(userVO));
 		modelAndView.addObject("autoLoginCheck", autoLoginCheck);
 		modelAndView.addObject("kakaoLogin", kakaoLogin);
+		modelAndView.addObject("naverLogin", naverLogin);
 		
 		return modelAndView;
 	}
@@ -261,12 +419,13 @@ public class UserController {
 		
 		if (session.getAttribute("login") != null) {
 			
-//			int userNo = ((UserVO) session.getAttribute("login")).getUserNo();
+			int userNo = ((UserVO) session.getAttribute("login")).getUserNo();
 			
-//			kktLoginService.doKakaoLogout(userService.getUserVoWithNo(userNo));
+			nvLoginService.doNaverLogout(userService.getUserVoWithNo(userNo));
 			
-			session.removeAttribute("login");
 			session.removeAttribute("kakao");
+			session.removeAttribute("naver");
+			session.removeAttribute("login");
 		}
 		modelAndView.setViewName("redirect:/user/userLogin");
 		
