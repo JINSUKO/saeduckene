@@ -58,7 +58,7 @@ public class CategoryHandler implements HandlerInterceptor {
 			
 			long currenTimeMillis = System.currentTimeMillis();
 			
-			boolean expriedKakaoToken  = (currenTimeMillis - loginTokenRegDate) >= 21599;
+			boolean expriedKakaoToken  = (currenTimeMillis - loginTokenRegDate) >= 21599000;
 			log.info("expriedKakaoToken: " + expriedKakaoToken);
 			
 			if (expriedKakaoToken) {
@@ -76,7 +76,7 @@ public class CategoryHandler implements HandlerInterceptor {
 			
 			long currenTimeMillis = System.currentTimeMillis();
 			
-			boolean expriedKakaoToken  = (currenTimeMillis - loginTokenRegDate) >= 3600;
+			boolean expriedKakaoToken  = (currenTimeMillis - loginTokenRegDate) >= 3600000;
 			log.info("expriedKakaoToken: " + expriedKakaoToken);
 			
 			if (expriedKakaoToken) {
