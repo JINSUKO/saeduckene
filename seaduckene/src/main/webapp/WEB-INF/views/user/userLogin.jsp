@@ -63,7 +63,7 @@
 	} else if('${msg}' === 'wrongKakaoAccess') {
 		alert('카카오아이디로 일반 로그인하실 수 없습니다.\n카카오 로그인으로 접근해주세요.');
 	} else if('${msg}' === 'wrongNaverAccess') {
-		alert('네이버아이디로 일반 로그인하실 수 없습니다.\네이버 로그인으로 접근해주세요.');
+		alert('네이버아이디로 일반 로그인하실 수 없습니다.\n네이버 로그인으로 접근해주세요.');
 	}
 	
 	$(function() {
