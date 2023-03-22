@@ -170,6 +170,7 @@ public class UserController {
 				
 				SimpleDateFormat simple = new SimpleDateFormat("yyyyMMdd");
 				String today = simple.format(new Date());
+				String randomFileName = UUID.randomUUID().toString().replaceAll("-", "");
 				
 				BufferedImage kakaoImage = null;
 				try {
@@ -186,7 +187,9 @@ public class UserController {
 				
 				String uploadFolder = KKLProfilePath + today;
 				
-				File saveFile = new File(uploadFolder + "/" + KKLProfileImageName);
+				randomFileName = randomFileName + "." + formatName;
+				
+				File saveFile = new File(uploadFolder + "/" + randomFileName);
 				
 				File folder = new File(uploadFolder);
 				if(!folder.exists()) {
@@ -206,7 +209,7 @@ public class UserController {
 				
 				userVo.setUserProfilePath(KKLProfilePath);
 				userVo.setUserProfileFolder(KKLProfileFolder);
-				userVo.setUserProfileFileName(KKLProfileImageName);
+				userVo.setUserProfileFileName(randomFileName);
 				
 				userService.updateUserInfo(userVo);
 				
@@ -303,6 +306,7 @@ public class UserController {
 				
 				SimpleDateFormat simple = new SimpleDateFormat("yyyyMMdd");
 				String today = simple.format(new Date());
+				String randomFileName = UUID.randomUUID().toString().replaceAll("-", "");
 				
 				BufferedImage naverImage = null;
 				try {
@@ -319,7 +323,9 @@ public class UserController {
 				
 				String uploadFolder = NLProfilePath + today;
 				
-				File saveFile = new File(uploadFolder + "/" + NLProfileImageName);
+				randomFileName = randomFileName + "." + formatName;
+				
+				File saveFile = new File(uploadFolder + "/" + randomFileName);
 				
 				File folder = new File(uploadFolder);
 				if(!folder.exists()) {
@@ -339,7 +345,7 @@ public class UserController {
 				
 				userVo.setUserProfilePath(NLProfilePath);
 				userVo.setUserProfileFolder(NLProfileFolder);
-				userVo.setUserProfileFileName(NLProfileImageName);
+				userVo.setUserProfileFileName(randomFileName);
 				
 				userService.updateUserInfo(userVo);
 				
